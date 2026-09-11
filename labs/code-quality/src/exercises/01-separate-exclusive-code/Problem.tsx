@@ -1,33 +1,32 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState } from 'react'
 
-type FulfillmentMethod = "delivery" | "pickup";
+type FulfillmentMethod = 'delivery' | 'pickup'
 
 export function Problem() {
-  const [fulfillmentMethod, setFulfillmentMethod] =
-    useState<FulfillmentMethod>("delivery");
-  const [address, setAddress] = useState("");
-  const [pickupStore, setPickupStore] = useState("");
-  const [resultMessage, setResultMessage] = useState("");
+  const [fulfillmentMethod, setFulfillmentMethod] = useState<FulfillmentMethod>('delivery')
+  const [address, setAddress] = useState('')
+  const [pickupStore, setPickupStore] = useState('')
+  const [resultMessage, setResultMessage] = useState('')
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+    event.preventDefault()
 
-    if (fulfillmentMethod === "delivery") {
+    if (fulfillmentMethod === 'delivery') {
       if (address.trim().length === 0) {
-        setResultMessage("배달 주소를 입력해 주세요.");
-        return;
+        setResultMessage('배달 주소를 입력해 주세요.')
+        return
       }
 
-      setResultMessage(`${address.trim()} 주소로 배달을 요청했어요.`);
-      return;
+      setResultMessage(`${address.trim()} 주소로 배달을 요청했어요.`)
+      return
     }
 
     if (pickupStore.trim().length === 0) {
-      setResultMessage("픽업 매장을 입력해 주세요.");
-      return;
+      setResultMessage('픽업 매장을 입력해 주세요.')
+      return
     }
 
-    setResultMessage(`${pickupStore.trim()} 매장에서 픽업을 요청했어요.`);
+    setResultMessage(`${pickupStore.trim()} 매장에서 픽업을 요청했어요.`)
   }
 
   return (
@@ -35,10 +34,7 @@ export function Problem() {
       <div className="exercise-copy">
         <p className="step-label">Starter code</p>
         <h2 id="request-title">상품 수령 방법</h2>
-        <p>
-          현재 컴포넌트는 배달과 픽업의 입력, 검증, 결과 생성을 모두 알고
-          있습니다.
-        </p>
+        <p>현재 컴포넌트는 배달과 픽업의 입력, 검증, 결과 생성을 모두 알고 있습니다.</p>
       </div>
 
       <form onSubmit={handleSubmit}>
@@ -47,11 +43,11 @@ export function Problem() {
 
           <label>
             <input
-              checked={fulfillmentMethod === "delivery"}
+              checked={fulfillmentMethod === 'delivery'}
               name="fulfillmentMethod"
               onChange={() => {
-                setFulfillmentMethod("delivery");
-                setResultMessage("");
+                setFulfillmentMethod('delivery')
+                setResultMessage('')
               }}
               type="radio"
               value="delivery"
@@ -61,11 +57,11 @@ export function Problem() {
 
           <label>
             <input
-              checked={fulfillmentMethod === "pickup"}
+              checked={fulfillmentMethod === 'pickup'}
               name="fulfillmentMethod"
               onChange={() => {
-                setFulfillmentMethod("pickup");
-                setResultMessage("");
+                setFulfillmentMethod('pickup')
+                setResultMessage('')
               }}
               type="radio"
               value="pickup"
@@ -74,7 +70,7 @@ export function Problem() {
           </label>
         </fieldset>
 
-        {fulfillmentMethod === "delivery" ? (
+        {fulfillmentMethod === 'delivery' ? (
           <label className="field">
             배달 주소
             <input
@@ -103,5 +99,5 @@ export function Problem() {
         {resultMessage}
       </p>
     </section>
-  );
+  )
 }
