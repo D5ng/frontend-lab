@@ -1,0 +1,6 @@
+interface:
+  display_name: "Frontend Code Quality Coach"
+  short_description: "React 코드 품질 훈련과 근거 중심 리뷰를 돕습니다"
+  default_prompt: "Use $frontend-code-quality-coach to help me practice or review React code quality without revealing a solution too early."
+policy:
+  allow_implicit_invocation: true
