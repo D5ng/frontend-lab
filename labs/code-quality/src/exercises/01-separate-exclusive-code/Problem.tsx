@@ -1,35 +1,9 @@
-import { SubmitEvent, useState } from 'react'
 import { TextField } from './components/TextField'
 import { RadioField } from './components/RadioField'
-
-type FulfillmentMethod = 'delivery' | 'pickup'
+import { useFulfillment } from './hooks/useFulfillment'
 
 export function Problem() {
-  const [fulfillmentMethod, setFulfillmentMethod] = useState<FulfillmentMethod>('delivery')
-  const [address, setAddress] = useState('')
-  const [pickupStore, setPickupStore] = useState('')
-  const [resultMessage, setResultMessage] = useState('')
-
-  function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
-    event.preventDefault()
-
-    if (fulfillmentMethod === 'delivery') {
-      if (address.trim().length === 0) {
-        setResultMessage('배달 주소를 입력해 주세요.')
-        return
-      }
-
-      setResultMessage(`${address.trim()} 주소로 배달을 요청했어요.`)
-      return
-    }
-
-    if (pickupStore.trim().length === 0) {
-      setResultMessage('픽업 매장을 입력해 주세요.')
-      return
-    }
-
-    setResultMessage(`${pickupStore.trim()} 매장에서 픽업을 요청했어요.`)
-  }
+  const { fulfillmentMethod, onFulfillmentMethodChange, delivery, pickup, onSubmit, resultMessage } = useFulfillment()
 
   return (
     <section className="exercise-card" aria-labelledby="request-title">
@@ -39,7 +13,7 @@ export function Problem() {
         <p>현재 컴포넌트는 배달과 픽업의 입력, 검증, 결과 생성을 모두 알고 있습니다.</p>
       </div>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={onSubmit}>
         <fieldset>
           <legend>수령 방법을 선택해 주세요.</legend>
 
@@ -47,10 +21,7 @@ export function Problem() {
             name="fulfillmentMethod"
             value="delivery"
             checked={fulfillmentMethod === 'delivery'}
-            onValueChange={(value) => {
-              setFulfillmentMethod(value as FulfillmentMethod)
-              setResultMessage('')
-            }}
+            onCheck={() => onFulfillmentMethodChange('delivery')}
           >
             배달
           </RadioField>
@@ -59,10 +30,7 @@ export function Problem() {
             name="fulfillmentMethod"
             value="pickup"
             checked={fulfillmentMethod === 'pickup'}
-            onValueChange={(value) => {
-              setFulfillmentMethod(value as FulfillmentMethod)
-              setResultMessage('')
-            }}
+            onCheck={() => onFulfillmentMethodChange('pickup')}
           >
             매장 픽업
           </RadioField>
@@ -71,18 +39,18 @@ export function Problem() {
         {fulfillmentMethod === 'delivery' ? (
           <TextField
             name="address"
-            onChange={(event) => setAddress(event.target.value)}
+            onChange={(event) => delivery.onAddressChange(event.target.value)}
             placeholder="예: 서울시 강남구 테헤란로 1"
-            value={address}
+            value={delivery.address}
           >
             배달 주소
           </TextField>
         ) : (
           <TextField
             name="pickupStore"
-            onChange={(event) => setPickupStore(event.target.value)}
+            onChange={(event) => pickup.onStoreChange(event.target.value)}
             placeholder="예: 역삼점"
-            value={pickupStore}
+            value={pickup.store}
           >
             픽업 매장
           </TextField>
