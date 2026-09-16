@@ -1,15 +1,10 @@
-import { useState, type SubmitEvent } from 'react'
+import type { SubmitEvent } from 'react'
 import { Button, FlexBox, FormControl, FormField, FormLabel, RadioGroup, RadioGroupItem, TextField, Typography } from '@wanteddev/wds'
 
-type EventType = 'online' | 'offline'
-type Action = 'draft' | 'publish'
+import { useEventRegistration } from './hooks/useEventRegistration'
+import type { EventFormData, EventType } from './model/eventForm'
 
-export type EventFormData = {
-  eventType: EventType
-  title: string
-  onlineUrl: string
-  offlineLocation: string
-}
+export type { EventFormData } from './model/eventForm'
 
 type ProblemProps = {
   onSaveDraft?: (formData: EventFormData) => Promise<void>
@@ -17,75 +12,22 @@ type ProblemProps = {
 }
 
 async function completeImmediately() {
-  return Promise.resolve()
+  return undefined
 }
 
 export function Problem({ onSaveDraft = completeImmediately, onPublish = completeImmediately }: ProblemProps) {
-  const [eventType, setEventType] = useState<EventType>('online')
-  const [title, setTitle] = useState('')
-  const [onlineUrl, setOnlineUrl] = useState('')
-  const [offlineLocation, setOfflineLocation] = useState('')
-  const [processingAction, setProcessingAction] = useState<Action | null>(null)
-  const [resultMessage, setResultMessage] = useState('')
+  const { eventFormData, processingAction, resultMessage, updateFormData, saveDraft, publish } = useEventRegistration({
+    onSaveDraft,
+    onPublish,
+  })
 
-  function getFormData(): EventFormData {
-    return {
-      eventType,
-      title: title.trim(),
-      onlineUrl: onlineUrl.trim(),
-      offlineLocation: offlineLocation.trim(),
-    }
-  }
-
-  function getPublishValidationMessage(formData: EventFormData) {
-    if (formData.title.length === 0) {
-      return '행사 제목을 입력해 주세요.'
-    }
-
-    if (formData.eventType === 'online' && formData.onlineUrl.length === 0) {
-      return '온라인 접속 URL을 입력해 주세요.'
-    }
-
-    if (formData.eventType === 'offline' && formData.offlineLocation.length === 0) {
-      return '오프라인 장소를 입력해 주세요.'
-    }
-
-    return null
-  }
-
-  async function runAction(action: Action) {
-    const formData = getFormData()
-
-    if (action === 'publish') {
-      const validationMessage = getPublishValidationMessage(formData)
-
-      if (validationMessage !== null) {
-        setResultMessage(validationMessage)
-        return
-      }
-    }
-
-    setProcessingAction(action)
-    setResultMessage('')
-
-    try {
-      if (action === 'draft') {
-        await onSaveDraft(formData)
-        setResultMessage('임시 저장했어요.')
-      } else {
-        await onPublish(formData)
-        setResultMessage('행사를 게시했어요.')
-      }
-    } catch {
-      setResultMessage('작업을 완료하지 못했어요. 다시 시도해 주세요.')
-    } finally {
-      setProcessingAction(null)
-    }
+  function isEventType(value: string): value is EventType {
+    return value === 'online' || value === 'offline'
   }
 
   function handlePublish(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
-    void runAction('publish')
+    void publish()
   }
 
   return (
@@ -108,12 +50,15 @@ export function Problem({ onSaveDraft = completeImmediately, onPublish = complet
             className="event-type-options"
             disabled={processingAction !== null}
             name="eventType"
-            onValueChange={(nextEventType) => {
-              setEventType(nextEventType as EventType)
-              setResultMessage('')
+            onValueChange={(value) => {
+              if (!isEventType(value)) {
+                return
+              }
+
+              updateFormData('eventType', value)
             }}
             orientation="horizontal"
-            value={eventType}
+            value={eventFormData.eventType}
           >
             <FlexBox alignItems="center" gap="8px">
               <RadioGroupItem aria-label="온라인" value="online" />
@@ -136,24 +81,24 @@ export function Problem({ onSaveDraft = completeImmediately, onPublish = complet
             <TextField
               disabled={processingAction !== null}
               name="title"
-              onChange={(event) => setTitle(event.currentTarget.value)}
+              onChange={(event) => updateFormData('title', event.currentTarget.value)}
               placeholder="예: 프런트엔드 품질 세미나"
-              value={title}
+              value={eventFormData.title}
               width="100%"
             />
           </FormControl>
         </FormField>
 
-        {eventType === 'online' ? (
+        {eventFormData.eventType === 'online' ? (
           <FormField>
             <FormLabel>온라인 접속 URL</FormLabel>
             <FormControl>
               <TextField
                 disabled={processingAction !== null}
                 name="onlineUrl"
-                onChange={(event) => setOnlineUrl(event.currentTarget.value)}
+                onChange={(event) => updateFormData('onlineUrl', event.currentTarget.value)}
                 placeholder="예: https://example.com/event"
-                value={onlineUrl}
+                value={eventFormData.onlineUrl}
                 width="100%"
               />
             </FormControl>
@@ -165,9 +110,9 @@ export function Problem({ onSaveDraft = completeImmediately, onPublish = complet
               <TextField
                 disabled={processingAction !== null}
                 name="offlineLocation"
-                onChange={(event) => setOfflineLocation(event.currentTarget.value)}
+                onChange={(event) => updateFormData('offlineLocation', event.currentTarget.value)}
                 placeholder="예: 강남구 테헤란로 1"
-                value={offlineLocation}
+                value={eventFormData.offlineLocation}
                 width="100%"
               />
             </FormControl>
@@ -180,7 +125,7 @@ export function Problem({ onSaveDraft = completeImmediately, onPublish = complet
             disabled={processingAction !== null}
             fullWidth
             loading={processingAction === 'draft'}
-            onClick={() => void runAction('draft')}
+            onClick={() => void saveDraft()}
             size="large"
             variant="outlined"
           >
