@@ -55,4 +55,16 @@ describe('상품 수령 방법', () => {
 
     expect(screen.getByText(scenario.expected)).toBeVisible()
   })
+
+  it('수령 방법을 다시 선택해도 이전에 입력한 배달 주소를 유지한다', async () => {
+    const user = userEvent.setup()
+    render(<Problem />)
+
+    await user.type(screen.getByRole('textbox', { name: '배달 주소' }), '서울시 강남구 테헤란로 1')
+
+    await user.click(screen.getByRole('radio', { name: '매장 픽업' }))
+    await user.click(screen.getByRole('radio', { name: '배달' }))
+
+    expect(screen.getByRole('textbox', { name: '배달 주소' })).toHaveValue('서울시 강남구 테헤란로 1')
+  })
 })
