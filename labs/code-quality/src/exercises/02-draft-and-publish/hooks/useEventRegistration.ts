@@ -45,6 +45,7 @@ export function useEventRegistration({ onSaveDraft, onPublish }: UseEventRegistr
         setResultMessage('임시 저장했어요.')
       } else {
         await onPublish(formData)
+        setEventFormData(createInitialEventFormData())
         setResultMessage('행사를 게시했어요.')
       }
     } catch {
