@@ -1,3 +1,4 @@
+/* 할 일 목록 데이터 */
 export type DailyTask = {
   id: string
   title: string

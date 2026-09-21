@@ -24,9 +24,12 @@ export function Problem({ initialTasks = DEFAULT_TASKS }: ProblemProps) {
 
   return (
     <FlexBox className="daily-task-screen" flexDirection="column">
-      <FlexBox alignItems="center" className="daily-task-topbar">
-        <Typography as="span" className="daily-task-brand" variant="headline2" weight="bold">
+      <FlexBox alignItems="center" className="daily-task-topbar" justifyContent="space-between">
+        <Typography as="span" className="daily-task-brand" color="semantic.primary.normal" variant="heading1" weight="bold">
           하루
+        </Typography>
+        <Typography as="span" color="semantic.label.alternative" variant="label1" weight="medium">
+          오늘
         </Typography>
       </FlexBox>
 

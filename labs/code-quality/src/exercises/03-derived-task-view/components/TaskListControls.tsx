@@ -1,5 +1,4 @@
-import { Button, Chip, FlexBox, SearchField, Typography } from '@wanteddev/wds'
-import { IconTrash } from '@wanteddev/wds-icon'
+import { Chip, FlexBox, SearchField, TextButton, Typography } from '@wanteddev/wds'
 import type { ChangeEventHandler } from 'react'
 import type { TaskStatusFilter } from '../model/filterVisibleTasks'
 
@@ -38,16 +37,15 @@ export function TaskListControls({
         <Typography as="h2" id="task-list-title" variant="heading1" weight="bold">
           나의 할 일
         </Typography>
-        <Button
+        <TextButton
+          className="daily-task-cleanup"
           color="assistive"
           disabled={completedCount === 0}
-          leadingContent={<IconTrash aria-hidden="true" height={16} width={16} />}
           onClick={deleteCompletedTasks}
           size="small"
-          variant="outlined"
         >
           완료한 일 정리 {completedCount}
-        </Button>
+        </TextButton>
       </FlexBox>
 
       <SearchField

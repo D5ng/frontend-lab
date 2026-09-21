@@ -9,17 +9,18 @@
   text-rendering: optimizeLegibility;
 }
 
-body {
+html body {
   min-width: 320px;
   min-height: 100vh;
   background: var(--semantic-background-normal-alternative);
 }
 
 .mobile-lab-app {
-  width: min(100%, 375px);
-  min-height: 100vh;
+  width: min(100%, 430px);
+  min-height: 100dvh;
   margin: 0 auto;
   background: var(--semantic-background-normal-normal);
+  box-shadow: 0 0 0 1px var(--semantic-line-solid-alternative);
 }
 
 .daily-task-screen {
@@ -28,23 +29,50 @@ body {
 }
 
 .daily-task-topbar {
-  min-height: 56px;
+  min-height: 64px;
   padding: 0 24px;
 }
 
 .daily-task-brand {
-  letter-spacing: -0.04em;
-}
-
-.daily-task-intro {
-  padding: 26px 24px 24px;
+  letter-spacing: -0.07em;
 }
 
 .daily-task-summary {
-  margin: 0 20px;
-  padding: 24px;
-  border-radius: 20px;
-  background: rgba(var(--semantic-primary-normal-rgb), 0.06);
+  padding: 38px 24px 42px;
+  border-radius: 0 0 24px 24px;
+  background: var(--semantic-primary-normal);
+}
+
+.daily-task-summary h1,
+.daily-task-summary p,
+.daily-task-summary strong {
+  color: #fff;
+}
+
+.daily-task-summary h1 {
+  font-size: 28px;
+  line-height: 1.35;
+  letter-spacing: -0.055em;
+}
+
+.daily-task-summary-detail {
+  margin: 8px 0 0;
+}
+
+.daily-task-progress {
+  margin-top: 30px;
+}
+
+.daily-task-summary .daily-task-progress-indicator {
+  flex: 1;
+  min-width: 0;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.daily-task-summary .daily-task-progress-indicator::after {
+  background: #fff;
 }
 
 .daily-task-progress-copy {
@@ -52,24 +80,22 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-.daily-task-progress-indicator {
-  border-radius: 999px;
-}
-
 .daily-task-content {
-  padding: 36px 20px 56px;
+  padding: 32px 24px 56px;
 }
 
 .daily-task-section-heading {
-  min-height: 40px;
-}
-
-.daily-task-section-heading button {
   min-height: 44px;
 }
 
+.daily-task-cleanup {
+  flex: none;
+  min-height: 44px;
+  white-space: nowrap;
+}
+
 .daily-task-search {
-  margin-top: 20px;
+  margin-top: 16px;
 }
 
 .daily-task-filters {
@@ -77,17 +103,18 @@ body {
 }
 
 .daily-task-filters button {
-  min-height: 44px;
+  min-height: 40px;
   border-radius: 999px;
 }
 
 .daily-task-list {
   padding: 0;
-  margin: 12px 0 0;
+  margin: 20px 0 0;
   list-style: none;
 }
 
 .daily-task-item {
+  min-height: 80px;
   padding: 16px 0;
   border-bottom: 1px solid var(--semantic-line-solid-alternative);
 }
@@ -112,18 +139,21 @@ body {
   overflow-wrap: anywhere;
 }
 
-.daily-task-category {
-  flex: none;
-  padding-top: 2px;
-}
-
 .daily-task-item[data-completed='true'] .daily-task-title {
   color: var(--semantic-label-alternative);
   text-decoration: line-through;
+  text-decoration-color: var(--semantic-label-assistive);
 }
 
 .daily-task-metadata {
+  min-width: 0;
+}
+
+.daily-task-meta-detail::before {
+  display: inline-block;
+  margin-right: 8px;
   color: var(--semantic-label-assistive);
+  content: '·';
 }
 
 .daily-task-empty {
@@ -142,13 +172,25 @@ body {
 
 .daily-task-result {
   min-height: 22px;
-  margin: 12px 0 0;
+  margin: 16px 0 0;
   text-align: center;
 }
 
+@media (max-width: 430px) {
+  .mobile-lab-app {
+    box-shadow: none;
+  }
+}
+
 @media (max-width: 359px) {
-  .daily-task-content .daily-task-section-heading {
-    align-items: flex-start;
-    flex-direction: column;
+  .daily-task-topbar,
+  .daily-task-summary {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  .daily-task-content {
+    padding-right: 20px;
+    padding-left: 20px;
   }
 }
