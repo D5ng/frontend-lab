@@ -34,15 +34,10 @@ export function TaskListControls({
 }: Props) {
   return (
     <>
-      <FlexBox alignItems="flex-start" className="daily-task-section-heading" justifyContent="space-between" gap="12px">
-        <FlexBox flexDirection="column" gap="2px">
-          <Typography as="h2" id="task-list-title" variant="heading1" weight="bold">
-            나의 할 일
-          </Typography>
-          <Typography as="p" color="semantic.label.alternative" variant="label1">
-            예정된 일 {tasksTotalCount}개
-          </Typography>
-        </FlexBox>
+      <FlexBox alignItems="center" className="daily-task-section-heading" justifyContent="space-between" gap="12px">
+        <Typography as="h2" id="task-list-title" variant="heading1" weight="bold">
+          나의 할 일
+        </Typography>
         <Button
           color="assistive"
           disabled={completedCount === 0}

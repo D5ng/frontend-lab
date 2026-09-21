@@ -20,29 +20,27 @@ body {
   min-height: 100vh;
   margin: 0 auto;
   background: var(--semantic-background-normal-normal);
-  box-shadow: 0 0 48px rgb(23 23 25 / 8%);
 }
 
 .daily-task-screen {
-  min-height: 100vh;
+  min-height: 100dvh;
   background: var(--semantic-background-normal-normal);
 }
 
 .daily-task-intro {
-  padding: 20px 20px 24px;
+  padding: 28px 20px 24px;
 }
 
 .daily-task-summary {
   margin: 0 20px;
   padding: 20px;
-  border: 1px solid var(--semantic-line-solid-neutral);
-  border-radius: 20px;
-  background: var(--semantic-background-elevated-normal);
-  box-shadow: 0 8px 24px rgb(23 23 25 / 5%);
+  border-radius: 16px;
+  background: var(--semantic-background-normal-alternative);
 }
 
 .daily-task-progress-copy {
   flex: none;
+  font-variant-numeric: tabular-nums;
 }
 
 .daily-task-progress-indicator {
@@ -57,22 +55,30 @@ body {
   min-height: 40px;
 }
 
+.daily-task-section-heading button {
+  min-height: 44px;
+}
+
 .daily-task-search {
-  margin-top: 18px;
+  margin-top: 20px;
 }
 
 .daily-task-filters {
-  margin-top: 14px;
+  margin-top: 16px;
+}
+
+.daily-task-filters button {
+  min-height: 44px;
 }
 
 .daily-task-list {
   padding: 0;
-  margin: 16px 0 0;
+  margin: 12px 0 0;
   list-style: none;
 }
 
 .daily-task-item {
-  padding: 18px 0;
+  padding: 14px 0;
   border-bottom: 1px solid var(--semantic-line-solid-alternative);
 }
 
@@ -85,9 +91,15 @@ body {
   flex: 1;
 }
 
+.daily-task-item [role='checkbox'] {
+  flex: none;
+  min-width: 44px;
+  min-height: 44px;
+}
+
 .daily-task-title {
   min-width: 0;
-  flex: 1;
+  overflow-wrap: anywhere;
 }
 
 .daily-task-item[data-completed='true'] .daily-task-title {
@@ -109,8 +121,8 @@ body {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  color: var(--semantic-primary-normal);
-  background: rgb(var(--semantic-primary-normal-rgb) / 8%);
+  color: var(--semantic-label-alternative);
+  background: var(--semantic-background-normal-alternative);
 }
 
 .daily-task-result {
@@ -120,14 +132,8 @@ body {
 }
 
 @media (max-width: 359px) {
-  .daily-task-section-heading {
+  .daily-task-content .daily-task-section-heading {
     align-items: flex-start;
     flex-direction: column;
-  }
-}
-
-@media (max-width: 375px) {
-  .mobile-lab-app {
-    box-shadow: none;
   }
 }
