@@ -27,18 +27,20 @@ export function TaskList({ visibleTasks, onToggleTask }: Props) {
           />
 
           <FlexBox className="daily-task-item-body" flexDirection="column" gap="4px">
-            <Typography as="h3" className="daily-task-title" variant="body1" weight="medium">
-              {task.title}
-            </Typography>
+            <FlexBox alignItems="flex-start" justifyContent="space-between" gap="8px">
+              <Typography as="h3" className="daily-task-title" variant="body1" weight="medium">
+                {task.title}
+              </Typography>
+              <Typography as="span" className="daily-task-category" color="semantic.label.alternative" variant="caption1">
+                {CATEGORY_LABELS[task.category]}
+              </Typography>
+            </FlexBox>
             <FlexBox className="daily-task-metadata" flexWrap="wrap" gap="4px 10px">
               <Typography as="span" color="semantic.label.alternative" variant="caption1">
                 {task.due}
               </Typography>
               <Typography as="span" color="semantic.label.alternative" variant="caption1">
                 {task.place}
-              </Typography>
-              <Typography as="span" color="semantic.label.alternative" variant="caption1">
-                {CATEGORY_LABELS[task.category]}
               </Typography>
             </FlexBox>
           </FlexBox>

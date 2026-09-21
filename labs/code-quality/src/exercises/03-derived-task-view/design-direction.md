@@ -19,7 +19,7 @@ Montage의 light theme 토큰을 화면의 기본 언어로 사용한다.
 - `semantic.label.normal`: 제목과 핵심 정보
 - `semantic.label.alternative`: 날짜, 장소 같은 보조 정보
 - `semantic.line.solid.alternative`: 목록 항목의 구분
-- `semantic.background.normal.alternative`: 앱 바깥과 진행 상황을 구분하는 중립 표면
+- `semantic.background.normal.alternative`: 앱 바깥의 중립 표면
 
 타이포그래피는 Montage `Typography`의 variant와 weight로 위계를 만들고, Pretendard와 시스템 한글 글꼴은 그 기반으로만 사용한다.
 
@@ -30,7 +30,6 @@ Montage의 light theme 토큰을 화면의 기본 언어로 사용한다.
 │ 하루                        │
 ├─────────────────────────────┤
 │ 오늘도 차근차근             │
-│ 생활 속 할 일을 한눈에 확인 │
 ├─────────────────────────────┤
 │ 오늘 남은 일 2개       50%  │
 │ 전체 4개 중 2개 완료        │
@@ -46,7 +45,7 @@ Montage의 light theme 토큰을 화면의 기본 언어로 사용한다.
 └─────────────────────────────┘
 ```
 
-상단 요약만 은은한 중립 배경으로 구분한다. 목록은 여러 색의 배지와 보조 아이콘 대신 제목과 메타데이터를 두 줄로 정리하고, Montage의 구분선과 충분한 여백으로 한 흐름을 만든다.
+상단 요약만 브랜드 블루를 옅게 사용한 표면으로 구분한다. 목록은 여러 색의 배지와 보조 아이콘 대신 제목, 카테고리와 메타데이터를 정리하고, Montage의 구분선과 충분한 여백으로 한 흐름을 만든다.
 
 ## 상호작용 기준
 

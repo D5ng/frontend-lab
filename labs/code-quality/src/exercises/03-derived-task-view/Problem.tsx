@@ -1,4 +1,4 @@
-import { FlexBox, TopNavigation, Typography } from '@wanteddev/wds'
+import { FlexBox, Typography } from '@wanteddev/wds'
 import { DailyTask, DEFAULT_TASKS } from './model/task'
 import { useDailyTasks } from './hooks/useDailyTasks'
 import { TaskProgressSummary } from './components/TaskProgressSummary'
@@ -24,7 +24,11 @@ export function Problem({ initialTasks = DEFAULT_TASKS }: ProblemProps) {
 
   return (
     <FlexBox className="daily-task-screen" flexDirection="column">
-      <TopNavigation titleId="daily-task-navigation-title">하루</TopNavigation>
+      <FlexBox alignItems="center" className="daily-task-topbar">
+        <Typography as="span" className="daily-task-brand" variant="headline2" weight="bold">
+          하루
+        </Typography>
+      </FlexBox>
 
       <TaskProgressSummary
         todoCount={todoCount}
