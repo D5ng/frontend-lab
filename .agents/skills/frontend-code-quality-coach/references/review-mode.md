@@ -1,38 +1,31 @@
-# Review Mode
+# 리뷰 모드
 
-Review before editing unless the user explicitly asks for implementation.
+사용자가 구현을 요청하지 않았다면 검토 후 코드를 수정하지 않는다.
 
-## Evidence pass
+## 근거 확인
 
-1. Read the stated requirements, relevant source, tests, and direct consumers.
-2. Describe each important module's current responsibility in one sentence.
-3. Identify the source of truth and policies involved.
-4. Check observable behavior separately from structural quality.
+1. 요구사항, 관련 코드·테스트, 직접적인 사용처를 읽는다.
+2. 주요 모듈의 현재 책임을 각각 한 문장으로 설명한다.
+3. 원본 상태와 파생값, 변경 동작, 조회·표현 규칙의 위치를 파악한다.
+4. 관찰 가능한 동작의 정확성과 구조의 품질을 별도로 확인한다.
 
-## Findings
+## 검토 결과의 순서
 
-Report the outcome in this order:
+1. **검증된 결함:** 현재 동작이나 계약이 이미 잘못됐다.
+2. **설계 위험:** 구체적이고 개연성 있는 변경에서 불필요한 비용이 드러난다.
+3. **개선 제안:** 선택한 품질 기준을 개선할 수 있지만 지금 필수는 아니다.
+4. **관례:** 정확성에 영향이 없는 일관성이나 취향의 문제다.
 
-1. **Verified defect:** current behavior or contract is already incorrect.
-2. **Design risk:** a concrete, plausible requirement change exposes avoidable cost.
-3. **Proposal:** an alternative that may improve a chosen quality but is not required now.
-4. **Convention:** a consistency preference without correctness impact.
+중요한 판단에는 코드 근거, 관련된 [품질 기준](code-quality-criteria.md), 이 저장소에서의 영향, 비용을 드러내는 변경 시나리오, 대안과 그 대가, 지금 변경할지 이후로 미룰지를 담는다. 가정한 시나리오를 확인된 요구사항처럼 제시하지 않는다.
 
-For each material finding include:
+구조를 비교할 때는 변경 하나를 고른 뒤 각 대안에서 실제로 수정할 상태·정책·사용처를 추적한다. 특히 ‘훅으로 빼면 한 파일만 고친다’는 주장은 해당 정책이 정말 그 훅 안에 있는지 확인해야 한다.
 
-- direct code evidence;
-- the relevant readability, predictability, cohesion, or coupling criterion;
-- why it matters in this repository;
-- a change scenario that reveals the cost;
-- at least one viable alternative and its tradeoff;
-- whether to change now or wait for more evidence.
+## 과도한 확신 피하기
 
-## Avoid false certainty
+- 컴포넌트가 크다는 이유만으로 여러 책임이라고 단정하지 않는다.
+- 커스텀 훅의 존재나 개수가 좋은 경계를 보장한다고 보지 않는다.
+- 상태와 콜백의 전달이 명확하다면 props 전달 자체를 결함으로 보지 않는다.
+- 중복이 항상 빠뜨린 추상화를 뜻하지는 않는다.
+- 공개된 예시와 닮았다는 이유만으로 현재 구조를 정답으로 판정하지 않는다.
 
-- A large component is not automatically multiple responsibilities.
-- A Custom Hook is not automatically a clean separation.
-- Prop drilling is not automatically harmful when ownership and dependency remain clear.
-- Duplicate code is not automatically a missed abstraction.
-- A design is not correct merely because it resembles a published example.
-
-If there are no material findings, say so and name the remaining verification limits. Do not invent a suggestion to fill every criterion.
+중요한 문제가 없다면 그렇게 말하고, 확인하지 못한 동작·환경을 명시한다. 모든 기준에 억지로 지적 사항을 만들지 않는다.

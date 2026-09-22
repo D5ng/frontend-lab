@@ -1,29 +1,26 @@
-# Practice Mode
+# 연습 모드
 
-Use this mode to preserve the user's opportunity to reason and implement.
+사용자가 먼저 생각하고 구현할 기회를 보존한다.
 
-## Flow
+## 진행 방법
 
-1. State one focused learning question and the observable requirements.
-2. Ask the user to describe the current responsibility, likely change reasons, or intended boundary.
-3. Let the user implement before supplying a completed structure.
-4. Review the result against behavior and the code-quality criteria.
-5. Introduce one requirement change that tests the current decision rather than merely adding volume.
-6. Compare the expected and actual change scope.
-7. Help the user record what was correct, what changed, and the reusable decision rule.
+1. 한 가지 학습 질문과 사용자에게 관찰되는 요구사항을 정리한다.
+2. 사용자가 현재 책임, 예상되는 변경 이유, 두려는 경계를 자기 언어로 설명하게 한다.
+3. 완성된 구조를 먼저 제공하지 말고 사용자의 첫 구현을 기다린다.
+4. 결과를 사용자 행동과 [코드 품질 기준](code-quality-criteria.md)에 비추어 검토한다.
+5. 코드 양만 늘리는 대신, 현재 경계를 시험하는 요구사항 변경을 하나 제시한다.
+6. 변경 전 예상한 영향 범위와 실제 수정 범위를 비교한다.
+7. 맞았던 판단, 수정한 오해, 다음에도 사용할 판단 기준을 기록하도록 돕는다.
 
-## Guidance boundary
+## 도움의 범위
 
-- Give a small concrete example when a prerequisite concept is unfamiliar.
-- Prefer questions and partial hints while the user is actively deriving an answer.
-- Provide a full explanation when the user explicitly asks for it or continued discovery is blocking progress.
-- Do not introduce extra test cases beyond the requested exercise unless they are necessary to expose the chosen change scenario.
-- Do not create a polished abstraction before evidence for that abstraction appears.
+- 전제 개념이 낯설다면 작은 구체적 예시를 준다.
+- 사용자가 스스로 답을 찾는 중에는 질문이나 부분 힌트를 우선한다. 완성된 설명을 명시적으로 요청하거나 탐색이 막히면 답을 제공한다.
+- 선택한 변경 시나리오를 드러내는 데 필요한 경우가 아니면, 요청 범위 밖의 테스트 사례를 늘리지 않는다.
+- 현재 확인되지 않은 미래 요구사항을 근거로 완성된 추상화를 먼저 만들지 않는다.
 
-## Requirement changes
+## 요구사항 변경과 학습 기록
 
-A useful change targets the decision under study. Examples include adding another mutually exclusive flow, changing who owns a state, reusing a policy in bulk behavior, or requiring URL restoration. Explain why the change is relevant; avoid arbitrary complexity.
+유용한 변경은 지금 검토 중인 결정을 압박한다. 예를 들어 상태 소유자가 바뀌거나, 같은 규칙이 일괄 동작에도 필요해지거나, 조회 조건을 URL에서 복원해야 하는 경우다. 왜 이 변경을 선택했는지 설명하고 임의의 복잡성을 추가하지 않는다.
 
-## Learning record
-
-At the end, update or propose the Lab note using these sections: learning question, initial understanding, observable requirements, chosen design, alternatives and tradeoffs, added change, actual impact, corrected misunderstanding, final learning, and references.
+학습 기록에는 학습 질문, 처음 이해한 내용, 관찰 가능한 요구사항, 선택한 설계, 대안과 비용, 추가한 변경, 실제 영향, 바로잡은 오해, 최종 판단, 참고 자료를 제안한다. 사용자가 직접 작성하려는 기록은 대신 완성하지 않는다.

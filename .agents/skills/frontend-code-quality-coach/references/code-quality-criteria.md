@@ -1,67 +1,59 @@
-# Code quality criteria
+# 코드 품질 판단 기준
 
-Use these criteria together. A decision that improves one can weaken another, so relate every judgment to the current requirements and likely changes.
+네 기준은 함께 사용한다. 하나를 개선하면 다른 기준이 약해질 수 있으므로, 현재 요구사항과 **구체적인 변경 시나리오**에 연결해 판단한다. 기준의 출처는 [Frontend Fundamentals: 좋은 코드를 위한 4가지 기준](https://frontend-fundamentals.com/code-quality/code/)이며, 아래 질문과 적용 절차는 코칭을 위한 해석이다. 이를 특정 회사의 유일한 구현 방식이나 채용 기준으로 제시하지 않는다.
 
-Primary sources:
+## 가독성
 
-- [좋은 코드를 위한 4가지 기준](https://frontend-fundamentals.com/code-quality/code/)
-- [toss/frontend-fundamentals](https://github.com/toss/frontend-fundamentals)
+독자가 한 번에 기억해야 할 맥락과 동작을 파악하기 위해 이동해야 하는 위치가 적은가?
 
-## Readability
+- 사용자 수준의 흐름이 세부 구현에 가려지지 않는가?
+- 이름만으로 값의 범위와 함수의 실제 동작을 예상할 수 있는가?
+- 분리한 뒤에는 호출부와 구현부를 오가는 비용보다 숨긴 복잡성이 큰가?
 
-Ask how much context a reader must hold at once and whether the execution flow follows the order in which it is read.
+짧은 코드, 많은 함수, 적은 조건문이 곧 좋은 가독성은 아니다. 단순한 판단을 불필요하게 감추지 않는다는 [시점 이동 줄이기](https://frontend-fundamentals.com/code-quality/code/examples/user-policy.html)도 함께 고려한다.
 
-Useful signals:
+## 예측 가능성
 
-- branches that never run together are interleaved;
-- details obscure the user-level operation;
-- a name hides or contradicts the actual behavior;
-- an abstraction forces more jumping than the detail it hides.
+이름, 입력, 반환값, 주변 관례를 보고 동작을 추론할 수 있는가?
 
-Do not equate shorter code, more functions, or fewer conditionals with better readability.
+- 비슷한 함수의 반환·오류 처리 계약이 일관적인가?
+- 단순 조회처럼 보이는 호출이 숨은 상태 변경을 일으키지 않는가?
+- 컴포넌트나 훅의 이름이 실제 책임보다 좁거나 넓지 않은가?
 
-## Predictability
+널리 쓰이는 라이브러리 관례와 다르다는 이유만으로, 이 코드 안에서 명확한 계약을 오류로 취급하지 않는다.
 
-Ask whether collaborators can infer behavior from names, inputs, outputs, and nearby conventions.
+## 응집도
 
-Useful signals:
+같은 요구사항 때문에 함께 수정되어야 할 코드가 가까이 있고, 일부만 수정해 규칙이 어긋날 위험이 작은가?
 
-- similar functions use incompatible return or error contracts;
-- an innocent-looking call changes hidden state;
-- the same name means different things in neighboring modules;
-- a component requires undocumented ordering or environmental assumptions.
+- 한 정책이 여러 사용처에 수동으로 반복되어 서로 다르게 바뀔 수 있는가?
+- 한 필드의 표시·검증·요청 변환처럼 함께 맞춰야 할 코드가 흩어져 있는가?
+- 같은 도메인 명사를 사용한다는 것 외에 함께 변경될 근거가 있는가?
 
-Do not reject a locally clear contract only because another popular library uses a different convention.
+기능과 함께 수정되는 파일을 가까이 두는 [디렉터리 응집도](https://frontend-fundamentals.com/code-quality/code/examples/code-directory.html)도 고려한다. 함께 사용된다는 사실만으로 반드시 같은 책임은 아니다.
 
-## Cohesion
+## 결합도
 
-Ask whether code that must change together is structurally kept together.
+한 변경이 영향을 주는 코드와 사용처의 범위가 좁고 예측 가능한가?
 
-Useful signals:
+- 하위 모듈이 특정 화면이나 사용자 흐름을 불필요하게 알고 있는가?
+- 하나의 훅에 서로 독립적으로 변하는 페이지 상태를 모아 다른 사용처까지 영향을 주는가?
+- 소비자가 자신의 책임과 무관한 정보를 넘겨야 하는가?
+- 공통화 때문에 독립적으로 바뀌어야 할 사례들이 함께 묶이지 않았는가?
 
-- one policy is manually repeated across consumers;
-- a form's field, validation, and request transformation can drift independently;
-- a single requirement change requires remembering unrelated locations;
-- a shared concept has a stable reason to change.
+의존성이 존재하는 것 자체가 결함은 아니다. [책임을 하나씩 관리하기](https://frontend-fundamentals.com/code-quality/code/examples/use-page-state-coupling.html)의 핵심은 훅의 개수가 아니라 변경 영향 범위를 통제하는 것이다. 국소적인 중복은 독립적인 변경을 보호할 수 있다.
 
-Do not group code merely because it has the same domain noun or looks similar today.
+## React 경계에 적용하기
 
-## Coupling
+1. 사용자의 행동이나 외부 입력으로 직접 바뀌는 **원본 상태**와, 매번 다시 계산할 수 있는 **파생값**을 구분한다.
+2. 화면에 표시할 값이 여러 입력의 조합이라면, 어떤 곳이 그 입력을 소유하고 어떤 곳이 계산만 하는지 분리해 설명한다. 데이터를 전달받아 조회하는 것은 데이터를 소유하거나 변경하는 것과 다르다.
+3. 훅·순수 함수·컴포넌트·화면에 그대로 두는 방법을 후보로 놓는다. 훅의 수나 파일 수는 결과이지 설계 목표가 아니다.
+4. 상태의 수명·동기화·부수효과를 관리해야 한다면 훅이 도움이 될 수 있다. 입력을 받아 결과만 계산하는 규칙이라면 순수 함수나 현재 화면 안의 계산이 더 명확할 수 있다.
+5. UI와 로직의 경계를 평가할 때 ‘완전 분리’ 여부보다, 화면 표현의 변경과 데이터 규칙의 변경이 각각 어디로 전파되는지 확인한다.
 
-Ask whether the impact of a change is narrow and predictable.
+## 변경 시나리오로 결론 내리기
 
-Useful signals:
-
-- a low-level module knows a page or user flow;
-- a consumer must provide information irrelevant to its own responsibility;
-- changing one variant forces edits to unrelated variants;
-- a shared abstraction exposes many switches for unrelated use cases.
-
-Do not assume duplication always means harmful coupling. Local duplication can preserve independent change.
-
-## Tradeoff prompts
-
-- If duplicated code is unified, which future changes become safer and which consumers become tied together?
-- If a component is split, which context becomes easier to understand and which full flow becomes harder to trace?
-- If state moves upward or into Context, who gains access and which dependencies become less visible?
-- If a condition receives a name, does the name express a stable policy or merely hide syntax?
+- 실제 요구사항과 앞으로의 변경을 구분한다. 미래 변경이 가정이라면 그 불확실성을 명시한다.
+- 변경 하나를 정하고 현재 구조와 대안에서 **어떤 책임·파일·계약이 바뀌는지** 비교한다. 수정 파일 수만 세지 말고 탐색 비용, 동기화 누락 위험, 불필요한 영향 범위를 본다.
+- 추상화가 응집도를 높이지만 시점 이동을 늘리거나, 공통화가 중복을 줄이지만 결합도를 높이는 비용을 함께 기록한다.
+- 이득이 확인되지 않았다면 현 구조 유지도 유효한 결론이다. 다만 어떤 변경이 생기면 판단을 다시 할지 제시한다.
