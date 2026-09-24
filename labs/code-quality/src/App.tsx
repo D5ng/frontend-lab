@@ -1,4 +1,4 @@
-import { Problem } from './exercises/03-derived-task-view/Problem'
+import { Problem } from './exercises/04-shopping-cart/Problem'
 
 export function App() {
   return (
