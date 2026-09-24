@@ -7,5 +7,6 @@
   "files.associations": {
     ".prettierrc": "json"
   },
-  "files.insertFinalNewline": true
+  "files.insertFinalNewline": true,
+  "js/ts.tsdk.path": "node_modules/typescript/lib"
 }
