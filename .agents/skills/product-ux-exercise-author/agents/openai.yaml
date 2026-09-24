@@ -1,0 +1,6 @@
+interface:
+  display_name: "Product UX Exercise Author"
+  short_description: "Montage로 제품 수준 모바일 화면을 설계하고 실습 문제로 출제합니다"
+  default_prompt: "Use $product-ux-exercise-author to design a production-grade mobile screen with Montage and turn it into a lab exercise."
+policy:
+  allow_implicit_invocation: true
