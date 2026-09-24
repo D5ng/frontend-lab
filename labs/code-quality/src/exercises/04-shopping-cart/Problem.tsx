@@ -35,7 +35,7 @@ export function Problem() {
         </FlexBox>
       </FlexBox>
 
-      <Divider />
+      <Divider thickness={10} />
 
       <FlexBox alignItems="center" aria-labelledby="cart-total-label" as="section" className="cart-total" justifyContent="space-between">
         <Typography as="h3" id="cart-total-label" variant="body1" weight="medium">
