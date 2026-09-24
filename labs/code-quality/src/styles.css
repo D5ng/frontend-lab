@@ -9,64 +9,188 @@
   text-rendering: optimizeLegibility;
 }
 
-body {
+html body {
   min-width: 320px;
   min-height: 100vh;
   background: var(--semantic-background-normal-alternative);
 }
 
-.mobile-event-app {
-  width: min(100%, 375px);
-  min-height: 100vh;
+.mobile-lab-app {
+  width: min(100%, 430px);
+  min-height: 100dvh;
   margin: 0 auto;
+  background: var(--semantic-background-normal-normal);
+  box-shadow: 0 0 0 1px var(--semantic-line-solid-alternative);
+}
+
+.daily-task-screen {
+  min-height: 100dvh;
   background: var(--semantic-background-normal-normal);
 }
 
-.page-shell {
-  padding: 32px 20px 184px;
+.daily-task-topbar {
+  min-height: 64px;
+  padding: 0 24px;
 }
 
-.event-page-header {
-  padding-bottom: 8px;
+.daily-task-brand {
+  letter-spacing: -0.07em;
 }
 
-.event-registration-section {
-  gap: 32px;
+.daily-task-summary {
+  padding: 38px 24px 42px;
+  border-radius: 0 0 24px 24px;
+  background: var(--semantic-primary-normal);
 }
 
-.event-registration-form {
-  display: grid;
-  gap: 16px;
+.daily-task-summary h1,
+.daily-task-summary p,
+.daily-task-summary strong {
+  color: #fff;
 }
 
-.event-registration-form fieldset {
-  border: 0;
+.daily-task-summary h1 {
+  font-size: 28px;
+  line-height: 1.35;
+  letter-spacing: -0.055em;
 }
 
-.event-type-field {
-  display: grid;
-  gap: 12px;
-  padding: 0;
+.daily-task-summary-detail {
+  margin: 8px 0 0;
 }
 
-.event-type-options {
-  display: flex;
-  gap: 20px;
+.daily-task-progress {
+  margin-top: 30px;
 }
 
-.event-registration-actions {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1;
-  width: min(100%, 375px);
-  margin: 0 auto;
-  padding: 16px 20px calc(16px + env(safe-area-inset-bottom));
-  border-top: 1px solid var(--semantic-line-normal-normal);
-  background: var(--semantic-background-normal-normal);
+.daily-task-summary .daily-task-progress-indicator {
+  flex: 1;
+  min-width: 0;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.32);
 }
 
-.event-registration-feedback {
+.daily-task-summary .daily-task-progress-indicator::after {
+  background: #fff;
+}
+
+.daily-task-progress-copy {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.daily-task-content {
+  padding: 32px 24px 56px;
+}
+
+.daily-task-section-heading {
+  min-height: 44px;
+}
+
+.daily-task-cleanup {
+  flex: none;
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+.daily-task-search {
+  margin-top: 16px;
+}
+
+.daily-task-filters {
+  margin-top: 16px;
+}
+
+.daily-task-filters button {
   min-height: 40px;
+  border-radius: 999px;
+}
+
+.daily-task-list {
+  padding: 0;
+  margin: 20px 0 0;
+  list-style: none;
+}
+
+.daily-task-item {
+  min-height: 80px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--semantic-line-solid-alternative);
+}
+
+.daily-task-item:last-child {
+  border-bottom: 0;
+}
+
+.daily-task-item-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.daily-task-item [role='checkbox'] {
+  flex: none;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.daily-task-title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.daily-task-item[data-completed='true'] .daily-task-title {
+  color: var(--semantic-label-alternative);
+  text-decoration: line-through;
+  text-decoration-color: var(--semantic-label-assistive);
+}
+
+.daily-task-metadata {
+  min-width: 0;
+}
+
+.daily-task-meta-detail::before {
+  display: inline-block;
+  margin-right: 8px;
+  color: var(--semantic-label-assistive);
+  content: '·';
+}
+
+.daily-task-empty {
+  min-height: 220px;
+  margin-top: 18px;
+  text-align: center;
+}
+
+.daily-task-empty-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  color: var(--semantic-label-alternative);
+  background: var(--semantic-background-normal-alternative);
+}
+
+.daily-task-result {
+  min-height: 22px;
+  margin: 16px 0 0;
+  text-align: center;
+}
+
+@media (max-width: 430px) {
+  .mobile-lab-app {
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 359px) {
+  .daily-task-topbar,
+  .daily-task-summary {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  .daily-task-content {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
 }
