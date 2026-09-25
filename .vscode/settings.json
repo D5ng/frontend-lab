@@ -1,11 +1,15 @@
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "files.associations": {
     ".prettierrc": "json"
   },
-  "files.insertFinalNewline": true
+  "files.insertFinalNewline": true,
+  "js/ts.tsdk.path": "node_modules/typescript/lib"
 }
