@@ -4,50 +4,68 @@ import { describe, expect, it } from 'vitest'
 
 import { Problem } from './Problem'
 
+function getQuantity(productName: string) {
+  return screen.getByRole('status', { name: `${productName} 수량` })
+}
+
+function getIncreaseButton(productName: string) {
+  return screen.getByRole('button', { name: `${productName} 수량 늘리기` })
+}
+
+function getDecreaseButton(productName: string) {
+  return screen.getByRole('button', { name: `${productName} 수량 줄이기` })
+}
+
 function getTotal() {
   return within(screen.getByRole('region', { name: '총 결제 금액' }))
 }
 
-describe('장바구니 1단계: 수량 조절', () => {
-  it('처음에는 상품 1개와 그 금액을 보여준다', () => {
+describe('장바구니 2단계: 여러 상품', () => {
+  it('담긴 상품마다 수량을 보여주고 모두 합한 금액을 보여준다', () => {
     render(<Problem />)
 
-    expect(screen.getByRole('status', { name: '수량' })).toHaveTextContent('1')
-    expect(getTotal().getByText('18,900원')).toBeVisible()
+    expect(getQuantity('제주 햇감귤 3kg')).toHaveTextContent('1')
+    expect(getQuantity('유기농 바나나 1.2kg')).toHaveTextContent('2')
+    expect(getQuantity('무항생제 유정란 30구')).toHaveTextContent('1')
+    expect(getTotal().getByText('40,500원')).toBeVisible()
   })
 
-  it('수량을 늘리면 총 결제 금액이 함께 바뀐다', async () => {
+  it('한 상품의 수량을 늘리면 그 상품만 바뀌고 총 결제 금액에 반영된다', async () => {
     const user = userEvent.setup()
     render(<Problem />)
 
-    await user.click(screen.getByRole('button', { name: '수량 늘리기' }))
-    await user.click(screen.getByRole('button', { name: '수량 늘리기' }))
+    await user.click(getIncreaseButton('유기농 바나나 1.2kg'))
 
-    expect(screen.getByRole('status', { name: '수량' })).toHaveTextContent('3')
-    expect(getTotal().getByText('56,700원')).toBeVisible()
+    expect(getQuantity('유기농 바나나 1.2kg')).toHaveTextContent('3')
+    expect(getQuantity('제주 햇감귤 3kg')).toHaveTextContent('1')
+    expect(getQuantity('무항생제 유정란 30구')).toHaveTextContent('1')
+    expect(getTotal().getByText('46,400원')).toBeVisible()
   })
 
-  it('수량을 줄이면 총 결제 금액이 함께 바뀐다', async () => {
+  it('한 상품의 수량을 줄이면 그 상품만 바뀌고 총 결제 금액에 반영된다', async () => {
     const user = userEvent.setup()
     render(<Problem />)
 
-    await user.click(screen.getByRole('button', { name: '수량 늘리기' }))
-    await user.click(screen.getByRole('button', { name: '수량 줄이기' }))
+    await user.click(getIncreaseButton('제주 햇감귤 3kg'))
+    await user.click(getIncreaseButton('제주 햇감귤 3kg'))
+    await user.click(getDecreaseButton('제주 햇감귤 3kg'))
 
-    expect(screen.getByRole('status', { name: '수량' })).toHaveTextContent('1')
-    expect(getTotal().getByText('18,900원')).toBeVisible()
+    expect(getQuantity('제주 햇감귤 3kg')).toHaveTextContent('2')
+    expect(getQuantity('유기농 바나나 1.2kg')).toHaveTextContent('2')
+    expect(getTotal().getByText('59,400원')).toBeVisible()
   })
 
-  it('수량은 1개보다 줄일 수 없다', async () => {
+  it('상품마다 수량은 1개보다 줄일 수 없다', async () => {
     const user = userEvent.setup()
     render(<Problem />)
 
-    expect(screen.getByRole('button', { name: '수량 줄이기' })).toBeDisabled()
+    expect(getDecreaseButton('제주 햇감귤 3kg')).toBeDisabled()
+    expect(getDecreaseButton('유기농 바나나 1.2kg')).toBeEnabled()
 
-    await user.click(screen.getByRole('button', { name: '수량 늘리기' }))
-    expect(screen.getByRole('button', { name: '수량 줄이기' })).toBeEnabled()
+    await user.click(getDecreaseButton('유기농 바나나 1.2kg'))
 
-    await user.click(screen.getByRole('button', { name: '수량 줄이기' }))
-    expect(screen.getByRole('button', { name: '수량 줄이기' })).toBeDisabled()
+    expect(getQuantity('유기농 바나나 1.2kg')).toHaveTextContent('1')
+    expect(getDecreaseButton('유기농 바나나 1.2kg')).toBeDisabled()
+    expect(getTotal().getByText('34,600원')).toBeVisible()
   })
 })
