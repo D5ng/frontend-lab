@@ -12,7 +12,7 @@ export function CartTotalPrice({ totalPrice }: Props) {
         총 결제 금액
       </Typography>
       <Typography as="strong" color="semantic.primary.normal" variant="heading2" weight="bold">
-        {formatPrice(totalPrice)}원
+        {formatPrice(totalPrice)}
       </Typography>
     </FlexBox>
   )
