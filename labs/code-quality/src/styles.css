@@ -176,6 +176,29 @@ html body {
   text-align: center;
 }
 
+.cart-screen {
+  min-height: 100dvh;
+  background: var(--semantic-background-normal-normal);
+}
+
+.cart-item {
+  padding: 20px 20px 24px;
+}
+
+.cart-quantity-control {
+  gap: 4px;
+}
+
+.cart-quantity-value {
+  min-width: 40px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.cart-screen .cart-total {
+  padding: 24px 20px;
+}
+
 @media (max-width: 430px) {
   .mobile-lab-app {
     box-shadow: none;

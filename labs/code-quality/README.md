@@ -55,6 +55,14 @@
 
 요구사항은 [Exercise 03 문서](./src/exercises/03-derived-task-view/requirements.md), 시각 기준은 [디자인 방향](./src/exercises/03-derived-task-view/design-direction.md)에 있습니다. 구현 전에 [학습 기록](./src/exercises/03-derived-task-view/note.md)의 첫 세 항목을 작성합니다.
 
+## Exercise 04: 장바구니를 한 단계씩 키우기
+
+가장 쉬운 기능 하나로 시작해 단계마다 기능을 하나씩 덧댑니다. 다음 단계의 요구사항은 지금 단계를 끝낸 뒤에 공개합니다.
+
+> 이번 변경은 어떤 코드를 함께 바꾸게 하고, 그 변경이 나누거나 합칠 이유를 주는가?
+
+1단계는 한 파일 안에서 상품 하나의 수량을 조절합니다. 요구사항은 [Exercise 04 문서](./src/exercises/04-shopping-cart/requirements.md)에 있습니다.
+
 ## 실행
 
 ```bash
