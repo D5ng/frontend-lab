@@ -26,17 +26,15 @@ export function useCart() {
   const [items, setItems] = useState<CartItem[]>(INITIAL_CART_ITEMS)
 
   const increaseQuantity = (itemId: CartItem['id']) => {
-    const updatedProducts = items.map((item) => (item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item))
-    setItems(updatedProducts)
+    const updatedItems = items.map((item) => (item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item))
+    setItems(updatedItems)
   }
 
   const decreaseQuantity = (itemId: CartItem['id']) => {
-    const updatedProducts = items.map((items) =>
-      items.id === itemId
-        ? { ...items, quantity: canDecreaseQuantity(items.quantity) ? items.quantity - 1 : MIN_CART_ITEM_QUANTITY }
-        : items,
+    const updatedItems = items.map((item) =>
+      item.id === itemId ? { ...item, quantity: canDecreaseQuantity(item.quantity) ? item.quantity - 1 : MIN_CART_ITEM_QUANTITY } : item,
     )
-    setItems(updatedProducts)
+    setItems(updatedItems)
   }
 
   const totalPrice = items.reduce((totalPrice, item) => {

@@ -3,8 +3,8 @@ import { CartItemRow } from './CartItemRow'
 
 interface Props {
   items: CartItem[]
-  onIncreaseQuantity: (productId: CartItem['id']) => void
-  onDecreaseQuantity: (productId: CartItem['id']) => void
+  onIncreaseQuantity: (itemId: CartItem['id']) => void
+  onDecreaseQuantity: (itemId: CartItem['id']) => void
 }
 
 export function CartItemList({ items, onDecreaseQuantity, onIncreaseQuantity }: Props) {
