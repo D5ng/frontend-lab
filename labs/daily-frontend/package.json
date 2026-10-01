@@ -11,7 +11,13 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@karrotmarket/react-monochrome-icon": "^1.29.0",
+    "@seed-design/css": "^2.8.3",
+    "@seed-design/react": "^2.5.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@seed-design/cli": "^1.7.0"
   }
 }
