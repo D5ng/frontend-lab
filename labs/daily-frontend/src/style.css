@@ -1,77 +1,81 @@
-body {
-  margin: 0;
-  background: #f5f6f8;
-  color: #20242c;
-  font-family: system-ui, sans-serif;
-  line-height: 1.6;
-}
-main {
-  max-width: 560px;
-  margin: 64px auto;
-  padding: 0 20px;
-}
-h1 {
-  font-size: 26px;
-}
-section {
-  background: white;
-  border: 1px solid #dce0e6;
-  border-radius: 12px;
-  padding: 24px;
-}
-input {
-  font: inherit;
-  border: 1px solid #aeb7c4;
-  border-radius: 6px;
-  padding: 10px 12px;
-  display: block;
-  margin-top: 8px;
-  width: 100%;
+* {
   box-sizing: border-box;
 }
-ul {
-  padding-left: 20px;
+body {
+  margin: 0;
+  background: var(--seed-color-bg-layer-basement);
+  color: var(--seed-color-fg-neutral);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
-li {
-  margin: 12px 0;
+h1,
+h2,
+h3,
+p {
+  margin: 0;
 }
-:focus-visible {
-  outline: 3px solid #5275da;
-  outline-offset: 3px;
-}
-
-nav {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: 24px;
-}
-nav a {
-  color: #243b83;
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #dce0e6;
-  text-decoration: none;
-}
-nav a[aria-current='page'] {
-  background: #e5ebff;
-  border-color: #5275da;
-}
-button {
+button,
+input,
+select {
   font: inherit;
-  padding: 8px 12px;
-  cursor: pointer;
 }
-button:disabled {
-  cursor: default;
+.daily-app {
+  width: 100%;
+  max-width: 480px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  background: var(--seed-color-bg-layer-default);
 }
-.product-choice {
+.daily-header {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  gap: var(--seed-dimension-x3);
+  min-height: 64px;
+  padding: var(--seed-dimension-x4) var(--seed-dimension-x5);
+  border-bottom: 1px solid var(--seed-color-stroke-neutral-subtle);
 }
-.product-choice input {
-  display: inline-block;
-  width: auto;
-  margin: 0;
+.daily-selector {
+  padding: var(--seed-dimension-x3) var(--seed-dimension-x5) 0;
+}
+:focus-visible {
+  outline: 2px solid var(--seed-color-stroke-focus-ring);
+  outline-offset: 3px;
+}
+/* 기존 실습의 native 요소는 풀이를 보존하며 공통 토큰으로 표현한다. */
+.daily-content > section {
+  padding: var(--seed-dimension-x6) var(--seed-dimension-x5);
+}
+.daily-content > section h2 {
+  font-size: var(--seed-font-size-t7);
+  margin-bottom: var(--seed-dimension-x6);
+}
+.daily-content > section input:not([type='checkbox']) {
+  display: block;
+  width: 100%;
+  min-height: 52px;
+  margin-top: var(--seed-dimension-x2);
+  padding: var(--seed-dimension-x3);
+  border: 1px solid var(--seed-color-stroke-neutral-weak);
+  border-radius: var(--seed-radius-r2);
+  background: var(--seed-color-bg-layer-default);
+  color: inherit;
+}
+.daily-content > section ul {
+  list-style: none;
+  padding: 0;
+}
+.daily-content > section li {
+  padding: var(--seed-dimension-x4) 0;
+  border-bottom: 1px solid var(--seed-color-stroke-neutral-subtle);
+}
+@media (min-width: 600px) {
+  .daily-app {
+    margin: 32px auto;
+    border: 1px solid var(--seed-color-stroke-neutral-subtle);
+    border-radius: var(--seed-radius-r4);
+    overflow: clip;
+    min-height: calc(100dvh - 64px);
+  }
 }
