@@ -1,0 +1,9 @@
+.async-search-empty {
+  text-align: center;
+}
+.async-search-empty-icon {
+  width: 36px;
+  height: 36px;
+  margin-bottom: var(--seed-dimension-x2);
+  color: var(--seed-color-fg-neutral-muted);
+}
