@@ -1,0 +1,77 @@
+body {
+  margin: 0;
+  background: #f5f6f8;
+  color: #20242c;
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+}
+main {
+  max-width: 560px;
+  margin: 64px auto;
+  padding: 0 20px;
+}
+h1 {
+  font-size: 26px;
+}
+section {
+  background: white;
+  border: 1px solid #dce0e6;
+  border-radius: 12px;
+  padding: 24px;
+}
+input {
+  font: inherit;
+  border: 1px solid #aeb7c4;
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: block;
+  margin-top: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+ul {
+  padding-left: 20px;
+}
+li {
+  margin: 12px 0;
+}
+:focus-visible {
+  outline: 3px solid #5275da;
+  outline-offset: 3px;
+}
+
+nav {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+nav a {
+  color: #243b83;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #dce0e6;
+  text-decoration: none;
+}
+nav a[aria-current='page'] {
+  background: #e5ebff;
+  border-color: #5275da;
+}
+button {
+  font: inherit;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+button:disabled {
+  cursor: default;
+}
+.product-choice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.product-choice input {
+  display: inline-block;
+  width: auto;
+  margin: 0;
+}

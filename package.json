@@ -10,12 +10,13 @@
   },
   "scripts": {
     "dev": "pnpm --filter @frontend-lab/code-quality dev",
-    "lint": "pnpm --filter @frontend-lab/code-quality lint",
+    "lint": "pnpm -r --if-present lint",
     "format": "prettier --write .",
-    "format:check": "pnpm --filter @frontend-lab/code-quality format:check",
-    "test": "pnpm --filter @frontend-lab/code-quality test",
-    "build": "pnpm --filter @frontend-lab/code-quality build",
-    "prepare": "husky"
+    "format:check": "pnpm -r --if-present format:check",
+    "test": "pnpm -r --if-present test",
+    "build": "pnpm -r --if-present build",
+    "prepare": "husky",
+    "dev:daily": "pnpm --filter @frontend-lab/daily-frontend dev"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
