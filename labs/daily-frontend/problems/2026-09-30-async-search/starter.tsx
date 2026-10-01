@@ -16,6 +16,8 @@ export function ProductSearch({ searchProducts }: ProductSearchProps) {
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
+    let cancelled = false
+
     if (!query) {
       setProducts([])
       setIsLoading(false)
@@ -26,11 +28,21 @@ export function ProductSearch({ searchProducts }: ProductSearchProps) {
 
     searchProducts(query)
       .then((result) => {
-        setProducts(result)
+        if (!cancelled) {
+          setProducts(result)
+        }
       })
       .finally(() => {
+        if (cancelled) {
+          return
+        }
+
         setIsLoading(false)
       })
+
+    return () => {
+      cancelled = true
+    }
   }, [query, searchProducts])
 
   return (
