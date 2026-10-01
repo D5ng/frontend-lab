@@ -86,6 +86,15 @@ importers:
         specifier: ^19.2.8
         version: 19.2.8(react@19.2.8)
 
+  labs/daily-frontend:
+    dependencies:
+      react:
+        specifier: ^19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: ^19.2.8
+        version: 19.2.8(react@19.2.8)
+
 packages:
   '@adobe/css-tools@4.5.0':
     resolution: { integrity: sha512-6OzddxPio9UiWTCemp4N8cYLV2ZN1ncRnV1cVGtve7dhPOtRkleRyx32GQCYSwDYgaHU3USMm84tNsvKzRCa1Q== }
