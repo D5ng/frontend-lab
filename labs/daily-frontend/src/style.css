@@ -44,14 +44,14 @@ select {
   outline-offset: 3px;
 }
 /* 기존 실습의 native 요소는 풀이를 보존하며 공통 토큰으로 표현한다. */
-.daily-content > section {
+.daily-content > section:not(.order-boundaries) {
   padding: var(--seed-dimension-x6) var(--seed-dimension-x5);
 }
-.daily-content > section h2 {
+.daily-content > section:not(.order-boundaries) h2 {
   font-size: var(--seed-font-size-t7);
   margin-bottom: var(--seed-dimension-x6);
 }
-.daily-content > section input:not([type='checkbox']) {
+.daily-content > section:not(.order-boundaries) input:not([type='checkbox']) {
   display: block;
   width: 100%;
   min-height: 52px;
@@ -62,11 +62,11 @@ select {
   background: var(--seed-color-bg-layer-default);
   color: inherit;
 }
-.daily-content > section ul {
+.daily-content > section:not(.order-boundaries) ul {
   list-style: none;
   padding: 0;
 }
-.daily-content > section li {
+.daily-content > section:not(.order-boundaries) li {
   padding: var(--seed-dimension-x4) 0;
   border-bottom: 1px solid var(--seed-color-stroke-neutral-subtle);
 }
