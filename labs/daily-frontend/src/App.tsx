@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Badge, Text } from '@seed-design/react'
 import { problems } from './problems'
-import { SelectRoot, SelectTrigger, SelectContent, SelectGroup, SelectItem } from './seed-design/ui/select'
+import { SelectRoot, SelectTrigger, SelectContent, SelectGroup, SelectItem } from 'seed-design/ui/select'
 
 function getProblemId() {
   return window.location.hash.slice(1)
