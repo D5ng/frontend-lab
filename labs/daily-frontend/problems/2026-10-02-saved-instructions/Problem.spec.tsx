@@ -65,7 +65,7 @@ describe('출제자가 준비한 UI와 모의 API', () => {
 })
 
 // 구현을 시작할 때 이 블록의 .skip을 제거하세요. 현재는 미완성 스타터이므로 건너뜁니다.
-describe.skip('실습자가 구현할 거래 안내 편집 행동', () => {
+describe('실습자가 구현할 거래 안내 편집 행동', () => {
   it('편집 중에는 공개된 안내를 유지하고 되돌리기는 저장된 안내를 복원한다', async () => {
     const user = userEvent.setup()
     const saveInstructions = vi.fn()

@@ -1,12 +1,61 @@
-import type { SaveInstructions } from './api'
-import { uiPreviews } from './preview'
+import { useState } from 'react'
+import { INITIAL_INSTRUCTIONS, type SaveInstructions } from './api'
 import { InstructionsView } from './view'
 
 export type InstructionsEditorProps = { saveInstructions: SaveInstructions }
 
-export function InstructionsEditor(_props: InstructionsEditorProps) {
-  // TODO: 초기 화면만 준비돼 있습니다. 필요한 상태와 사용자 행동을 직접 구현하세요.
-  // view.tsx는 표현용 코드입니다. 사용할 수도, 이 파일에서 화면과 함께 구현할 수도 있습니다.
-  // uiPreviews는 시각 검수용 고정값이며 실제 편집/저장 로직이 아닙니다.
-  return <InstructionsView {...uiPreviews.initial} />
+interface EditorState {
+  draftText: string
+  publishedText: string
+  isSubmitting: boolean
+  saveResult?: 'success' | 'error'
+}
+
+export function InstructionsEditor({ saveInstructions }: InstructionsEditorProps) {
+  const [{ draftText, publishedText, isSubmitting, saveResult }, setEditorState] = useState<EditorState>({
+    draftText: INITIAL_INSTRUCTIONS,
+    publishedText: INITIAL_INSTRUCTIONS,
+    isSubmitting: false,
+  })
+
+  const handleDraftTextChange = (text: string) => {
+    setEditorState((prevState) => ({ ...prevState, draftText: text, saveResult: undefined }))
+  }
+
+  const handleRestore = () => {
+    setEditorState((prevState) => ({ ...prevState, draftText: publishedText }))
+  }
+
+  const handleSubmit = async () => {
+    const trimmed = draftText.trim()
+
+    if (trimmed === '') {
+      return
+    }
+
+    setEditorState((prevState) => ({ ...prevState, isSubmitting: true }))
+    try {
+      const publishedText = (await saveInstructions({ text: trimmed })).text
+      setEditorState((prevState) => ({ ...prevState, draftText: publishedText, publishedText, saveResult: 'success' }))
+    } catch {
+      setEditorState((prevState) => ({ ...prevState, saveResult: 'error' }))
+    } finally {
+      setEditorState((prevState) => ({ ...prevState, isSubmitting: false }))
+    }
+  }
+
+  const actionDisabled = isSubmitting || draftText.trim() === publishedText
+
+  return (
+    <InstructionsView
+      draftText={draftText}
+      publishedText={publishedText}
+      isSubmitting={isSubmitting}
+      saveResult={saveResult}
+      actionDisabled={actionDisabled}
+      onTextChange={handleDraftTextChange}
+      onRestore={handleRestore}
+      onSave={handleSubmit}
+    />
+  )
 }
