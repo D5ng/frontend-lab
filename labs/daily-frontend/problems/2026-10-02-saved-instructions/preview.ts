@@ -1,15 +1,17 @@
-import { INITIAL_INSTRUCTIONS } from './api'
+import { INITIAL_INSTRUCTIONS, SaveResult } from './model/instructions'
 
 type INITIAL_STATE = {
   draftText: string
+  draftError: boolean
   publishedText: string
   isSubmitting: boolean
   actionDisabled: boolean
-  saveResult?: 'success' | 'error'
+  saveResult?: SaveResult
 }
 
 const initial: INITIAL_STATE = {
   draftText: INITIAL_INSTRUCTIONS,
+  draftError: false,
   publishedText: INITIAL_INSTRUCTIONS,
   isSubmitting: false,
   actionDisabled: true,
@@ -20,7 +22,7 @@ const initial: INITIAL_STATE = {
 export const uiPreviews: Record<string, INITIAL_STATE> = {
   initial,
   editing: { ...initial, draftText: '내일 오후 3시, 도서관 앞에서 만나요.', actionDisabled: false },
-  empty: { ...initial, draftText: '', actionDisabled: false },
+  empty: { ...initial, draftText: '', actionDisabled: false, draftError: true },
   loading: { ...initial, draftText: '내일 오후 3시, 도서관 앞에서 만나요.', isSubmitting: true },
   error: {
     ...initial,
