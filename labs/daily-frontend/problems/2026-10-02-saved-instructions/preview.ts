@@ -1,32 +1,39 @@
-import { INITIAL_INSTRUCTIONS } from './api'
-import type { InstructionsViewProps } from './view'
+import { INITIAL_INSTRUCTIONS, SaveResult } from './model/instructions'
 
-const initial: InstructionsViewProps = {
-  text: INITIAL_INSTRUCTIONS,
+type INITIAL_STATE = {
+  draftText: string
+  draftError: boolean
+  publishedText: string
+  isSubmitting: boolean
+  actionDisabled: boolean
+  saveResult?: SaveResult
+}
+
+const initial: INITIAL_STATE = {
+  draftText: INITIAL_INSTRUCTIONS,
+  draftError: false,
   publishedText: INITIAL_INSTRUCTIONS,
-  busy: false,
-  saveDisabled: true,
-  restoreDisabled: true,
+  isSubmitting: false,
+  actionDisabled: true,
+  saveResult: undefined,
 }
 
 // 정적인 UI 검수용 값입니다. 상태 전이나 저장 로직을 구현하지 않습니다.
-export const uiPreviews: Record<string, InstructionsViewProps> = {
+export const uiPreviews: Record<string, INITIAL_STATE> = {
   initial,
-  editing: { ...initial, text: '내일 오후 3시, 도서관 앞에서 만나요.', saveDisabled: false, restoreDisabled: false },
-  empty: { ...initial, text: '', saveDisabled: false, restoreDisabled: false, fieldError: '거래 안내를 입력해 주세요.' },
-  loading: { ...initial, text: '내일 오후 3시, 도서관 앞에서 만나요.', busy: true },
+  editing: { ...initial, draftText: '내일 오후 3시, 도서관 앞에서 만나요.', actionDisabled: false },
+  empty: { ...initial, draftText: '', actionDisabled: false, draftError: true },
+  loading: { ...initial, draftText: '내일 오후 3시, 도서관 앞에서 만나요.', isSubmitting: true },
   error: {
     ...initial,
-    text: '내일 오후 3시, 도서관 앞에서 만나요.',
-    saveDisabled: false,
-    restoreDisabled: false,
-    message: '저장하지 못했어요. 다시 시도해 주세요.',
-    messageTone: 'critical',
+    draftText: '내일 오후 3시, 도서관 앞에서 만나요.',
+    actionDisabled: false,
+    saveResult: 'error',
   },
   success: {
     ...initial,
-    text: '내일 오후 3시, 도서관 앞에서 만나요.',
+    draftText: '내일 오후 3시, 도서관 앞에서 만나요.',
     publishedText: '내일 오후 3시, 도서관 앞에서 만나요.',
-    message: '거래 안내를 저장했어요.',
+    saveResult: 'success',
   },
 }
