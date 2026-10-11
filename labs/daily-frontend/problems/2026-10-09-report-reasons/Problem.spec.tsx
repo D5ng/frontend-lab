@@ -119,13 +119,12 @@ describe('신고 폼의 기존 행동', () => {
     expect(sendReport).toHaveBeenCalledExactlyOnceWith({ reason: 'other', description: '상품 설명과\n실물이 달라요' })
   })
   it('모의 API의 첫 유효 요청은 실패하고 재시도는 성공한다', async () => {
-    vi.useFakeTimers()
     const send = createReportMock()
     const first = expect(send({ reason: 'no-show' })).rejects.toThrow('접수 실패')
-    await vi.advanceTimersByTimeAsync(1800)
+
     await first
     const retry = expect(send({ reason: 'no-show' })).resolves.toBeUndefined()
-    await vi.advanceTimersByTimeAsync(1800)
+
     await retry
   })
 })
