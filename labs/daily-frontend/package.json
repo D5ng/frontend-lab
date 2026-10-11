@@ -18,6 +18,12 @@
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
-    "@seed-design/cli": "^1.7.0"
+    "@seed-design/cli": "^1.7.0",
+    "msw": "3.0.3"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }
