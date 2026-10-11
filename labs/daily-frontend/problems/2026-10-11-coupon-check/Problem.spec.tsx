@@ -53,28 +53,28 @@ describe('준비물: UI와 API 계약', () => {
     expect(onApply).toHaveBeenCalledOnce()
   })
   it('WELCOME과 SALE은 서로 다른 지연과 할인 정보를 반환한다', async () => {
-    vi.useFakeTimers()
     const check = createCouponMock(),
       slow = vi.fn(),
       fast = vi.fn()
-    void check('WELCOME').then(slow)
-    void check('SALE').then(fast)
-    await vi.advanceTimersByTimeAsync(600)
+    const slowRequest = check('WELCOME').then(slow)
+    const fastRequest = check('SALE').then(fast)
+    await fastRequest
+
     expect(fast).toHaveBeenCalledWith(sale)
     expect(slow).not.toHaveBeenCalled()
-    await vi.advanceTimersByTimeAsync(1000)
+
+    await slowRequest
     expect(slow).toHaveBeenCalledWith(welcome)
   })
   it('사용 불가는 정상 응답이며 RETRY 첫 실패 뒤 재확인에 성공한다', async () => {
-    vi.useFakeTimers()
     const check = createCouponMock()
     const unavailable = expect(check('EXPIRED')).resolves.toEqual({ available: false })
     const failed = expect(check('RETRY')).rejects.toThrow('확인 실패')
-    await vi.advanceTimersByTimeAsync(600)
+
     await unavailable
     await failed
     const retried = expect(check('RETRY')).resolves.toEqual({ available: true, coupon: { code: 'RETRY', discount: 3000 } })
-    await vi.advanceTimersByTimeAsync(600)
+
     await retried
   })
 })
