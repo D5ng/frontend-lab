@@ -57,26 +57,24 @@ describe('제공 UI와 API', () => {
     if (name === 'error') expect(screen.getByRole('alert')).toHaveTextContent('다시 불러와 주세요.')
   })
   it('모의 조회의 첫 내일 실패와 재시도·응답 복사 계약을 검증한다', async () => {
-    vi.useFakeTimers()
     const api = createPickupMock()
     const failure = expect(api.loadSlots('tomorrow')).rejects.toThrow('시간 조회 실패')
-    await vi.advanceTimersByTimeAsync(500)
+
     await failure
     const next = api.loadSlots('tomorrow')
-    await vi.advanceTimersByTimeAsync(500)
+
     const result = await next
     expect(result).toEqual(slotsByDay.tomorrow)
     result[0]!.label = '수정'
     expect(slotsByDay.tomorrow[0]!.label).toBe('오전 10시')
   })
   it('모의 예약의 첫 실패 후 올바른 재시도는 성공한다', async () => {
-    vi.useFakeTimers()
     const api = createPickupMock()
     const first = expect(api.reserveSlot({ day: 'today', slotId: 'today-18' })).rejects.toThrow('예약 실패')
-    await vi.advanceTimersByTimeAsync(1000)
+
     await first
     const retry = expect(api.reserveSlot({ day: 'today', slotId: 'today-18' })).resolves.toBeUndefined()
-    await vi.advanceTimersByTimeAsync(1000)
+
     await retry
   })
 })
