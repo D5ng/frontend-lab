@@ -2,10 +2,10 @@
 import { useEffect, useState } from 'react'
 import { Badge, HStack, Text, VStack } from '@seed-design/react'
 import { IconMagnifyingglassLine } from '@karrotmarket/react-monochrome-icon'
-import { TextField, TextFieldInput } from '../../src/seed-design/ui/text-field'
-import { List, ListItem } from '../../src/seed-design/ui/list'
-import { ContentPlaceholder } from '../../src/seed-design/ui/content-placeholder'
-import { ProgressCircle } from '../../src/seed-design/ui/progress-circle'
+import { TextField, TextFieldInput } from 'seed-design/ui/text-field'
+import { List, ListItem } from 'seed-design/ui/list'
+import { ContentPlaceholder } from 'seed-design/ui/content-placeholder'
+import { ProgressCircle } from 'seed-design/ui/progress-circle'
 import './style.css'
 
 type Product = {
