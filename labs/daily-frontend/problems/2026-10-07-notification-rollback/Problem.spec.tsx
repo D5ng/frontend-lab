@@ -118,14 +118,13 @@ describe('상품별 알림의 기존 행동', () => {
   })
 
   it('모의 API는 책상 첫 요청만 실패하고 다른 상품 및 재시도는 성공한다', async () => {
-    vi.useFakeTimers()
     const update = createNotificationMock()
     const first = expect(update({ productId: 'desk', enabled: true })).rejects.toThrow('설정 변경 실패')
     const other = expect(update({ productId: 'books', enabled: false })).resolves.toBeUndefined()
-    await vi.advanceTimersByTimeAsync(1800)
+
     await Promise.all([first, other])
     const retry = expect(update({ productId: 'desk', enabled: true })).resolves.toBeUndefined()
-    await vi.advanceTimersByTimeAsync(1800)
+
     await retry
   })
 })
