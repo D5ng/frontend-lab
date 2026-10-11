@@ -1,0 +1,6 @@
+.reservation-policy {
+  overflow-wrap: anywhere;
+}
+.reservation-policy .reservation-choice {
+  min-height: var(--seed-dimension-x12);
+}
