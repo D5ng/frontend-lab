@@ -1,0 +1,10 @@
+.instructions-screen {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.instructions-actions > :first-child {
+  flex: 3;
+}
+.instructions-actions > :last-child {
+  flex: 7;
+}
