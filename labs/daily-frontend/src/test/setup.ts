@@ -1,4 +1,13 @@
-import { vi } from 'vitest'
+import { afterAll, afterEach, beforeAll, vi } from 'vitest'
+import { server } from '../mocks/server'
+import { resetMockAttempts } from '../mocks/scenario'
+
+beforeAll(() => server.listen({ onUnhandledFrame: 'error' }))
+afterEach(() => {
+  server.resetHandlers()
+  resetMockAttempts()
+})
+afterAll(() => server.close())
 
 // jsdom은 레이아웃을 계산하지 않는다. SEED의 누름 피드백 측정에만 쓰이는
 // 브라우저 API를 보완하고 주문 행동은 실제 컴포넌트로 검증한다.
