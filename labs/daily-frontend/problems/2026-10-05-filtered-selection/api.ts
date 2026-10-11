@@ -1,3 +1,5 @@
+import { createApiClient } from '../../src/api/client'
+
 export const products = [
   { id: 'desk', title: '접이식 책상', price: 12000 },
   { id: 'books', title: '소설책 세 권', price: 5000 },
@@ -7,12 +9,9 @@ export const products = [
 export type Reservation = { productIds: string[]; totalPrice: number }
 export type ReserveProducts = (reservation: Reservation) => Promise<void>
 
+// HTTP 응답 모킹은 handlers.ts에 두고 기존 함수 주입 계약을 유지한다.
 export function createDemoReservation(): ReserveProducts {
-  let attempts = 0
-  return async () => {
-    attempts += 1
-    const shouldFail = attempts === 1
-    await new Promise<void>((resolve) => setTimeout(resolve, 800))
-    if (shouldFail) throw new Error('일시적인 연결 실패')
-  }
+  const request = createApiClient()
+  return (reservation) =>
+    request('/api/daily/2026-10-05-filtered-selection/reservations', { method: 'POST', body: JSON.stringify(reservation) })
 }

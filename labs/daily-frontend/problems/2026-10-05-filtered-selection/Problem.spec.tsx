@@ -116,12 +116,11 @@ describe('관심 상품 예약의 기존 행동', () => {
 })
 
 it('모의 API는 첫 예약에만 실패하고 다음 예약은 성공한다', async () => {
-  vi.useFakeTimers()
   const reserve = createDemoReservation()
   const first = expect(reserve({ productIds: ['plant'], totalPrice: 0 })).rejects.toThrow('일시적인 연결 실패')
-  await vi.advanceTimersByTimeAsync(800)
+
   await first
   const second = expect(reserve({ productIds: ['plant'], totalPrice: 0 })).resolves.toBeUndefined()
-  await vi.advanceTimersByTimeAsync(800)
+
   await second
 })
