@@ -1,3 +1,5 @@
+import { createApiClient } from '../../src/api/client'
+
 export const neighborhoods = { seongsu: '성수동', yeonnam: '연남동', mangwon: '망원동' } as const
 export type Neighborhood = keyof typeof neighborhoods
 export type Post = { id: string; title: string; price: number; neighborhood: Neighborhood }
@@ -8,16 +10,8 @@ export const examplePosts: Post[] = [
   { id: 's2', title: '작은 방에 두기 좋은 원목 책상', price: 35000, neighborhood: 'seongsu' },
 ]
 
-// 취소를 지원하지 않는 모의 서버입니다. UI의 요청 수명 관리는 구현하지 않습니다.
+// HTTP 응답 모킹은 handlers.ts에 두고 기존 함수 주입 계약을 유지한다.
 export function createDemoLoader(): LoadPosts {
-  let yeonnamCalls = 0
-  return async (neighborhood) => {
-    const fail = neighborhood === 'yeonnam' && ++yeonnamCalls === 1
-    const delay = neighborhood === 'seongsu' ? 1800 : neighborhood === 'yeonnam' ? 450 : 700
-    await new Promise<void>((resolve) => setTimeout(resolve, delay))
-    if (fail) throw new Error('temporary failure')
-    if (neighborhood === 'mangwon') return []
-    if (neighborhood === 'seongsu') return examplePosts.map((post) => ({ ...post }))
-    return [{ id: 'y1', title: '산책할 때 쓰기 좋은 작은 크로스백', price: 12000, neighborhood }]
-  }
+  const request = createApiClient()
+  return (neighborhood) => request<Post[]>(`/api/daily/2026-10-04-neighborhood-feed/posts?neighborhood=${neighborhood}`)
 }

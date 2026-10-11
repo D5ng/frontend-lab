@@ -54,37 +54,20 @@ describe('출제자가 제공한 UI와 모의 API', () => {
     expect(screen.getByRole('status')).toHaveTextContent('게시글 2개를 불러왔어요.')
   })
 
-  it('성수는 1.8초, 망원은 0.7초 뒤 각각 게시글과 빈 목록을 응답한다', async () => {
-    vi.useFakeTimers()
-    try {
-      const api = createDemoLoader()
-      const finish = vi.fn()
-      const seongsu = api('seongsu').then(finish)
-      const mangwon = expect(api('mangwon')).resolves.toEqual([])
-      await vi.advanceTimersByTimeAsync(700)
-      await mangwon
-      expect(finish).not.toHaveBeenCalled()
-      await vi.advanceTimersByTimeAsync(1100)
-      await seongsu
-      expect(finish).toHaveBeenCalledWith(examplePosts)
-    } finally {
-      vi.useRealTimers()
-    }
+  it('느린 성수 응답을 기다리는 동안 망원의 빈 목록 응답이 먼저 도착한다', async () => {
+    const api = createDemoLoader()
+    const finish = vi.fn()
+    const seongsu = api('seongsu').then(finish)
+    await expect(api('mangwon')).resolves.toEqual([])
+    expect(finish).not.toHaveBeenCalled()
+    await seongsu
+    expect(finish).toHaveBeenCalledWith(examplePosts)
   })
 
   it('연남의 첫 요청만 실패하고 재요청은 연남 게시글을 반환한다', async () => {
-    vi.useFakeTimers()
-    try {
-      const api = createDemoLoader()
-      const first = expect(api('yeonnam')).rejects.toThrow('temporary failure')
-      await vi.advanceTimersByTimeAsync(450)
-      await first
-      const next = expect(api('yeonnam')).resolves.toMatchObject([{ neighborhood: 'yeonnam' }])
-      await vi.advanceTimersByTimeAsync(450)
-      await next
-    } finally {
-      vi.useRealTimers()
-    }
+    const api = createDemoLoader()
+    await expect(api('yeonnam')).rejects.toThrow('temporary failure')
+    await expect(api('yeonnam')).resolves.toMatchObject([{ neighborhood: 'yeonnam' }])
   })
 })
 
