@@ -79,15 +79,14 @@ describe('제공한 화면·API의 검증', () => {
   })
 
   it('모의 API는 첫 요청만 실패하고 다음 요청의 내용을 복사해 반환한다', async () => {
-    vi.useFakeTimers()
     const save = createDemoSaver()
     const failure = expect(save({ memo: '처음' })).rejects.toThrow('일시적인 연결 실패')
-    await vi.advanceTimersByTimeAsync(1800)
+
     await failure
     const request = { memo: '다음' }
     const response = save(request)
     request.memo = '요청 후 바뀐 값'
-    await vi.advanceTimersByTimeAsync(1800)
+
     await expect(response).resolves.toEqual({ memo: '다음' })
   })
 })
