@@ -28,27 +28,36 @@ export function CouponView(props: CouponViewProps) {
           코드를 확인한 뒤 할인 쿠폰을 적용해 주세요.
         </Text>
       </VStack>
-      <TextField
-        label="쿠폰 코드"
-        variant="underline"
-        value={props.value}
-        invalid={!!props.fieldError}
-        errorMessage={props.fieldError}
-        description="영문 코드의 앞뒤 공백과 대소문자는 구분하지 않아요."
-        onValueChange={({ value }) => props.onChange(value)}
+      <form
+        onSubmit={(event) => {
+          event.preventDefault()
+          props.onCheck()
+        }}
       >
-        <TextFieldInput placeholder="예: WELCOME" autoCapitalize="characters" autoComplete="off" spellCheck={false} />
-      </TextField>
-      <ActionButton
-        variant="neutralWeak"
-        size="large"
-        disabled={!props.canCheck}
-        loading={props.checking}
-        aria-label={props.checking ? '쿠폰 확인 중' : '쿠폰 확인하기'}
-        onClick={props.onCheck}
-      >
-        쿠폰 확인하기
-      </ActionButton>
+        <VStack gap="x6" width="full">
+          <TextField
+            label="쿠폰 코드"
+            variant="underline"
+            value={props.value}
+            invalid={!!props.fieldError}
+            errorMessage={props.fieldError}
+            description="영문 코드의 앞뒤 공백과 대소문자는 구분하지 않아요."
+            onValueChange={({ value }) => props.onChange(value)}
+          >
+            <TextFieldInput placeholder="예: WELCOME" autoCapitalize="characters" autoComplete="off" spellCheck={false} />
+          </TextField>
+          <ActionButton
+            variant="neutralWeak"
+            size="large"
+            disabled={!props.canCheck}
+            loading={props.checking}
+            aria-label={props.checking ? '쿠폰 확인 중' : '쿠폰 확인하기'}
+            type="submit"
+          >
+            쿠폰 확인하기
+          </ActionButton>
+        </VStack>
+      </form>
       {props.checking && (
         <Text role="status" textStyle="t4Regular">
           쿠폰을 확인하고 있어요. 코드를 바꾸면 새로 확인해 주세요.
@@ -86,7 +95,7 @@ export function CouponView(props: CouponViewProps) {
           먼저 쿠폰 코드를 확인해 주세요.
         </Text>
       )}
-      <ActionButton variant="neutralSolid" size="large" disabled={!props.canApply} onClick={props.onApply}>
+      <ActionButton type="button" variant="neutralSolid" size="large" disabled={!props.canApply} onClick={props.onApply}>
         할인 적용하기
       </ActionButton>
     </VStack>
