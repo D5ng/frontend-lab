@@ -1,7 +1,7 @@
 import { SubmitEventHandler, useState } from 'react'
 import { CancelReservation } from '../../../api'
-import { getCancelFee, getRefundAmount, isCancelReasonTooShort, MIN_CANCEL_REASON_LENGTH } from '../models/cancelPolicy'
-import { Reservation } from '../models/reservation'
+import { getCancelFee, getRefundAmount, isCancellable, isCancelReasonTooShort, MIN_CANCEL_REASON_LENGTH } from '../models/cancelPolicy'
+import { INITIAL_RESERVATIONS, isReservationId, Reservation, ReservationId } from '../models/reservation'
 
 export interface CancelReservationResult {
   tone: 'critical' | 'positive'
@@ -9,19 +9,29 @@ export interface CancelReservationResult {
 }
 
 interface Params {
-  reservation: Reservation
-  cancellable: boolean
+  cancelledIds: ReservationId[]
   cancelReservation: CancelReservation
   onCancelled: (reservation: Reservation) => void
 }
 
-export function useCancelReservationForm({ reservation, cancellable, cancelReservation, onCancelled }: Params) {
+export function useCancelReservationForm({ cancelledIds, cancelReservation, onCancelled }: Params) {
+  const [selectedId, setSelectedId] = useState<ReservationId>('tomorrow')
   const [reason, setReason] = useState('')
   const [fieldError, setFieldError] = useState('')
   const [pending, setPending] = useState(false)
   const [result, setResult] = useState<CancelReservationResult | null>(null)
 
-  const disabled = pending || !cancellable
+  const selected = INITIAL_RESERVATIONS.find((item) => item.id === selectedId) ?? INITIAL_RESERVATIONS[0]
+  const disabled = pending || !isCancellable(cancelledIds, selected)
+
+  const handleReservationChange = (value: string) => {
+    if (!isReservationId(value)) {
+      return
+    }
+
+    setSelectedId(value)
+    reset()
+  }
 
   const clearFeedback = () => {
     setFieldError('')
@@ -56,12 +66,12 @@ export function useCancelReservationForm({ reservation, cancellable, cancelReser
 
     try {
       await cancelReservation({
-        reservationId: reservation.id,
+        reservationId: selected.id,
         reason: reason.trim(),
-        fee: getCancelFee(reservation.timing),
-        refund: getRefundAmount(reservation),
+        fee: getCancelFee(selected.timing),
+        refund: getRefundAmount(selected),
       })
-      onCancelled(reservation)
+      onCancelled(selected)
       setReason('')
       setResult({ tone: 'positive', message: '예약을 취소했어요. 환불 예정 금액을 확인해 주세요.' })
     } catch {
@@ -72,12 +82,14 @@ export function useCancelReservationForm({ reservation, cancellable, cancelReser
   }
 
   return {
+    selected,
+    selectedId,
     fieldError,
     reason,
     result,
     disabled,
     pending,
-    reset,
+    handleReservationChange,
     handleReasonChange,
     handleSubmit,
   }
