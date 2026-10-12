@@ -1,11 +1,6 @@
 import { formatPrice } from '../../../utils/formatPrice'
 import { Reservation, ReservationId, ReservationTiming } from './reservation'
 
-/* 취소 가능한 예약인지 판별하는 함수 */
-export function isCancellable(cancelledIds: ReservationId[], selected: Reservation) {
-  return !cancelledIds.includes(selected.id) && selected.timing !== 'started'
-}
-
 /* 당일 취소 수수료 */
 const SAME_DAY_CANCEL_FEE = 2_000
 
@@ -44,11 +39,6 @@ export function getCancelPolicy(cancelledIds: ReservationId[], reservation: Rese
   return isAlreadyCancelled(cancelledIds, reservation) ? ALREADY_CANCELLED_NOTICE : CANCEL_POLICY_NOTICE_BY_TIMING[reservation.timing]
 }
 
-/* 이미 취소된 예약인지 판별하는 함수 */
-export function isAlreadyCancelled(cancelledIds: ReservationId[], reservation: Reservation) {
-  return cancelledIds.includes(reservation.id)
-}
-
 /* 환불 예정 금액을 반환하는 함수 */
 export function getRefundAmount(reservation: Reservation) {
   return reservation.paid - getCancelFee(reservation.timing)
@@ -59,4 +49,19 @@ export const MIN_CANCEL_REASON_LENGTH = 5
 /* 예약 취소 사유의 글자수가 기준보다 짧은지 판별하는 함수 */
 export function isCancelReasonTooShort(reason: string) {
   return reason.trim().length < MIN_CANCEL_REASON_LENGTH
+}
+
+/* 취소 가능한 시점인지 판별하는 함수 */
+export function isCancellableTiming(timing: ReservationTiming): boolean {
+  return timing !== 'started'
+}
+
+/* 취소 가능한 예약인지 판별하는 함수 */
+export function isCancellable(cancelledIds: ReservationId[], selected: Reservation) {
+  return !isAlreadyCancelled(cancelledIds, selected) && isCancellableTiming(selected.timing)
+}
+
+/* 이미 취소된 예약인지 판별하는 함수 */
+export function isAlreadyCancelled(cancelledIds: ReservationId[], reservation: Reservation) {
+  return cancelledIds.includes(reservation.id)
 }
