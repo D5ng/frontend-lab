@@ -46,77 +46,86 @@ export function NotificationInbox({ markRead }: { markRead: MarkRead }) {
           {items.filter((item) => !item.read && selected.includes(item.id)).length}개
         </Text>
       </VStack>
-      <List as="div" role="group" aria-label="읽음 처리할 알림" width="full">
-        {items.map((item) => (
-          <ListCheckItem
-            key={item.id}
-            title={item.title}
-            detail={item.description}
-            inputProps={{ 'aria-label': item.title }}
-            checked={selected.includes(item.id)}
-            disabled={item.read || processing.includes(item.id)}
-            onCheckedChange={(checked) => {
-              if (item.read || processing.includes(item.id)) return
-              setSelected((current) =>
-                checked ? [...current.filter((id) => id !== item.id), item.id] : current.filter((id) => id !== item.id),
-              )
-              if (processing.length === 0) setMessage('')
-            }}
-            prefix={
-              <Checkbox.Control variant="ghost" size="large" tone="neutral">
-                <Checkbox.Indicator unchecked={<IconCheckmarkFatFill />} checked={<IconCheckmarkFatFill />} />
-              </Checkbox.Control>
-            }
-            suffix={
-              <Text textStyle="t3Regular" color="fg.neutralSubtle">
-                {item.read ? '읽음' : processing.includes(item.id) ? '처리 중' : '안 읽음'}
+      <form
+        onSubmit={(event) => {
+          event.preventDefault()
+          void submit()
+        }}
+      >
+        <VStack gap="x6" width="full">
+          <List as="div" role="group" aria-label="읽음 처리할 알림" width="full">
+            {items.map((item) => (
+              <ListCheckItem
+                key={item.id}
+                title={item.title}
+                detail={item.description}
+                inputProps={{ 'aria-label': item.title }}
+                checked={selected.includes(item.id)}
+                disabled={item.read || processing.includes(item.id)}
+                onCheckedChange={(checked) => {
+                  if (item.read || processing.includes(item.id)) return
+                  setSelected((current) =>
+                    checked ? [...current.filter((id) => id !== item.id), item.id] : current.filter((id) => id !== item.id),
+                  )
+                  if (processing.length === 0) setMessage('')
+                }}
+                prefix={
+                  <Checkbox.Control variant="ghost" size="large" tone="neutral">
+                    <Checkbox.Indicator unchecked={<IconCheckmarkFatFill />} checked={<IconCheckmarkFatFill />} />
+                  </Checkbox.Control>
+                }
+                suffix={
+                  <Text textStyle="t3Regular" color="fg.neutralSubtle">
+                    {item.read ? '읽음' : processing.includes(item.id) ? '처리 중' : '안 읽음'}
+                  </Text>
+                }
+              />
+            ))}
+          </List>
+          <VStack px="x4" gap="x4">
+            {items.every((item) => item.read) && (
+              <Text textStyle="t4Regular" color="fg.neutralSubtle">
+                모든 알림을 확인했어요.
               </Text>
-            }
-          />
-        ))}
-      </List>
-      <VStack px="x4" gap="x4">
-        {items.every((item) => item.read) && (
-          <Text textStyle="t4Regular" color="fg.neutralSubtle">
-            모든 알림을 확인했어요.
-          </Text>
-        )}
-        {processing.length > 0 && (
-          <Text role="status" textStyle="t4Regular">
-            {processing.length}개 처리 중이에요. 다른 알림은 계속 선택할 수 있어요.
-          </Text>
-        )}
-        {message && (
-          <Callout.Root tone={failed ? 'critical' : 'positive'} role={failed ? 'alert' : 'status'}>
-            <Callout.Content>
-              <Callout.Description>{message}</Callout.Description>
-            </Callout.Content>
-          </Callout.Root>
-        )}
-        {processing.length === 0 &&
-          items.filter((item) => !item.read && selected.includes(item.id)).length === 0 &&
-          !items.every((item) => item.read) && (
-            <Text textStyle="t4Regular" color="fg.neutralSubtle">
-              읽음 처리할 알림을 선택해 주세요.
-            </Text>
-          )}
-        <ActionButton
-          variant="neutralSolid"
-          size="large"
-          loading={processing.length > 0}
-          disabled={processing.length > 0 || items.filter((item) => !item.read && selected.includes(item.id)).length === 0}
-          aria-label={
-            processing.length > 0
-              ? '읽음 처리 중'
-              : `선택한 ${items.filter((item) => !item.read && selected.includes(item.id)).length}개 읽음 처리`
-          }
-          onClick={() => void submit()}
-        >
-          {processing.length > 0
-            ? '읽음 처리 중'
-            : `선택한 ${items.filter((item) => !item.read && selected.includes(item.id)).length}개 읽음 처리`}
-        </ActionButton>
-      </VStack>
+            )}
+            {processing.length > 0 && (
+              <Text role="status" textStyle="t4Regular">
+                {processing.length}개 처리 중이에요. 다른 알림은 계속 선택할 수 있어요.
+              </Text>
+            )}
+            {message && (
+              <Callout.Root tone={failed ? 'critical' : 'positive'} role={failed ? 'alert' : 'status'}>
+                <Callout.Content>
+                  <Callout.Description>{message}</Callout.Description>
+                </Callout.Content>
+              </Callout.Root>
+            )}
+            {processing.length === 0 &&
+              items.filter((item) => !item.read && selected.includes(item.id)).length === 0 &&
+              !items.every((item) => item.read) && (
+                <Text textStyle="t4Regular" color="fg.neutralSubtle">
+                  읽음 처리할 알림을 선택해 주세요.
+                </Text>
+              )}
+            <ActionButton
+              variant="neutralSolid"
+              size="large"
+              loading={processing.length > 0}
+              disabled={processing.length > 0 || items.filter((item) => !item.read && selected.includes(item.id)).length === 0}
+              aria-label={
+                processing.length > 0
+                  ? '읽음 처리 중'
+                  : `선택한 ${items.filter((item) => !item.read && selected.includes(item.id)).length}개 읽음 처리`
+              }
+              type="submit"
+            >
+              {processing.length > 0
+                ? '읽음 처리 중'
+                : `선택한 ${items.filter((item) => !item.read && selected.includes(item.id)).length}개 읽음 처리`}
+            </ActionButton>
+          </VStack>
+        </VStack>
+      </form>
     </VStack>
   )
 }
