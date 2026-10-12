@@ -22,7 +22,7 @@ export function useCancelReservationForm({ cancelledIds, cancelReservation, onCa
   const [result, setResult] = useState<CancelReservationResult | null>(null)
 
   const selected = INITIAL_RESERVATIONS.find((item) => item.id === selectedId) ?? INITIAL_RESERVATIONS[0]
-  const disabled = pending || !isCancellable(cancelledIds, selected)
+  const submitDisabled = pending || !isCancellable(cancelledIds, selected)
 
   const handleReservationChange = (value: string) => {
     if (!isReservationId(value)) {
@@ -51,7 +51,7 @@ export function useCancelReservationForm({ cancelledIds, cancelReservation, onCa
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault()
 
-    if (disabled) {
+    if (submitDisabled) {
       return
     }
 
@@ -87,7 +87,7 @@ export function useCancelReservationForm({ cancelledIds, cancelReservation, onCa
     fieldError,
     reason,
     result,
-    disabled,
+    submitDisabled,
     pending,
     handleReservationChange,
     handleReasonChange,

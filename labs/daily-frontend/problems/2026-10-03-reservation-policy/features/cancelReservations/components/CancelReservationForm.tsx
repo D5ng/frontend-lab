@@ -15,12 +15,22 @@ interface Props {
 export function CancelReservationForm({ cancelReservation }: Props) {
   const [cancelledIds, setCancelledIds] = useState<ReservationId[]>([])
 
-  const { selectedId, selected, result, reason, fieldError, pending, disabled, handleReasonChange, handleReservationChange, handleSubmit } =
-    useCancelReservationForm({
-      cancelledIds,
-      cancelReservation,
-      onCancelled: (reservation) => setCancelledIds((previous) => [...previous, reservation.id]),
-    })
+  const {
+    selectedId,
+    selected,
+    result,
+    reason,
+    fieldError,
+    pending,
+    submitDisabled,
+    handleReasonChange,
+    handleReservationChange,
+    handleSubmit,
+  } = useCancelReservationForm({
+    cancelledIds,
+    cancelReservation,
+    onCancelled: (reservation) => setCancelledIds((previous) => [...previous, reservation.id]),
+  })
 
   return (
     <form onSubmit={handleSubmit}>
@@ -36,7 +46,7 @@ export function CancelReservationForm({ cancelReservation }: Props) {
             onValueChange={({ value }) => handleReasonChange(value)}
             invalid={!!fieldError}
             errorMessage={fieldError}
-            disabled={disabled}
+            disabled={submitDisabled}
           >
             <TextFieldInput placeholder="예: 개인 일정이 생겼어요" />
           </TextField>
@@ -46,7 +56,7 @@ export function CancelReservationForm({ cancelReservation }: Props) {
             size="large"
             loading={pending}
             aria-label={pending ? '취소 중...' : '예약 취소하기'}
-            disabled={disabled}
+            disabled={submitDisabled}
           >
             {pending ? '취소 중...' : '예약 취소하기'}
           </ActionButton>
