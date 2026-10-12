@@ -2,7 +2,7 @@ import { Callout, HStack, Text, VStack } from '@seed-design/react'
 
 import { formatPrice } from '../../../utils/formatPrice'
 import { Reservation, ReservationId } from '../models/reservation'
-import { getCancelFee, getCancelPolicy, getRefundAmount, isCancellableTiming } from '../models/cancelPolicy'
+import { getCancelFee, getCancelNotice, getRefundAmount, isCancellableTiming } from '../models/cancelPolicy'
 
 interface Props {
   selected: Reservation
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export function CancelPolicySummary({ selected, cancelledIds }: Props) {
-  const { tone, message } = getCancelPolicy(cancelledIds, selected)
+  const { tone, message } = getCancelNotice(cancelledIds, selected)
   const cancellableTiming = isCancellableTiming(selected.timing)
 
   return (

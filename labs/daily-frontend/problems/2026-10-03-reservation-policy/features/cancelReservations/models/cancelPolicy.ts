@@ -35,7 +35,7 @@ const ALREADY_CANCELLED_NOTICE: CancelNotice = {
 }
 
 /* 예약 취소 정책 문구를 반환하는 함수 */
-export function getCancelPolicy(cancelledIds: ReservationId[], reservation: Reservation) {
+export function getCancelNotice(cancelledIds: ReservationId[], reservation: Reservation) {
   return isAlreadyCancelled(cancelledIds, reservation) ? ALREADY_CANCELLED_NOTICE : CANCEL_POLICY_NOTICE_BY_TIMING[reservation.timing]
 }
 
