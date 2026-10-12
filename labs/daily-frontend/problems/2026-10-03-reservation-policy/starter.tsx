@@ -31,17 +31,20 @@ export function CancellationPage({ cancelReservation }: { cancelReservation: Can
   return (
     <VStack as="article" aria-label="예약 취소" className="reservation-policy" gap="x6" px="x5" py="x6">
       <CancelHeading />
-      <ReservationSelector selectedId={selectedId} disabled={pending} onReservationChange={handleReservationChange} />
-      <CancelPolicySummary selected={selected} cancelledIds={cancelledIds} />
-      <CancelReservationForm
-        reason={reason}
-        result={result}
-        pending={pending}
-        disabled={disabled}
-        fieldError={fieldError}
-        onReasonChange={handleReasonChange}
-        onSubmit={handleSubmit}
-      />
+      <form onSubmit={handleSubmit}>
+        <VStack gap="x6">
+          <ReservationSelector selectedId={selectedId} disabled={pending} onReservationChange={handleReservationChange} />
+          <CancelPolicySummary selected={selected} cancelledIds={cancelledIds} />
+          <CancelReservationForm
+            reason={reason}
+            result={result}
+            pending={pending}
+            disabled={disabled}
+            fieldError={fieldError}
+            onReasonChange={handleReasonChange}
+          />
+        </VStack>
+      </form>
     </VStack>
   )
 }
