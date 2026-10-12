@@ -1,7 +1,7 @@
 import { SubmitEventHandler, useState } from 'react'
-import { CancelReservation } from '../../api'
-import { getCancelFee, getRefundAmount, isCancelReasonTooShort, MIN_CANCEL_REASON_LENGTH } from './cancelPolicy'
-import { Reservation } from './reservation'
+import { CancelReservation } from '../../../api'
+import { getCancelFee, getRefundAmount, isCancelReasonTooShort, MIN_CANCEL_REASON_LENGTH } from '../models/cancelPolicy'
+import { Reservation } from '../models/reservation'
 
 export interface CancelReservationResult {
   tone: 'critical' | 'positive'

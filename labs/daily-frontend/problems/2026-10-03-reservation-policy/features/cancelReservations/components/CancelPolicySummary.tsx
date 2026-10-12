@@ -1,7 +1,8 @@
 import { Callout, HStack, Text, VStack } from '@seed-design/react'
-import { getCancelFee, getCancelPolicy, getRefundAmount } from './cancelPolicy'
-import { Reservation, ReservationId } from './reservation'
-import { formatPrice } from '../../utils/formatPrice'
+
+import { formatPrice } from '../../../utils/formatPrice'
+import { Reservation, ReservationId } from '../models/reservation'
+import { getCancelFee, getCancelPolicy, getRefundAmount } from '../models/cancelPolicy'
 
 interface Props {
   selected: Reservation

@@ -1,4 +1,4 @@
-import { formatPrice } from '../../utils/formatPrice'
+import { formatPrice } from '../../../utils/formatPrice'
 import { Reservation, ReservationId, ReservationTiming } from './reservation'
 
 /* 취소 가능한 예약인지 판별하는 함수 */

@@ -1,8 +1,8 @@
 import { ActionButton, Callout, VStack } from '@seed-design/react'
 import { SubmitEvent } from 'react'
 import { TextField, TextFieldInput } from 'seed-design/ui/text-field'
-import { CancelReservationResult } from './useCancelReservationForm'
-import { MIN_CANCEL_REASON_LENGTH } from './cancelPolicy'
+import { CancelReservationResult } from '../hooks/useCancelReservationForm'
+import { MIN_CANCEL_REASON_LENGTH } from '../models/cancelPolicy'
 
 interface Props {
   reason: string
