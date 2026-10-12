@@ -1,0 +1,6 @@
+interface:
+  display_name: "Vercel React Best Practices"
+  short_description: "React 성능 규칙(워터폴·번들·리렌더링)을 근거로 코드를 작성하고 리뷰합니다"
+  default_prompt: "Use $vercel-react-best-practices to review this React code for performance issues, pointing out only the one or two that matter most."
+policy:
+  allow_implicit_invocation: true
