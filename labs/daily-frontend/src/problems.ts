@@ -3,6 +3,7 @@ import { Problem as OrderBoundaries } from '../problems/2026-10-01-order-boundar
 import { Problem as SavedInstructions } from '../problems/2026-10-02-saved-instructions/Problem'
 import { Problem as ReservationPolicy } from '../problems/2026-10-03-reservation-policy/Problem'
 import { Problem as NeighborhoodFeed } from '../problems/2026-10-04-neighborhood-feed/Problem'
+import { Problem as FeedPages } from '../problems/2026-10-13-feed-pages/Problem'
 
 export const problems = [
   { id: '2026-09-30-async-search', title: '늦게 도착한 검색 결과', Component: AsyncSearch },
@@ -10,4 +11,5 @@ export const problems = [
   { id: '2026-10-02-saved-instructions', title: '작성 중인 안내와 저장된 안내', Component: SavedInstructions },
   { id: '2026-10-03-reservation-policy', title: '예약 취소 정책의 변경 경계', Component: ReservationPolicy },
   { id: '2026-10-04-neighborhood-feed', title: '빠른 동네 선택과 늦은 게시글', Component: NeighborhoodFeed },
+  { id: '2026-10-13-feed-pages', title: '새 목록과 늦게 도착한 더보기', Component: FeedPages },
 ]
