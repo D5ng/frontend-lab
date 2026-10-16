@@ -3,10 +3,10 @@ import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createDemoLoader, examplePosts } from './api'
-import type { Post } from './api'
 import { NeighborhoodFeed } from './starter'
 import { FeedView } from './view'
 import { previews } from './preview'
+import { Post } from './neighborhoodFeed/neighborhoodFeed.model'
 
 afterEach(cleanup)
 
@@ -72,7 +72,7 @@ describe('출제자가 제공한 UI와 모의 API', () => {
 })
 
 // 구현 시작 시 .skip을 제거하세요. 건너뜀은 풀이 통과가 아닙니다.
-describe.skip('실습자가 구현할 요청과 현재 화면의 경계', () => {
+describe('실습자가 구현할 요청과 현재 화면의 경계', () => {
   it('진입 시 성수 요청을 시작하고 성공한 게시글을 표시한다', async () => {
     const request = deferred()
     const load = vi.fn(() => request.promise)

@@ -1,9 +1,5 @@
 import { createApiClient } from '../../src/api/client'
-
-export const neighborhoods = { seongsu: '성수동', yeonnam: '연남동', mangwon: '망원동' } as const
-export type Neighborhood = keyof typeof neighborhoods
-export type Post = { id: string; title: string; price: number; neighborhood: Neighborhood }
-export type LoadPosts = (neighborhood: Neighborhood) => Promise<Post[]>
+import { LoadPosts, Post } from './neighborhoodFeed/neighborhoodFeed.model'
 
 export const examplePosts: Post[] = [
   { id: 's1', title: '주말에 읽기 좋은 에세이 두 권', price: 7000, neighborhood: 'seongsu' },
