@@ -11,6 +11,7 @@ description: React 코드의 가독성, 예측 가능성, 응집도, 결합도�
 
 - 실습하거나 개념을 배우는 중이라면 [연습 모드](references/practice-mode.md)를 읽는다.
 - 기존 코드 또는 설계를 검토한다면 [리뷰 모드](references/review-mode.md)를 읽는다.
+- 사용자가 풀이 기록(`note.md`)에 쓴 답을 검토한다면 [풀이 기록 검토](references/note-review.md)를 읽는다.
 - 어느 모드든 판단 전에 [코드 품질 기준](references/code-quality-criteria.md)을 읽는다.
 - 사용자의 코드를 검토할 때는 [네이밍 검토](references/naming.md)도 읽고, 구조 피드백과 함께 이름을 제안한다.
 - 두 모드가 겹치면, 사용자가 완성된 예시를 명시적으로 요청하지 않는 한 먼저 스스로 구현할 기회를 남긴다.
