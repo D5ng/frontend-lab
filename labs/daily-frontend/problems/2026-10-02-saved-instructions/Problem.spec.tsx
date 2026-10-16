@@ -2,10 +2,11 @@ import '@testing-library/jest-dom/vitest'
 import { act, cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { INITIAL_INSTRUCTIONS, createSaveMock } from './api'
+import { createSaveMock } from './api'
 import { uiPreviews } from './preview'
-import { InstructionsEditor } from './starter'
-import { InstructionsView } from './view'
+import { InstructionsEditor } from './components/InstructionsEditor'
+import { TestInstructionsView } from './components/TestInstructionsView'
+import { INITIAL_INSTRUCTIONS } from './model/instructions'
 
 afterEach(() => {
   cleanup()
@@ -14,7 +15,7 @@ afterEach(() => {
 
 describe('출제자가 준비한 UI와 모의 API', () => {
   it('입력 라벨과 공개된 안내를 표시하고 저장 전에는 주요 조작을 비활성화한다', () => {
-    render(<InstructionsView {...uiPreviews.initial} />)
+    render(<TestInstructionsView {...uiPreviews.initial} />)
     expect(screen.getByRole('textbox', { name: '거래 안내' })).toHaveValue(INITIAL_INSTRUCTIONS)
     expect(screen.getByRole('region', { name: '현재 공개된 안내' })).toHaveTextContent(INITIAL_INSTRUCTIONS)
     expect(screen.getByRole('button', { name: '저장하기' })).toBeDisabled()
@@ -22,7 +23,7 @@ describe('출제자가 준비한 UI와 모의 API', () => {
   })
 
   it.each(['loading', 'empty', 'error', 'success'])('%s 상태의 화면 표현을 제공한다', (state) => {
-    render(<InstructionsView {...uiPreviews[state]} />)
+    render(<TestInstructionsView {...uiPreviews[state]} />)
     if (state === 'loading') {
       expect(screen.getByRole('textbox', { name: '거래 안내' })).toBeDisabled()
       expect(screen.getByRole('button', { name: '저장 중...' })).toBeDisabled()
@@ -43,7 +44,7 @@ describe('출제자가 준비한 UI와 모의 API', () => {
     const onTextChange = vi.fn()
     const onSave = vi.fn()
     const onRestore = vi.fn()
-    render(<InstructionsView {...uiPreviews.editing} onTextChange={onTextChange} onSave={onSave} onRestore={onRestore} />)
+    render(<TestInstructionsView {...uiPreviews.editing} onDraftChange={onTextChange} onSave={onSave} onRestore={onRestore} />)
     await user.type(screen.getByRole('textbox', { name: '거래 안내' }), '!')
     expect(onTextChange).toHaveBeenCalled()
     await user.click(screen.getByRole('button', { name: '저장하기' }))
@@ -65,7 +66,7 @@ describe('출제자가 준비한 UI와 모의 API', () => {
 })
 
 // 구현을 시작할 때 이 블록의 .skip을 제거하세요. 현재는 미완성 스타터이므로 건너뜁니다.
-describe.skip('실습자가 구현할 거래 안내 편집 행동', () => {
+describe('실습자가 구현할 거래 안내 편집 행동', () => {
   it('편집 중에는 공개된 안내를 유지하고 되돌리기는 저장된 안내를 복원한다', async () => {
     const user = userEvent.setup()
     const saveInstructions = vi.fn()
