@@ -7,7 +7,7 @@
 
 ## 시작하기
 
-`starter.tsx`의 `ProductRemoval`에 로직과 구조를 직접 구현하세요. `view.tsx`는 표시와 이벤트 전달만 제공하고 `api.ts`/`handlers.ts`는 실제 fetch/MSW 환경만 제공합니다. 시작 코드는 목록만 보여 주며 삭제·복구 요청은 아직 하지 않습니다. 완성 로직이나 권장 상태·훅 구조는 제공하지 않습니다. view의 props 수와 상태 수가 같아야 하는 것도 아닙니다.
+`pages/ProductRemovalPage.tsx`의 `ProductRemovalPage`에 로직과 구조를 직접 구현하세요. `features/productRemoval/components/RemovalView.tsx`는 표시와 이벤트 전달만 제공하고 `features/productRemoval/apis/`/`handlers.ts`는 실제 fetch/MSW 환경만 제공합니다. 시작 코드는 목록만 보여 주며 삭제·복구 요청은 아직 하지 않습니다. 완성 로직이나 권장 상태·훅 구조는 제공하지 않습니다. view의 props 수와 상태 수가 같아야 하는 것도 아닙니다.
 
 ```sh
 pnpm install --frozen-lockfile
@@ -93,7 +93,7 @@ UI 출제 스킬의 Montage 지침보다 사용자 지정 SEED 기준을 우선�
 
 ## 완료 조건
 
-1. `Problem.spec.tsx`의 실습자 행동 블록에서 `describe.skip`을 `describe`로 바꿔 7개를 통과합니다. 제공 UI 준비 3개·HTTP 4개의 검증 범위도 유지합니다.
+1. `pages/ProductRemovalPage.spec.tsx`의 실습자 행동 블록에서 `describe.skip`을 `describe`로 바꿔 7개를 통과합니다. 제공 UI 준비 3개·HTTP 4개의 검증 범위도 유지합니다.
 2. 실제 화면에서 삭제 실패 → 재시도 성공 → 복구 실패 → 재시도 성공을 확인하고, 다음 삭제 성공 후 복구 대상이 바뀌는 흐름도 확인합니다. 테스트를 통과시키려고 요구사항을 삭제하거나 skip하지 않습니다.
 3. `note.md`에 상태의 원본, 선택한 경계와 비용, 실제 검증 근거를 직접 기록합니다.
 

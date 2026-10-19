@@ -2,9 +2,9 @@ import '@testing-library/jest-dom/vitest'
 import { act, cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { ProductRemoval } from './starter'
-import { RemovalView } from './view'
-import { initialProducts } from './api'
+import { ProductRemovalPage } from './ProductRemovalPage'
+import { RemovalView } from '../features/productRemoval/components/RemovalView'
+import { initialProducts } from '../features/productRemoval/apis/initialProducts'
 
 afterEach(cleanup)
 function deferred() {
@@ -21,7 +21,7 @@ const button = (name: string) => screen.getByRole('button', { name: `${name} 목
 describe('제공 화면 준비', () => {
   it('미구현 스타터는 목록만 표시하며 요청하지 않는다', () => {
     const api = { remove: vi.fn(), restore: vi.fn() }
-    render(<ProductRemoval api={api} />)
+    render(<ProductRemovalPage api={api} />)
     expect(screen.getAllByRole('listitem')).toHaveLength(3)
     expect(api.remove).not.toHaveBeenCalled()
     expect(api.restore).not.toHaveBeenCalled()
@@ -69,7 +69,7 @@ describe.skip('실습자 구현 행동', () => {
     const user = userEvent.setup()
     const request = deferred()
     const api = { remove: vi.fn(() => request.promise), restore: vi.fn() }
-    render(<ProductRemoval api={api} />)
+    render(<ProductRemovalPage api={api} />)
     await user.dblClick(button('원목 의자'))
     expect(api.remove).toHaveBeenCalledExactlyOnceWith('chair')
     expect(screen.getAllByRole('listitem')).toHaveLength(3)
@@ -83,7 +83,7 @@ describe.skip('실습자 구현 행동', () => {
     const user = userEvent.setup()
     const restore = deferred()
     const api = { remove: vi.fn().mockResolvedValue(undefined), restore: vi.fn(() => restore.promise) }
-    render(<ProductRemoval api={api} />)
+    render(<ProductRemovalPage api={api} />)
     await user.click(button('원목 의자'))
     await user.dblClick(screen.getByRole('button', { name: '마지막 상품 되돌리기' }))
     expect(api.restore).toHaveBeenCalledExactlyOnceWith('chair')
@@ -105,7 +105,7 @@ describe.skip('실습자 구현 행동', () => {
       remove: vi.fn().mockResolvedValueOnce(undefined).mockRejectedValueOnce(new Error('fail')).mockResolvedValueOnce(undefined),
       restore: vi.fn(),
     }
-    render(<ProductRemoval api={api} />)
+    render(<ProductRemovalPage api={api} />)
     await user.click(button('원목 의자'))
     await user.click(button('책상 조명'))
     expect(screen.getByRole('alert')).toHaveTextContent('목록에서 빼지 못했어요. 다시 시도해 주세요.')
@@ -121,7 +121,7 @@ describe.skip('실습자 구현 행동', () => {
       remove: vi.fn().mockResolvedValue(undefined),
       restore: vi.fn().mockRejectedValueOnce(new Error('fail')).mockResolvedValueOnce(undefined),
     }
-    render(<ProductRemoval api={api} />)
+    render(<ProductRemovalPage api={api} />)
     await user.click(button('원목 의자'))
     await user.click(screen.getByRole('button', { name: '마지막 상품 되돌리기' }))
     expect(screen.getByRole('alert')).toHaveTextContent('되돌리지 못했어요. 다시 시도해 주세요.')
@@ -134,7 +134,7 @@ describe.skip('실습자 구현 행동', () => {
   it('두 번째 삭제 성공 뒤에는 마지막 상품만 되돌린다', async () => {
     const user = userEvent.setup()
     const api = { remove: vi.fn().mockResolvedValue(undefined), restore: vi.fn().mockResolvedValue(undefined) }
-    render(<ProductRemoval api={api} />)
+    render(<ProductRemovalPage api={api} />)
     await user.click(button('원목 의자'))
     await user.click(button('책상 조명'))
     await user.click(screen.getByRole('button', { name: '마지막 상품 되돌리기' }))
@@ -146,7 +146,7 @@ describe.skip('실습자 구현 행동', () => {
     const user = userEvent.setup()
     const request = deferred()
     const api = { remove: vi.fn().mockResolvedValueOnce(undefined).mockReturnValueOnce(request.promise), restore: vi.fn() }
-    render(<ProductRemoval api={api} />)
+    render(<ProductRemovalPage api={api} />)
     await user.click(button('원목 의자'))
     await user.click(button('책상 조명'))
     expect(screen.queryByText('원목 의자를 목록에서 뺐어요.')).not.toBeInTheDocument()
@@ -159,7 +159,7 @@ describe.skip('실습자 구현 행동', () => {
   it('빈 목록에서도 마지막 삭제를 되돌릴 수 있다', async () => {
     const user = userEvent.setup()
     const api = { remove: vi.fn().mockResolvedValue(undefined), restore: vi.fn().mockResolvedValue(undefined) }
-    render(<ProductRemoval api={api} />)
+    render(<ProductRemovalPage api={api} />)
     await user.click(button('원목 의자'))
     await user.click(button('책상 조명'))
     await user.click(button('작은 책장'))

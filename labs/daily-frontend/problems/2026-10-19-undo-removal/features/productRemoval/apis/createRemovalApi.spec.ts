@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { createRemovalApi } from './api'
+import { createRemovalApi } from './createRemovalApi'
 
 describe('삭제와 복구 HTTP 모의 API', () => {
   it('의자 삭제 첫 실패와 재시도 204를 처리한다', async () => {

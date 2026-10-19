@@ -1,7 +1,7 @@
 import { Callout, Text, VStack } from '@seed-design/react'
 import { ActionButton } from 'seed-design/ui/action-button'
 import { List, ListItem } from 'seed-design/ui/list'
-import type { Product } from './api'
+import type { Product } from '../types/product'
 
 export interface RemovalViewProps {
   items: Product[]

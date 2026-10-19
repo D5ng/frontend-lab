@@ -1,5 +1,5 @@
-import { initialProducts } from './api'
-import { RemovalView, type RemovalViewProps } from './view'
+import { initialProducts } from '../apis/initialProducts'
+import { RemovalView, type RemovalViewProps } from './RemovalView'
 
 // 고정 props 표현 검수용. 전이·API·실습 정답 로직이 아닙니다.
 export function RemovalPreview({ scene }: { scene: string }) {
