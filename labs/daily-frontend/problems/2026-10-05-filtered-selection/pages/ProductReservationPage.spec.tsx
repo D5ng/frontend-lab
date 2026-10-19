@@ -2,8 +2,8 @@ import '@testing-library/jest-dom/vitest'
 import { act, cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { createDemoReservation } from './api'
-import { ProductReservation } from './starter'
+import { createDemoReservation } from '../features/productReservation/apis/createDemoReservation'
+import { ProductReservationPage } from './ProductReservationPage'
 
 afterEach(() => {
   cleanup()
@@ -12,7 +12,7 @@ afterEach(() => {
 
 describe('관심 상품 예약의 기존 행동', () => {
   it('선택하지 않으면 금액은 0원이고 예약할 수 없다', () => {
-    render(<ProductReservation reserveProducts={vi.fn()} />)
+    render(<ProductReservationPage reserveProducts={vi.fn()} />)
     expect(screen.getAllByRole('checkbox')).toHaveLength(3)
     expect(screen.getByText('선택 0개')).toBeVisible()
     expect(screen.getByText('상품 금액 0원')).toBeVisible()
@@ -22,7 +22,7 @@ describe('관심 상품 예약의 기존 행동', () => {
   it('나눔 상품만 선택해도 금액 0원으로 예약할 수 있다', async () => {
     const reserve = vi.fn().mockResolvedValue(undefined)
     const user = userEvent.setup()
-    render(<ProductReservation reserveProducts={reserve} />)
+    render(<ProductReservationPage reserveProducts={reserve} />)
     await user.click(screen.getByRole('checkbox', { name: '작은 화분' }))
     await user.click(screen.getByRole('button', { name: '선택 상품 예약하기' }))
     expect(reserve).toHaveBeenCalledWith({ productIds: ['plant'], totalPrice: 0 })
@@ -32,7 +32,7 @@ describe('관심 상품 예약의 기존 행동', () => {
   it('필터로 숨겨진 선택도 개수·금액·예약 대상에 포함한다', async () => {
     const reserve = vi.fn().mockRejectedValue(new Error('실패'))
     const user = userEvent.setup()
-    render(<ProductReservation reserveProducts={reserve} />)
+    render(<ProductReservationPage reserveProducts={reserve} />)
     await user.click(screen.getByRole('checkbox', { name: '접이식 책상' }))
     await user.click(screen.getByRole('checkbox', { name: '작은 화분' }))
     await user.click(screen.getByRole('radio', { name: '나눔' }))
@@ -52,7 +52,7 @@ describe('관심 상품 예약의 기존 행동', () => {
   it('선택 해제는 해당 상품만 제거하고 요청은 원래 상품 순서를 따른다', async () => {
     const reserve = vi.fn().mockResolvedValue(undefined)
     const user = userEvent.setup()
-    render(<ProductReservation reserveProducts={reserve} />)
+    render(<ProductReservationPage reserveProducts={reserve} />)
     for (const title of ['작은 화분', '소설책 세 권', '접이식 책상', '소설책 세 권']) {
       await user.click(screen.getByRole('checkbox', { name: title }))
     }
@@ -72,7 +72,7 @@ describe('관심 상품 예약의 기존 행동', () => {
         }),
     )
     const user = userEvent.setup()
-    render(<ProductReservation reserveProducts={reserve} />)
+    render(<ProductReservationPage reserveProducts={reserve} />)
     await user.click(screen.getByRole('checkbox', { name: '접이식 책상' }))
     await user.click(screen.getByRole('button', { name: '선택 상품 예약하기' }))
     expect(screen.getByRole('button', { name: '예약 중' })).toBeDisabled()
@@ -86,7 +86,7 @@ describe('관심 상품 예약의 기존 행동', () => {
   it('실패하면 선택·필터를 보존하고 같은 데이터로 재시도하며 성공하면 선택만 비운다', async () => {
     const reserve = vi.fn().mockRejectedValueOnce(new Error('실패')).mockResolvedValueOnce(undefined)
     const user = userEvent.setup()
-    render(<ProductReservation reserveProducts={reserve} />)
+    render(<ProductReservationPage reserveProducts={reserve} />)
     await user.click(screen.getByRole('checkbox', { name: '접이식 책상' }))
     await user.click(screen.getByRole('radio', { name: '나눔' }))
     await user.click(screen.getByRole('button', { name: '선택 상품 예약하기' }))
@@ -105,7 +105,7 @@ describe('관심 상품 예약의 기존 행동', () => {
 
   it('오류 안내는 새 선택을 하면 제거한다', async () => {
     const user = userEvent.setup()
-    render(<ProductReservation reserveProducts={vi.fn().mockRejectedValue(new Error('실패'))} />)
+    render(<ProductReservationPage reserveProducts={vi.fn().mockRejectedValue(new Error('실패'))} />)
     await user.click(screen.getByRole('checkbox', { name: '접이식 책상' }))
     await user.click(screen.getByRole('button', { name: '선택 상품 예약하기' }))
     expect(await screen.findByRole('alert')).toBeVisible()
