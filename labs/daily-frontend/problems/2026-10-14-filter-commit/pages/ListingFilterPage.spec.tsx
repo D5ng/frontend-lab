@@ -2,8 +2,9 @@ import '@testing-library/jest-dom/vitest'
 import { act, cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Problem } from './Problem'
-import { initialListings, type Listing, type SearchListings } from './api'
+import { ListingFilterPage } from './ListingFilterPage'
+import { initialListings } from '../features/listingFilter/apis/initialListings'
+import type { Listing, SearchListings } from '../features/listingFilter/types/listing'
 
 afterEach(cleanup)
 
@@ -17,7 +18,7 @@ function deferred() {
   return { promise, resolve, reject }
 }
 function setup(api = vi.fn<SearchListings>().mockResolvedValue(initialListings)) {
-  render(<Problem searchListings={api} />)
+  render(<ListingFilterPage searchListings={api} />)
   return { user: userEvent.setup(), api }
 }
 const applyButton = () => screen.getByRole('button', { name: '선택한 조건 적용' })

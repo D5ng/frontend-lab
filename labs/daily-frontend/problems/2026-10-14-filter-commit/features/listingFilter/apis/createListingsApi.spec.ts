@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { http, HttpResponse } from 'msw/http'
-import { server } from '../../src/mocks/server'
-import { createListingsApi, initialListings } from './api'
+import { server } from '../../../../../src/mocks/server'
+import { createListingsApi } from './createListingsApi'
+import { initialListings } from './initialListings'
 
 describe('관심 물건 HTTP 계약', () => {
   it('POST 본문을 전송하고 서버의 목록을 받는다', async () => {

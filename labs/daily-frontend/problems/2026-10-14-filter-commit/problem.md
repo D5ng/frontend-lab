@@ -7,7 +7,7 @@
 
 ## 시작하기
 
-`Problem.tsx`는 아래 요구사항이 이미 동작하는 스타터입니다. 먼저 화면을 조작하고 `note.md`에 현재 이해와 설계 가설을 적어 주세요. 동작을 유지하면서 가독성·예측 가능성·응집도·결합도를 기준으로 재구성하세요. 파일 수, 훅 개수, 중복 제거 자체는 정답이 아닙니다. 공통 앱과 API·모킹 환경은 풀이 대상이 아닙니다.
+`pages/ListingFilterPage.tsx`는 아래 요구사항이 이미 동작하는 스타터입니다. 먼저 화면을 조작하고 `note.md`에 현재 이해와 설계 가설을 적어 주세요. 동작을 유지하면서 가독성·예측 가능성·응집도·결합도를 기준으로 재구성하세요. 파일 수, 훅 개수, 중복 제거 자체는 정답이 아닙니다. 공통 앱과 API·모킹 환경은 풀이 대상이 아닙니다.
 
 ```sh
 pnpm install --frozen-lockfile
@@ -39,7 +39,8 @@ pnpm --filter @frontend-lab/daily-frontend test problems/2026-10-14-filter-commi
 
 ## 제공 환경과 요청
 
-- `api.ts`: 입력/응답 타입, 최초 샘플, 실제 fetch API 공장.
+- `features/listingFilter/types/listing.ts`: 입력/응답 타입.
+- `features/listingFilter/apis/`: 최초 샘플(`categories.ts`, `initialListings.ts`)과 실제 fetch API 공장(`createListingsApi.ts`).
 - `handlers.ts`: `POST /api/daily/2026-10-14/listings`, 본문 `{ categories: Category[] }`, 응답 `Listing[]`.
 - MSW가 브라우저와 테스트에서 HTTP를 가로챕니다. 별도 백엔드는 필요하지 않습니다.
 - 화면 진입마다 새 API 세션을 사용합니다. 유효한 첫 요청은 1.8초 후 503, 이후 요청은 1.8초 후 성공합니다. 재진입하면 시나리오를 다시 시작합니다. 잘못된/빈 카테고리는 400입니다.

@@ -1,7 +1,9 @@
 import { http, HttpResponse } from 'msw/http'
 import { delay } from 'msw/utils/delay'
 import { nextAttempt } from '../../src/mocks/scenario'
-import { categories, initialListings, type Category } from './api'
+import { categories } from './features/listingFilter/apis/categories'
+import { initialListings } from './features/listingFilter/apis/initialListings'
+import type { Category } from './features/listingFilter/types/listing'
 
 export const handlers = [
   http.post('*/api/daily/2026-10-14/listings', async ({ request }) => {
