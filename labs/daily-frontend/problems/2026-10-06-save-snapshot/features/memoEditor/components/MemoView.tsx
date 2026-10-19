@@ -1,7 +1,7 @@
 import { Box, Callout, Text, VStack } from '@seed-design/react'
 import { ActionButton } from 'seed-design/ui/action-button'
 import { TextField, TextFieldTextarea } from 'seed-design/ui/text-field'
-import './style.css'
+import './MemoView.css'
 
 // 화면 표현용 계약입니다. 같은 이름의 상태를 각각 만들라는 뜻은 아닙니다.
 export type MemoViewProps = {

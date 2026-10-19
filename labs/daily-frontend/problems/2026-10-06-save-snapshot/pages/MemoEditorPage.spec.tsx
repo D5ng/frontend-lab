@@ -2,10 +2,12 @@ import '@testing-library/jest-dom/vitest'
 import { act, cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { INITIAL_MEMO, createDemoSaver, type Memo } from './api'
-import { previews } from './preview'
-import { MemoEditor } from './starter'
-import { MemoView } from './view'
+import { INITIAL_MEMO } from '../features/memoEditor/apis/initialMemo'
+import { createDemoSaver } from '../features/memoEditor/apis/createDemoSaver'
+import type { Memo } from '../features/memoEditor/types/memo'
+import { previews } from '../features/memoEditor/components/MemoView.preview'
+import { MemoEditorPage } from './MemoEditorPage'
+import { MemoView } from '../features/memoEditor/components/MemoView'
 
 afterEach(() => {
   cleanup()
@@ -30,7 +32,7 @@ const savedRegion = () => within(screen.getByRole('region', { name: '마지막 �
 describe('제공한 화면·API의 검증', () => {
   it('스타터는 로직 미연결을 안내하고 초기 메모만 표시한다', () => {
     const saveMemo = vi.fn()
-    render(<MemoEditor initialMemo={INITIAL_MEMO} saveMemo={saveMemo} />)
+    render(<MemoEditorPage initialMemo={INITIAL_MEMO} saveMemo={saveMemo} />)
     expect(screen.getByText(/아직 입력·저장·되돌리기 로직이 연결되지 않았어요/)).toBeVisible()
     expect(input()).toHaveValue(INITIAL_MEMO)
     expect(input()).toHaveAttribute('readonly')
@@ -96,7 +98,7 @@ describe.skip('직접 구현할 메모 저장 행동', () => {
   it('초기에는 변경이 없고 입력 후 되돌리면 마지막 저장값을 복원한다', async () => {
     const user = userEvent.setup(),
       saveMemo = vi.fn()
-    render(<MemoEditor initialMemo={INITIAL_MEMO} saveMemo={saveMemo} />)
+    render(<MemoEditorPage initialMemo={INITIAL_MEMO} saveMemo={saveMemo} />)
     expect(input()).not.toHaveAttribute('readonly')
     expect(saveButton()).toBeDisabled()
     expect(restoreButton()).toBeDisabled()
@@ -113,7 +115,7 @@ describe.skip('직접 구현할 메모 저장 행동', () => {
     const user = userEvent.setup(),
       request = deferred(),
       saveMemo = vi.fn(() => request.promise)
-    render(<MemoEditor initialMemo="A" saveMemo={saveMemo} />)
+    render(<MemoEditorPage initialMemo="A" saveMemo={saveMemo} />)
     await user.clear(input())
     await user.type(input(), 'B')
     await user.click(saveButton())
@@ -138,7 +140,7 @@ describe.skip('직접 구현할 메모 저장 행동', () => {
   it('저장 중 추가 수정이 없으면 성공 뒤 변경 없음이 되고 새 편집은 결과 안내를 지운다', async () => {
     const user = userEvent.setup(),
       request = deferred()
-    render(<MemoEditor initialMemo="A" saveMemo={() => request.promise} />)
+    render(<MemoEditorPage initialMemo="A" saveMemo={() => request.promise} />)
     await user.clear(input())
     await user.type(input(), 'B')
     await user.click(saveButton())
@@ -161,7 +163,7 @@ describe.skip('직접 구현할 메모 저장 행동', () => {
       .fn()
       .mockImplementationOnce(() => request.promise)
       .mockResolvedValueOnce({ memo: 'C' })
-    render(<MemoEditor initialMemo="A" saveMemo={saveMemo} />)
+    render(<MemoEditorPage initialMemo="A" saveMemo={saveMemo} />)
     await user.clear(input())
     await user.type(input(), 'B')
     await user.click(saveButton())
@@ -182,7 +184,7 @@ describe.skip('직접 구현할 메모 저장 행동', () => {
   it('빈 입력도 그대로 저장하며 공백·줄바꿈을 임의로 제거하지 않는다', async () => {
     const user = userEvent.setup(),
       saveMemo = vi.fn(async (request: Memo) => request)
-    render(<MemoEditor initialMemo="A" saveMemo={saveMemo} />)
+    render(<MemoEditorPage initialMemo="A" saveMemo={saveMemo} />)
     await user.clear(input())
     await user.click(saveButton())
     expect(saveMemo).toHaveBeenLastCalledWith({ memo: '' })
@@ -195,7 +197,7 @@ describe.skip('직접 구현할 메모 저장 행동', () => {
   it('B 저장 중 초기 A로 다시 바꿔도 성공 뒤 A를 유지하고 미저장으로 표시한다', async () => {
     const user = userEvent.setup(),
       request = deferred()
-    render(<MemoEditor initialMemo="A" saveMemo={() => request.promise} />)
+    render(<MemoEditorPage initialMemo="A" saveMemo={() => request.promise} />)
     await user.clear(input())
     await user.type(input(), 'B')
     await user.click(saveButton())

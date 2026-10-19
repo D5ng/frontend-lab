@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw/http'
 import { delay } from 'msw/utils/delay'
 import { nextAttempt } from '../../src/mocks/scenario'
-import type { Memo } from './api'
+import type { Memo } from './features/memoEditor/types/memo'
 export const handlers = [
   http.put('*/api/daily/2026-10-06-save-snapshot/memo', async ({ request }) => {
     const fail = nextAttempt(request) === 1

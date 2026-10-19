@@ -1,5 +1,5 @@
-import { INITIAL_MEMO } from './api'
-import type { MemoViewProps } from './view'
+import { INITIAL_MEMO } from '../apis/initialMemo'
+import type { MemoViewProps } from './MemoView'
 
 // 검수용 고정 화면 데이터입니다. 사용자 이벤트나 저장 흐름을 구현하지 않습니다.
 export const previews = {
