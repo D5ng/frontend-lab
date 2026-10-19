@@ -2,8 +2,8 @@ import '@testing-library/jest-dom/vitest'
 import { act, cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Problem } from './Problem'
-import type { Quote, Receipt, ReservationApi } from './api'
+import { ReservationReviewPage } from './ReservationReviewPage'
+import type { Quote, Receipt, ReservationApi } from '../features/reservationReview/types/reservation'
 
 afterEach(cleanup)
 const quote: Quote = { quoteId: 'quote-two', count: 2, totalPrice: 27100 }
@@ -13,7 +13,7 @@ function setup() {
     getQuote: vi.fn<ReservationApi['getQuote']>().mockResolvedValue(quote),
     confirm: vi.fn<ReservationApi['confirm']>().mockResolvedValue(receipt),
   }
-  render(<Problem api={api} />)
+  render(<ReservationReviewPage api={api} />)
   return { api, user: userEvent.setup() }
 }
 function deferred<T>() {

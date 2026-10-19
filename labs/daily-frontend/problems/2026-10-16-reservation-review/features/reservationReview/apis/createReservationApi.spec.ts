@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { http, HttpResponse } from 'msw/http'
-import { server } from '../../src/mocks/server'
-import { createReservationApi } from './api'
+import { server } from '../../../../../src/mocks/server'
+import { createReservationApi } from './createReservationApi'
 
 describe('제공 예약 HTTP 계약', () => {
   it('금액 확인은 인원을 보내고 확정은 quoteId만 보낸다', async () => {

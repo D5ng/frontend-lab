@@ -7,7 +7,7 @@
 
 ## 시작하기
 
-`Problem.tsx`는 이미 동작합니다. 인원 선택부터 확인·확정·실패·재시도까지 행동을 보존하며 구조를 개선하세요. 먼저 화면과 테스트를 실행하고 현재 이해·설계 가설을 `note.md`에 직접 적어 주세요. 완성된 **동작**을 제공하는 것이며, 재구성한 정답 구조는 제공하지 않습니다.
+`pages/ReservationReviewPage.tsx`는 이미 동작합니다. 인원 선택부터 확인·확정·실패·재시도까지 행동을 보존하며 구조를 개선하세요. 먼저 화면과 테스트를 실행하고 현재 이해·설계 가설을 `note.md`에 직접 적어 주세요. 완성된 **동작**을 제공하는 것이며, 재구성한 정답 구조는 제공하지 않습니다.
 
 ```sh
 pnpm install --frozen-lockfile
@@ -42,7 +42,7 @@ pnpm --filter @frontend-lab/daily-frontend test problems/2026-10-16-reservation-
 
 ## 제공 환경
 
-- `api.ts`: `getQuote(count): Promise<Quote>`, `confirm(quoteId): Promise<Receipt>`를 제공하는 API 공장. 실제 fetch 요청을 사용합니다.
+- `features/reservationReview/apis/createReservationApi.ts`: `getQuote(count): Promise<Quote>`, `confirm(quoteId): Promise<Receipt>`를 제공하는 API 공장. 실제 fetch 요청을 사용합니다. 타입은 `features/reservationReview/types/reservation.ts`에 있습니다.
 - `handlers.ts`: 기존 MSW 자동 탐색에 등록됩니다. 요청·응답 환경은 풀이 대상이 아닙니다.
 - `POST /api/daily/2026-10-16/quotes` 본문 `{ count }`, 응답 `{ quoteId, count, totalPrice }`.
 - `POST /api/daily/2026-10-16/reservations` 본문 `{ quoteId }`, 응답 `{ reservationId, count, totalPrice }`. 같은 API 세션에서 발급된 quoteId만 받습니다.

@@ -1,11 +1,5 @@
-import { createApiClient } from '../../src/api/client'
-
-export type Quote = { quoteId: string; count: number; totalPrice: number }
-export type Receipt = { reservationId: string; count: number; totalPrice: number }
-export interface ReservationApi {
-  getQuote: (count: number) => Promise<Quote>
-  confirm: (quoteId: string) => Promise<Receipt>
-}
+import { createApiClient } from '../../../../../src/api/client'
+import type { Quote, Receipt, ReservationApi } from '../types/reservation'
 
 export function createReservationApi(): ReservationApi {
   const request = createApiClient()

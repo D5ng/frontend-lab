@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw/http'
 import { delay } from 'msw/utils/delay'
 import { nextAttempt } from '../../src/mocks/scenario'
-import type { Quote } from './api'
+import type { Quote } from './features/reservationReview/types/reservation'
 
 const issuedQuotes = new Map<string, Quote>()
 export const handlers = [
