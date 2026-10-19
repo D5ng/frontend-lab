@@ -3,9 +3,9 @@ import { Callout, HStack, Text, VStack } from '@seed-design/react'
 import { ActionButton } from 'seed-design/ui/action-button'
 import { RadioGroup, RadioGroupItem } from 'seed-design/ui/radio-group'
 import { TextField, TextFieldTextarea } from 'seed-design/ui/text-field'
-import type { Reason, SendReport } from './api'
+import type { Reason, SendReport } from '../features/reportForm/types/report'
 
-export function ReportForm({ sendReport }: { sendReport: SendReport }) {
+export function ReportFormPage({ sendReport }: { sendReport: SendReport }) {
   const [reason, setReason] = useState<Reason | ''>('')
   const [description, setDescription] = useState('')
   const [reasonError, setReasonError] = useState('')

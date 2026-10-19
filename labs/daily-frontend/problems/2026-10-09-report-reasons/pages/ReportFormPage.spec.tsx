@@ -2,8 +2,8 @@ import '@testing-library/jest-dom/vitest'
 import { act, cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { createReportMock } from './api'
-import { ReportForm } from './starter'
+import { createReportMock } from '../features/reportForm/apis/createReportMock'
+import { ReportFormPage } from './ReportFormPage'
 
 afterEach(() => {
   cleanup()
@@ -15,7 +15,7 @@ describe('신고 폼의 기존 행동', () => {
   it('미선택 접수는 사유 오류만 표시하고 요청하지 않는다', async () => {
     const user = userEvent.setup(),
       sendReport = vi.fn()
-    render(<ReportForm sendReport={sendReport} />)
+    render(<ReportFormPage sendReport={sendReport} />)
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument()
     expect(screen.getAllByRole('radio').every((radio) => !(radio as HTMLInputElement).checked)).toBe(true)
     await user.click(screen.getByRole('button', { name: '신고 접수하기' }))
@@ -30,7 +30,7 @@ describe('신고 폼의 기존 행동', () => {
   ] as const)('%s는 trim 기준 %i자 미만을 거부하고 경계값을 접수한다', async (reason, minimum) => {
     const user = userEvent.setup(),
       sendReport = vi.fn().mockResolvedValue(undefined)
-    render(<ReportForm sendReport={sendReport} />)
+    render(<ReportFormPage sendReport={sendReport} />)
     await user.click(screen.getByRole('radio', { name: labels[reason] }))
     const input = screen.getByRole('textbox', { name: '상황 설명' })
     await user.type(input, `  ${'가'.repeat(minimum - 1)}  `)
@@ -52,7 +52,7 @@ describe('신고 폼의 기존 행동', () => {
   it('숨긴 설명은 보존하지만 불참 요청에 포함하지 않는다', async () => {
     const user = userEvent.setup(),
       sendReport = vi.fn().mockResolvedValue(undefined)
-    render(<ReportForm sendReport={sendReport} />)
+    render(<ReportFormPage sendReport={sendReport} />)
     await user.click(screen.getByRole('radio', { name: labels['wrong-item'] }))
     await user.type(screen.getByRole('textbox', { name: '상황 설명' }), '  상품 색이 달라요  ')
     await user.click(screen.getByRole('radio', { name: '약속 장소에 나오지 않았어요' }))
@@ -68,7 +68,7 @@ describe('신고 폼의 기존 행동', () => {
   it('사유를 전환하면 이전 오류를 지우고 새 최소 길이를 적용한다', async () => {
     const user = userEvent.setup(),
       sendReport = vi.fn()
-    render(<ReportForm sendReport={sendReport} />)
+    render(<ReportFormPage sendReport={sendReport} />)
     await user.click(screen.getByRole('radio', { name: labels.other }))
     await user.type(screen.getByRole('textbox'), '가나다라마')
     await user.click(screen.getByRole('button', { name: '신고 접수하기' }))
@@ -86,7 +86,7 @@ describe('신고 폼의 기존 행동', () => {
       reject = fail
     })
     const sendReport = vi.fn().mockReturnValueOnce(pending).mockResolvedValueOnce(undefined)
-    render(<ReportForm sendReport={sendReport} />)
+    render(<ReportFormPage sendReport={sendReport} />)
     await user.click(screen.getByRole('radio', { name: labels['wrong-item'] }))
     const input = screen.getByRole('textbox', { name: '상황 설명' })
     await user.type(input, '  다른 상품이에요  ')
@@ -112,7 +112,7 @@ describe('신고 폼의 기존 행동', () => {
   it('전송 때 내부 공백과 줄바꿈은 제거하지 않는다', async () => {
     const user = userEvent.setup(),
       sendReport = vi.fn().mockResolvedValue(undefined)
-    render(<ReportForm sendReport={sendReport} />)
+    render(<ReportFormPage sendReport={sendReport} />)
     await user.click(screen.getByRole('radio', { name: labels.other }))
     await user.type(screen.getByRole('textbox'), '  상품 설명과\n실물이 달라요  ')
     await user.click(screen.getByRole('button', { name: '신고 접수하기' }))

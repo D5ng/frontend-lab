@@ -6,7 +6,7 @@
 
 ## 상황과 핵심 질문
 
-`starter.tsx`는 이미 완전히 동작합니다. 사유에 따른 설명 문구·최소 길이·검증·전송 데이터·완료 안내가 한 컴포넌트의 여러 위치에 흩어져 있습니다.
+`pages/ReportFormPage.tsx`는 이미 완전히 동작합니다. 사유에 따른 설명 문구·최소 길이·검증·전송 데이터·완료 안내가 한 컴포넌트의 여러 위치에 흩어져 있습니다.
 
 **사유별 규칙이 바뀔 때 함께 수정되어야 하는 코드는 무엇이고, 어떤 경계가 그 변경을 쉽게 확인하게 할까요?**
 
@@ -32,12 +32,12 @@ UI와 로직을 다른 파일에 두는 것만으로 해결되는지, 서로 다
 
 ## 실행·테스트
 
-`api.ts`의 `SendReport` 주입 경계를 유지하세요. `Problem`은 첫 유효 요청만 1.8초 후 실패하고 이후 성공하는 모의 API를 연결합니다. 잘못된 입력은 API에 도달하지 않으므로 실패 횟수를 소비하지 않습니다. HTTP 요청은 MSW가 가로채며 실제 신고·상대방 알림·서버 저장은 없고, 화면 재진입 시 초기화합니다.
+`features/reportForm/types/report.ts`의 `SendReport` 주입 경계를 유지하세요. `Problem`은 첫 유효 요청만 1.8초 후 실패하고 이후 성공하는 모의 API를 연결합니다. 잘못된 입력은 API에 도달하지 않으므로 실패 횟수를 소비하지 않습니다. HTTP 요청은 MSW가 가로채며 실제 신고·상대방 알림·서버 저장은 없고, 화면 재진입 시 초기화합니다.
 
 ```sh
 pnpm install --frozen-lockfile
 pnpm dev:daily
-pnpm --filter @frontend-lab/daily-frontend exec vitest run problems/2026-10-09-report-reasons/Problem.spec.tsx
+pnpm --filter @frontend-lab/daily-frontend exec vitest run problems/2026-10-09-report-reasons/pages/ReportFormPage.spec.tsx
 pnpm --filter @frontend-lab/daily-frontend build
 ```
 
@@ -75,7 +75,7 @@ Daily에서 오늘 문제를 선택하거나 `#2026-10-09-report-reasons`로 진
 
 ## MSW 요청 환경
 
-`api.ts`의 함수는 실제 `fetch`를 호출하고, 같은 폴더의 `handlers.ts`가 기존 지연·첫 실패·성공 응답을 HTTP로 모킹합니다. 함수 주입 경계와 실습 요구사항은 유지합니다. HTTP 503 응답의 `message`는 API 함수가 Error로 변환하고, 사용 불가나 빈 목록은 정상 JSON 응답으로 처리합니다.
+`features/reportForm/apis/`의 함수는 실제 `fetch`를 호출하고, 문제 폴더 바로 아래의 `handlers.ts`가 기존 지연·첫 실패·성공 응답을 HTTP로 모킹합니다. 함수 주입 경계와 실습 요구사항은 유지합니다. HTTP 503 응답의 `message`는 API 함수가 Error로 변환하고, 사용 불가나 빈 목록은 정상 JSON 응답으로 처리합니다.
 
 API 공장 함수마다 독립적인 모의 서버 세션을 사용하므로 화면 재진입 시 첫 실패 횟수가 초기화됩니다. 요청 취소나 오래된 응답의 화면 반영 여부는 MSW가 해결하지 않습니다. 기존 함수 주입 행동 테스트로 응답 순서를 제어하고, 제공 API 테스트는 실제 HTTP 경로를 검증합니다. MSW 작성은 풀이 대상이 아닙니다.
 
