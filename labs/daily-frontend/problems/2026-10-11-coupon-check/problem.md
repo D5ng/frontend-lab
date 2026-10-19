@@ -8,7 +8,7 @@
 
 **입력 원본·확인 요청·사용 가능한 쿠폰의 유효 기간은 어디에서 구분해야 할까요?**
 
-`starter.tsx`의 `CouponForm`을 직접 구현하세요. 입력만 연결되어 있으며 요청·할인 적용은 미구현입니다. `view.tsx`의 props는 화면 표현 계약이지 상태 구조의 정답이 아닙니다. 주입 경계 `checkCoupon`은 유지하고 그 밖의 파일·훅 개수는 자유입니다.
+`pages/CouponFormPage.tsx`의 `CouponFormPage`를 직접 구현하세요. 입력만 연결되어 있으며 요청·할인 적용은 미구현입니다. `features/couponForm/components/CouponView.tsx`의 props는 화면 표현 계약이지 상태 구조의 정답이 아닙니다. 주입 경계 `checkCoupon`은 유지하고 그 밖의 파일·훅 개수는 자유입니다.
 
 ## 요구사항
 
@@ -26,7 +26,7 @@
 ```sh
 pnpm install --frozen-lockfile
 pnpm dev:daily
-pnpm --filter @frontend-lab/daily-frontend exec vitest run problems/2026-10-11-coupon-check/Problem.spec.tsx
+pnpm --filter @frontend-lab/daily-frontend exec vitest run problems/2026-10-11-coupon-check/pages/CouponFormPage.spec.tsx
 pnpm --filter @frontend-lab/daily-frontend build
 ```
 
@@ -62,7 +62,7 @@ UI 검수용 `?coupon-preview=empty`, `invalid`, `checking`, `error`, `unavailab
 
 ## MSW 요청 환경
 
-`api.ts`의 함수는 실제 `fetch`를 호출하고, 같은 폴더의 `handlers.ts`가 기존 지연·첫 실패·성공 응답을 HTTP로 모킹합니다. 함수 주입 경계와 실습 요구사항은 유지합니다. HTTP 503 응답의 `message`는 API 함수가 Error로 변환하고, 사용 불가나 빈 목록은 정상 JSON 응답으로 처리합니다.
+`features/couponForm/apis/`의 함수는 실제 `fetch`를 호출하고, 문제 폴더 바로 아래의 `handlers.ts`가 기존 지연·첫 실패·성공 응답을 HTTP로 모킹합니다. 함수 주입 경계와 실습 요구사항은 유지합니다. HTTP 503 응답의 `message`는 API 함수가 Error로 변환하고, 사용 불가나 빈 목록은 정상 JSON 응답으로 처리합니다.
 
 API 공장 함수마다 독립적인 모의 서버 세션을 사용하므로 화면 재진입 시 첫 실패 횟수가 초기화됩니다. 요청 취소나 오래된 응답의 화면 반영 여부는 MSW가 해결하지 않습니다. 기존 함수 주입 행동 테스트로 응답 순서를 제어하고, 제공 API 테스트는 실제 HTTP 경로를 검증합니다. MSW 작성은 풀이 대상이 아닙니다.
 

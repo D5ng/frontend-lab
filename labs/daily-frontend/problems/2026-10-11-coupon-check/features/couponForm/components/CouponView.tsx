@@ -1,7 +1,7 @@
 import { Callout, HStack, Text, VStack } from '@seed-design/react'
 import { ActionButton } from 'seed-design/ui/action-button'
 import { TextField, TextFieldInput } from 'seed-design/ui/text-field'
-import type { Coupon } from './api'
+import type { Coupon } from '../types/coupon'
 
 export type CouponViewProps = {
   value: string

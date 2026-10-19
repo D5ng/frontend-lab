@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import type { CheckCoupon } from './api'
-import { CouponView } from './view'
+import type { CheckCoupon } from '../features/couponForm/types/coupon'
+import { CouponView } from '../features/couponForm/components/CouponView'
 
-export function CouponForm({ checkCoupon }: { checkCoupon: CheckCoupon }) {
+export function CouponFormPage({ checkCoupon }: { checkCoupon: CheckCoupon }) {
   const [value, setValue] = useState('')
   // TODO: checkCoupon을 연결하고 요구사항의 상태 경계를 직접 설계하세요.
   void checkCoupon

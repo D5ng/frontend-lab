@@ -1,8 +1,5 @@
-import { createApiClient } from '../../src/api/client'
-
-export type Coupon = { code: string; discount: number }
-export type CheckResult = { available: true; coupon: Coupon } | { available: false }
-export type CheckCoupon = (code: string) => Promise<CheckResult>
+import { createApiClient } from '../../../../../src/api/client'
+import type { CheckResult, CheckCoupon } from '../types/coupon'
 
 // HTTP 응답 모킹은 handlers.ts에 두고 기존 함수 주입 계약을 유지한다.
 export function createCouponMock(): CheckCoupon {

@@ -1,4 +1,4 @@
-import type { CouponViewProps } from './view'
+import type { CouponViewProps } from './CouponView'
 
 export const previews: Record<string, CouponViewProps> = {
   empty: {

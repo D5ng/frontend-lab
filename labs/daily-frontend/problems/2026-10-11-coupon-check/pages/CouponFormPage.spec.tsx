@@ -2,10 +2,11 @@ import '@testing-library/jest-dom/vitest'
 import { act, cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { createCouponMock, type CheckResult } from './api'
-import { CouponView } from './view'
-import { previews } from './preview'
-import { CouponForm } from './starter'
+import { createCouponMock } from '../features/couponForm/apis/createCouponMock'
+import type { CheckResult } from '../features/couponForm/types/coupon'
+import { CouponView } from '../features/couponForm/components/CouponView'
+import { previews } from '../features/couponForm/components/CouponView.preview'
+import { CouponFormPage } from './CouponFormPage'
 
 afterEach(() => {
   cleanup()
@@ -84,7 +85,7 @@ describe.skip('직접 구현할 쿠폰 확인 행동', () => {
   it('빈 입력과 공백만 있는 입력은 필드 오류를 표시하며 요청하지 않는다', async () => {
     const user = userEvent.setup(),
       check = vi.fn()
-    render(<CouponForm checkCoupon={check} />)
+    render(<CouponFormPage checkCoupon={check} />)
     expect(screen.getByRole('button', { name: '할인 적용하기' })).toBeDisabled()
     await user.click(screen.getByRole('button', { name: '쿠폰 확인하기' }))
     expect(screen.getByText('쿠폰 코드를 입력해 주세요.')).toBeVisible()
@@ -96,7 +97,7 @@ describe.skip('직접 구현할 쿠폰 확인 행동', () => {
     const user = userEvent.setup(),
       pending = deferred(),
       check = vi.fn().mockReturnValue(pending.promise)
-    render(<CouponForm checkCoupon={check} />)
+    render(<CouponFormPage checkCoupon={check} />)
     await user.type(screen.getByRole('textbox'), ' welcome ')
     await user.click(screen.getByRole('button', { name: '쿠폰 확인하기' }))
     expect(check).toHaveBeenCalledExactlyOnceWith('WELCOME')
@@ -116,7 +117,7 @@ describe.skip('직접 구현할 쿠폰 확인 행동', () => {
   it('원본 편집은 정규화 결과가 같아도 확인·적용을 즉시 지운다', async () => {
     const user = userEvent.setup(),
       check = vi.fn().mockResolvedValue(welcome)
-    render(<CouponForm checkCoupon={check} />)
+    render(<CouponFormPage checkCoupon={check} />)
     await user.type(screen.getByRole('textbox'), 'WELCOME')
     await user.click(screen.getByRole('button', { name: '쿠폰 확인하기' }))
     await user.click(screen.getByRole('button', { name: '할인 적용하기' }))
@@ -129,7 +130,7 @@ describe.skip('직접 구현할 쿠폰 확인 행동', () => {
     const user = userEvent.setup(),
       pending = deferred(),
       check = vi.fn().mockReturnValue(pending.promise)
-    render(<CouponForm checkCoupon={check} />)
+    render(<CouponFormPage checkCoupon={check} />)
     await user.type(screen.getByRole('textbox'), 'WELCOME')
     await user.click(screen.getByRole('button', { name: '쿠폰 확인하기' }))
     await user.type(screen.getByRole('textbox'), ' ')
@@ -145,7 +146,7 @@ describe.skip('직접 구현할 쿠폰 확인 행동', () => {
       old = deferred(),
       current = deferred()
     const check = vi.fn().mockReturnValueOnce(old.promise).mockReturnValueOnce(current.promise)
-    render(<CouponForm checkCoupon={check} />)
+    render(<CouponFormPage checkCoupon={check} />)
     await user.type(screen.getByRole('textbox'), 'WELCOME')
     await user.click(screen.getByRole('button', { name: '쿠폰 확인하기' }))
     await user.clear(screen.getByRole('textbox'))
@@ -163,7 +164,7 @@ describe.skip('직접 구현할 쿠폰 확인 행동', () => {
       old = deferred(),
       current = deferred()
     const check = vi.fn().mockReturnValueOnce(old.promise).mockReturnValueOnce(current.promise)
-    render(<CouponForm checkCoupon={check} />)
+    render(<CouponFormPage checkCoupon={check} />)
     await user.type(screen.getByRole('textbox'), 'WELCOME')
     await user.click(screen.getByRole('button', { name: '쿠폰 확인하기' }))
     await user.clear(screen.getByRole('textbox'))
@@ -179,7 +180,7 @@ describe.skip('직접 구현할 쿠폰 확인 행동', () => {
   it('사용 불가·요청 실패를 구분하고 원본으로 재확인한다', async () => {
     const user = userEvent.setup(),
       check = vi.fn().mockResolvedValueOnce({ available: false }).mockRejectedValueOnce(new Error('실패')).mockResolvedValueOnce(welcome)
-    render(<CouponForm checkCoupon={check} />)
+    render(<CouponFormPage checkCoupon={check} />)
     await user.type(screen.getByRole('textbox'), ' welcome ')
     await user.click(screen.getByRole('button', { name: '쿠폰 확인하기' }))
     expect(screen.getByRole('status')).toHaveTextContent('사용할 수 없는 쿠폰이에요.')
