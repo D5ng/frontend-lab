@@ -7,7 +7,7 @@
 
 ## 시작하기
 
-`starter.tsx`에서 조회·선택·재사용·실패 재시도를 직접 구현하세요. `view.tsx`는 표현만, `api.ts`와 `handlers.ts`는 요청 환경만 제공합니다. 시작 화면은 렌더되지만 아직 API를 호출하거나 물건을 바꾸지 않습니다. 완성 코드나 권장 훅·상태 구조는 제공하지 않습니다.
+`pages/ListingBrowserPage.tsx`에서 조회·선택·재사용·실패 재시도를 직접 구현하세요. `features/listingBrowser/components/DetailView.tsx`는 표현만, `features/listingBrowser/apis/`와 `handlers.ts`는 요청 환경만 제공합니다. 시작 화면은 렌더되지만 아직 API를 호출하거나 물건을 바꾸지 않습니다. 완성 코드나 권장 훅·상태 구조는 제공하지 않습니다.
 
 ```sh
 pnpm install --frozen-lockfile
@@ -82,11 +82,11 @@ UI 출제 스킬의 Montage 지침보다 사용자 지정 SEED 기준을 우선�
 
 ### 표현 검수용 미리보기
 
-개발 서버에서 `?listing-cache-preview=loading#2026-10-15-listing-cache`처럼 query를 hash **앞에** 붙일 수 있습니다. 값은 `loading`, `error`, `success`, `unavailable`입니다. `preview.ts`의 고정 props를 표시할 뿐 클릭·조회·캐시 전이가 구현된 것은 아닙니다. query를 제거하면 실제 풀이 화면으로 돌아옵니다. 프로덕션 빌드에서는 미리보기를 사용하지 않습니다.
+개발 서버에서 `?listing-cache-preview=loading#2026-10-15-listing-cache`처럼 query를 hash **앞에** 붙일 수 있습니다. 값은 `loading`, `error`, `success`, `unavailable`입니다. `features/listingBrowser/components/DetailView.preview.ts`의 고정 props를 표시할 뿐 클릭·조회·캐시 전이가 구현된 것은 아닙니다. query를 제거하면 실제 풀이 화면으로 돌아옵니다. 프로덕션 빌드에서는 미리보기를 사용하지 않습니다.
 
 ## 완료 조건
 
-1. `Problem.spec.tsx`의 **실습자 행동** 블록에서 `describe.skip`을 `describe`로 바꾸고 행동 7개를 통과합니다. 기존 제공 UI 검사 4개·API 검사 3개도 유지합니다. View 계약을 바꾼 경우 준비 검사도 새 계약에 맞추되 관찰 가능한 검증 범위를 보존합니다.
+1. `pages/ListingBrowserPage.spec.tsx`의 **실습자 행동** 블록에서 `describe.skip`을 `describe`로 바꾸고 행동 7개를 통과합니다. 기존 제공 UI 검사 4개·API 검사 3개도 유지합니다. View 계약을 바꾼 경우 준비 검사도 새 계약에 맞추되 관찰 가능한 검증 범위를 보존합니다.
 2. 의자 → 조명 → 의자와 조명 실패 → 재시도를 직접 실행해, 재요청 횟수·로딩·상세·오류가 각 요구사항을 지키는지 기록합니다.
 3. `note.md`에 선택한 경계의 근거·비용·실제로 확인한 범위를 직접 작성합니다. 정답 구조나 미래 기능 구현은 요구하지 않습니다.
 

@@ -1,4 +1,4 @@
-import type { DetailViewProps } from './view'
+import type { DetailViewProps } from './DetailView'
 
 // 표현 검수용 고정 입력이다. 요청·캐시·상태 전이를 구현하지 않는다.
 export const previews: Record<string, Omit<DetailViewProps, 'onSelect' | 'onRetry'>> = {

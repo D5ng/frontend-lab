@@ -2,7 +2,8 @@ import { useId } from 'react'
 import { Callout, Text, VStack } from '@seed-design/react'
 import { RadioGroup, RadioGroupItem } from 'seed-design/ui/radio-group'
 import { ActionButton } from 'seed-design/ui/action-button'
-import { listings, type ListingDetail, type ListingId } from './api'
+import { listings } from '../apis/listings'
+import type { ListingDetail, ListingId } from '../types/listing'
 
 export interface DetailViewProps {
   selectedId: ListingId

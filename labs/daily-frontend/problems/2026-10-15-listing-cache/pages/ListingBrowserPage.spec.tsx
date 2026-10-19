@@ -2,10 +2,10 @@ import '@testing-library/jest-dom/vitest'
 import { act, cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { ListingBrowser } from './starter'
-import { DetailView } from './view'
-import { previews } from './preview'
-import type { ListingDetail, LoadDetail } from './api'
+import { ListingBrowserPage } from './ListingBrowserPage'
+import { DetailView } from '../features/listingBrowser/components/DetailView'
+import { previews } from '../features/listingBrowser/components/DetailView.preview'
+import type { ListingDetail, LoadDetail } from '../features/listingBrowser/types/listing'
 
 afterEach(cleanup)
 const chair: ListingDetail = { id: 'chair', price: 15000, description: '의자 상세 설명', neighborhood: '성수동' }
@@ -55,14 +55,14 @@ describe('제공 UI 준비 상태 — 풀이 검증이 아님', () => {
 describe.skip('실습자가 구현할 사용자 행동', () => {
   it('진입 시 기본 물건을 조회하고 상세를 표시한다', async () => {
     const load = vi.fn<LoadDetail>().mockResolvedValue(chair)
-    render(<ListingBrowser loadDetail={load} />)
+    render(<ListingBrowserPage loadDetail={load} />)
     expect(await screen.findByText('의자 상세 설명')).toBeVisible()
     expect(load).toHaveBeenCalledExactlyOnceWith('chair')
   })
   it('선택을 바꾸면 이전 상세를 숨기고 새 요청 상태를 보여 준다', async () => {
     const task = deferred()
     const load = vi.fn<LoadDetail>().mockResolvedValueOnce(chair).mockReturnValueOnce(task.promise)
-    render(<ListingBrowser loadDetail={load} />)
+    render(<ListingBrowserPage loadDetail={load} />)
     await screen.findByText('의자 상세 설명')
     await userEvent.setup().click(screen.getByRole('radio', { name: '작은 스탠드 조명' }))
     expect(screen.queryByText('의자 상세 설명')).not.toBeInTheDocument()
@@ -74,7 +74,7 @@ describe.skip('실습자가 구현할 사용자 행동', () => {
   it('다른 물건을 보는 동안 도착한 성공도 보관하고 돌아오면 요청 없이 재사용한다', async () => {
     const first = deferred()
     const load = vi.fn<LoadDetail>().mockReturnValueOnce(first.promise).mockResolvedValueOnce(lamp)
-    render(<ListingBrowser loadDetail={load} />)
+    render(<ListingBrowserPage loadDetail={load} />)
     const user = userEvent.setup()
     await user.click(screen.getByRole('radio', { name: '작은 스탠드 조명' }))
     await screen.findByText('조명 상세 설명')
@@ -89,7 +89,7 @@ describe.skip('실습자가 구현할 사용자 행동', () => {
     const first = deferred()
     const second = deferred()
     const load = vi.fn<LoadDetail>().mockImplementation((id) => (id === 'chair' ? first.promise : second.promise))
-    render(<ListingBrowser loadDetail={load} />)
+    render(<ListingBrowserPage loadDetail={load} />)
     const user = userEvent.setup()
     await user.click(screen.getByRole('radio', { name: '작은 스탠드 조명' }))
     await user.click(screen.getByRole('radio', { name: '접이식 원목 의자' }))
@@ -103,7 +103,7 @@ describe.skip('실습자가 구현할 사용자 행동', () => {
   })
   it('실패한 물건으로 돌아오면 오류를 유지하고 명시적 재시도로만 다시 요청한다', async () => {
     const load = vi.fn<LoadDetail>().mockImplementation(async (id) => (id === 'chair' ? chair : Promise.reject(new Error('offline'))))
-    render(<ListingBrowser loadDetail={load} />)
+    render(<ListingBrowserPage loadDetail={load} />)
     const user = userEvent.setup()
     await screen.findByText('의자 상세 설명')
     await user.click(screen.getByRole('radio', { name: '작은 스탠드 조명' }))
@@ -122,7 +122,7 @@ describe.skip('실습자가 구현할 사용자 행동', () => {
     const first = deferred()
     const second = deferred()
     const load = vi.fn<LoadDetail>().mockImplementation((id) => (id === 'chair' ? first.promise : second.promise))
-    render(<ListingBrowser loadDetail={load} />)
+    render(<ListingBrowserPage loadDetail={load} />)
     await userEvent.setup().click(screen.getByRole('radio', { name: '작은 스탠드 조명' }))
     await act(async () => first.reject(new Error('offline')))
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
@@ -132,7 +132,7 @@ describe.skip('실습자가 구현할 사용자 행동', () => {
   })
   it('거래 종료 null도 정상 조회 결과로 재사용한다', async () => {
     const load = vi.fn<LoadDetail>().mockImplementation(async (id) => (id === 'chair' ? chair : null))
-    render(<ListingBrowser loadDetail={load} />)
+    render(<ListingBrowserPage loadDetail={load} />)
     const user = userEvent.setup()
     await screen.findByText('의자 상세 설명')
     await user.click(screen.getByRole('radio', { name: '머그컵 두 개' }))

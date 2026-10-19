@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { http, HttpResponse } from 'msw/http'
-import { server } from '../../src/mocks/server'
-import { createDetailApi } from './api'
+import { server } from '../../../../../src/mocks/server'
+import { createDetailApi } from './createDetailApi'
 
 describe('제공 상세 API 환경', () => {
   it('상품 ID로 GET 요청하고 응답을 전달한다', async () => {

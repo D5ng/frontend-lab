@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw/http'
 import { delay } from 'msw/utils/delay'
 import { nextAttempt } from '../../src/mocks/scenario'
-import type { ListingDetail } from './api'
+import type { ListingDetail } from './features/listingBrowser/types/listing'
 
 const details: Record<string, ListingDetail | null> = {
   chair: { id: 'chair', price: 15000, description: '접어서 보관할 수 있어요. 성수역에서 직거래해요.', neighborhood: '성수동' },
