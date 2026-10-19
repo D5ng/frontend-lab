@@ -1,5 +1,5 @@
-import type { FeedViewProps } from './view'
-import { demoPages } from './api'
+import type { FeedViewProps } from './FeedView'
+import { demoPages } from '../apis/demoPages'
 
 export const previews: Record<string, FeedViewProps> = {
   initial: {

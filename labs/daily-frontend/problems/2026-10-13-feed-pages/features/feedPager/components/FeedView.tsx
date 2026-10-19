@@ -1,7 +1,7 @@
 import { Callout, Skeleton, Text, VStack } from '@seed-design/react'
 import { List, ListItem } from 'seed-design/ui/list'
 import { ActionButton } from 'seed-design/ui/action-button'
-import type { Post } from './api'
+import type { Post } from '../types/feed'
 
 export type FeedViewProps = {
   items: Post[]

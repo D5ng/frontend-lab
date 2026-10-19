@@ -8,7 +8,7 @@
 
 **한 목록의 다음 페이지와 새로 시작한 목록을 구분하는 책임을 어디에 둘까요?**
 
-`starter.tsx`의 `FeedPager`에서 직접 구현하세요. 화면과 HTTP 모의 API는 제공하지만 상태 전이·중복 제거·응답 반영 로직은 제공하지 않습니다. `FeedView`의 props는 표현 계약이며 정답 상태 구조나 훅 개수를 지정하지 않습니다. 함수 주입 `loadPage`를 유지하세요.
+`pages/FeedPagerPage.tsx`의 `FeedPagerPage`에서 직접 구현하세요. 화면과 HTTP 모의 API는 제공하지만 상태 전이·중복 제거·응답 반영 로직은 제공하지 않습니다. `FeedView`의 props는 표현 계약이며 정답 상태 구조나 훅 개수를 지정하지 않습니다. 함수 주입 `loadPage`를 유지하세요.
 
 ## 요구사항
 
@@ -29,7 +29,7 @@
 ```sh
 pnpm install --frozen-lockfile
 pnpm dev:daily
-pnpm --filter @frontend-lab/daily-frontend exec vitest run problems/2026-10-13-feed-pages/Problem.spec.tsx
+pnpm --filter @frontend-lab/daily-frontend exec vitest run problems/2026-10-13-feed-pages/pages/FeedPagerPage.spec.tsx
 pnpm --filter @frontend-lab/daily-frontend build
 ```
 

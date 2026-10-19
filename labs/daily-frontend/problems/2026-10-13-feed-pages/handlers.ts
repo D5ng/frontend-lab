@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw/http'
 import { delay } from 'msw/utils/delay'
 import { nextAttempt } from '../../src/mocks/scenario'
-import { demoPages } from './api'
+import { demoPages } from './features/feedPager/apis/demoPages'
 
 export const handlers = [
   http.get('*/api/daily/2026-10-13-feed-pages/posts', async ({ request }) => {

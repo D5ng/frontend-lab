@@ -1,8 +1,4 @@
-import { createApiClient } from '../../src/api/client'
-
-export type Post = { id: string; title: string; location: string }
-export type Page = { items: Post[]; nextCursor: string | null }
-export type LoadPage = (cursor: string | null) => Promise<Page>
+import type { Page } from '../types/feed'
 
 export const demoPages: Record<string, Page> = {
   start: {
@@ -20,10 +16,4 @@ export const demoPages: Record<string, Page> = {
     nextCursor: 'next-2',
   },
   'next-2': { items: [{ id: 'plant', title: '작은 화분을 나눔해요', location: '성수동 · 어제' }], nextCursor: null },
-}
-
-export function createPageLoader(): LoadPage {
-  const request = createApiClient()
-  return (cursor) =>
-    request<Page>(`/api/daily/2026-10-13-feed-pages/posts${cursor === null ? '' : `?cursor=${encodeURIComponent(cursor)}`}`)
 }

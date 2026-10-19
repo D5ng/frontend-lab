@@ -2,10 +2,12 @@ import '@testing-library/jest-dom/vitest'
 import { act, cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { createPageLoader, demoPages, type Page } from './api'
-import { FeedView } from './view'
-import { previews } from './preview'
-import { FeedPager } from './starter'
+import { createPageLoader } from '../features/feedPager/apis/createPageLoader'
+import { demoPages } from '../features/feedPager/apis/demoPages'
+import type { Page } from '../features/feedPager/types/feed'
+import { FeedView } from '../features/feedPager/components/FeedView'
+import { previews } from '../features/feedPager/components/FeedView.preview'
+import { FeedPagerPage } from './FeedPagerPage'
 
 afterEach(cleanup)
 function deferred() {
@@ -72,7 +74,7 @@ describe.skip('직접 구현할 목록 행동', () => {
         .mockResolvedValueOnce({ ...first, items: [first.items[0], first.items[1], { ...first.items[1], title: '중복된 다른 제목' }] })
         .mockResolvedValueOnce(next)
         .mockResolvedValueOnce(last)
-    render(<FeedPager loadPage={load} />)
+    render(<FeedPagerPage loadPage={load} />)
     await screen.findByText(first.items[0].title)
     expect(load).toHaveBeenCalledExactlyOnceWith(null)
     expect(screen.queryByText('중복된 다른 제목')).not.toBeInTheDocument()
@@ -93,7 +95,7 @@ describe.skip('직접 구현할 목록 행동', () => {
       pending = deferred(),
       retry = deferred()
     const load = vi.fn().mockResolvedValueOnce(first).mockReturnValueOnce(pending.promise).mockReturnValueOnce(retry.promise)
-    render(<FeedPager loadPage={load} />)
+    render(<FeedPagerPage loadPage={load} />)
     await screen.findByText(first.items[0].title)
     await user.click(screen.getByRole('button', { name: '더보기' }))
     expect(screen.getByRole('button', { name: '다음 페이지 불러오는 중' })).toBeDisabled()
@@ -114,7 +116,7 @@ describe.skip('직접 구현할 목록 행동', () => {
       old = deferred(),
       fresh = deferred()
     const load = vi.fn().mockResolvedValueOnce(first).mockReturnValueOnce(old.promise).mockReturnValueOnce(fresh.promise)
-    render(<FeedPager loadPage={load} />)
+    render(<FeedPagerPage loadPage={load} />)
     await screen.findByText(first.items[0].title)
     await user.click(screen.getByRole('button', { name: '더보기' }))
     await user.click(screen.getByRole('button', { name: '목록 새로고침' }))
@@ -137,7 +139,7 @@ describe.skip('직접 구현할 목록 행동', () => {
       .mockReturnValueOnce(old.promise)
       .mockResolvedValueOnce(first)
       .mockReturnValueOnce(freshMore.promise)
-    render(<FeedPager loadPage={load} />)
+    render(<FeedPagerPage loadPage={load} />)
     await screen.findByText(first.items[0].title)
     await user.click(screen.getByRole('button', { name: '더보기' }))
     await user.click(screen.getByRole('button', { name: '목록 새로고침' }))
@@ -155,7 +157,7 @@ describe.skip('직접 구현할 목록 행동', () => {
     const user = userEvent.setup(),
       old = deferred()
     const load = vi.fn().mockResolvedValueOnce(first).mockReturnValueOnce(old.promise).mockResolvedValueOnce(last)
-    render(<FeedPager loadPage={load} />)
+    render(<FeedPagerPage loadPage={load} />)
     await screen.findByText(first.items[0].title)
     await user.click(screen.getByRole('button', { name: '더보기' }))
     await user.click(screen.getByRole('button', { name: '목록 새로고침' }))
@@ -167,7 +169,7 @@ describe.skip('직접 구현할 목록 행동', () => {
   it('첫 실패는 새로고침으로 null부터 재시도한다', async () => {
     const user = userEvent.setup(),
       load = vi.fn().mockRejectedValueOnce(new Error('실패')).mockResolvedValueOnce(first)
-    render(<FeedPager loadPage={load} />)
+    render(<FeedPagerPage loadPage={load} />)
     await screen.findByRole('alert')
     expect(screen.getByRole('button', { name: '더보기' })).toBeDisabled()
     await user.click(screen.getByRole('button', { name: '목록 새로고침' }))
@@ -176,7 +178,7 @@ describe.skip('직접 구현할 목록 행동', () => {
   })
   it('빈 첫 페이지는 실패가 아니며 자동 더보기 없이 새로고침할 수 있다', async () => {
     const load = vi.fn().mockResolvedValue({ items: [], nextCursor: null })
-    render(<FeedPager loadPage={load} />)
+    render(<FeedPagerPage loadPage={load} />)
     await screen.findByText('아직 나눔 글이 없어요. 나중에 새로고침해 주세요.')
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: '목록 새로고침' })).toBeEnabled()
