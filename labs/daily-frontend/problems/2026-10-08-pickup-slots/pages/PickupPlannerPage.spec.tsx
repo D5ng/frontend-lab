@@ -2,10 +2,12 @@ import '@testing-library/jest-dom/vitest'
 import { act, cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { createPickupMock, slotsByDay, type Slot } from './api'
-import { previews } from './preview'
-import { PickupPlanner } from './starter'
-import { PickupView } from './view'
+import { createPickupMock } from '../features/pickupPlanner/apis/createPickupMock'
+import { slotsByDay } from '../features/pickupPlanner/apis/slotsByDay'
+import type { Slot } from '../features/pickupPlanner/types/pickup'
+import { previews } from '../features/pickupPlanner/components/PickupView.preview'
+import { PickupPlannerPage } from './PickupPlannerPage'
+import { PickupView } from '../features/pickupPlanner/components/PickupView'
 
 afterEach(() => {
   cleanup()
@@ -85,7 +87,7 @@ describe.skip('직접 구현할 조회·선택·예약 행동', () => {
     const user = userEvent.setup()
     const loadSlots = vi.fn().mockResolvedValue(slotsByDay.today),
       reserveSlot = vi.fn().mockResolvedValue(undefined)
-    render(<PickupPlanner loadSlots={loadSlots} reserveSlot={reserveSlot} />)
+    render(<PickupPlannerPage loadSlots={loadSlots} reserveSlot={reserveSlot} />)
     await screen.findByRole('radio', { name: '오후 6시' })
     expect(loadSlots).toHaveBeenCalledWith('today')
     expect(screen.getByRole('button', { name: '픽업 예약하기' })).toBeDisabled()
@@ -99,7 +101,7 @@ describe.skip('직접 구현할 조회·선택·예약 행동', () => {
     const user = userEvent.setup(),
       old = deferred<Slot[]>()
     const loadSlots = vi.fn().mockReturnValueOnce(old.promise).mockResolvedValueOnce(slotsByDay.tomorrow)
-    render(<PickupPlanner loadSlots={loadSlots} reserveSlot={vi.fn()} />)
+    render(<PickupPlannerPage loadSlots={loadSlots} reserveSlot={vi.fn()} />)
     await user.click(screen.getByRole('radio', { name: '내일' }))
     await screen.findByRole('radio', { name: '오전 10시' })
     await act(async () => {
@@ -116,7 +118,7 @@ describe.skip('직접 구현할 조회·선택·예약 행동', () => {
       middle = deferred<Slot[]>(),
       latest = deferred<Slot[]>()
     const loadSlots = vi.fn().mockReturnValueOnce(first.promise).mockReturnValueOnce(middle.promise).mockReturnValueOnce(latest.promise)
-    render(<PickupPlanner loadSlots={loadSlots} reserveSlot={vi.fn()} />)
+    render(<PickupPlannerPage loadSlots={loadSlots} reserveSlot={vi.fn()} />)
     await user.click(screen.getByRole('radio', { name: '내일' }))
     await user.click(screen.getByRole('radio', { name: '오늘' }))
     await act(async () => first.resolve([{ id: 'obsolete', label: '지난 조회 시간' }]))
@@ -136,7 +138,7 @@ describe.skip('직접 구현할 조회·선택·예약 행동', () => {
       .mockReturnValueOnce(reloading.promise)
       .mockRejectedValueOnce(new Error('실패'))
       .mockResolvedValueOnce([])
-    render(<PickupPlanner loadSlots={loadSlots} reserveSlot={vi.fn()} />)
+    render(<PickupPlannerPage loadSlots={loadSlots} reserveSlot={vi.fn()} />)
     await user.click(await screen.findByRole('radio', { name: '오후 6시' }))
     await user.click(screen.getByRole('button', { name: '시간 다시 불러오기' }))
     expect(screen.queryByRole('radio', { name: '오후 6시' })).not.toBeInTheDocument()
@@ -155,7 +157,7 @@ describe.skip('직접 구현할 조회·선택·예약 행동', () => {
       pending = deferred<void>(),
       retry = deferred<void>()
     const reserveSlot = vi.fn().mockReturnValueOnce(pending.promise).mockReturnValueOnce(retry.promise)
-    render(<PickupPlanner loadSlots={vi.fn().mockResolvedValue(slotsByDay.today)} reserveSlot={reserveSlot} />)
+    render(<PickupPlannerPage loadSlots={vi.fn().mockResolvedValue(slotsByDay.today)} reserveSlot={reserveSlot} />)
     await user.click(await screen.findByRole('radio', { name: '오후 6시' }))
     await user.click(screen.getByRole('button', { name: '픽업 예약하기' }))
     expect(screen.getByRole('radio', { name: '내일' })).toBeDisabled()

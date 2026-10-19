@@ -1,7 +1,7 @@
 import { Callout, HStack, Skeleton, Text, VStack } from '@seed-design/react'
 import { ActionButton } from 'seed-design/ui/action-button'
 import { RadioGroup, RadioGroupItem } from 'seed-design/ui/radio-group'
-import type { Day, Slot } from './api'
+import type { Day, Slot } from '../types/pickup'
 
 export interface PickupViewProps {
   day: Day

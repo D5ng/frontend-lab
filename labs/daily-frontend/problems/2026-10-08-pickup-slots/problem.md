@@ -8,7 +8,7 @@
 
 **날짜·목록·선택이 서로 다른 시점에 바뀔 때, “현재 날짜에 유효한 시간만 예약한다”는 약속을 어디에서 관리할까요?**
 
-`starter.tsx`의 `PickupPlanner`에서 로직과 구조를 직접 구현하세요. 화면의 props는 표현 계약이지 상태 설계의 정답이 아닙니다. 지금은 로직 미연결 상태이며 어떤 요청도 실행하지 않습니다. 완성된 로직이나 권장 훅 수는 제공하지 않습니다.
+`pages/PickupPlannerPage.tsx`의 `PickupPlannerPage`에서 로직과 구조를 직접 구현하세요. 화면의 props는 표현 계약이지 상태 설계의 정답이 아닙니다. 지금은 로직 미연결 상태이며 어떤 요청도 실행하지 않습니다. 완성된 로직이나 권장 훅 수는 제공하지 않습니다.
 
 ## 관찰 가능한 요구사항
 
@@ -27,7 +27,7 @@
 
 ## 입력·API·실행
 
-`api.ts`의 `Day`, `Slot`, `LoadSlots`, `ReserveSlot`을 사용합니다. 조회 반환은 `Slot[]`이며, 예약은 성공 시 반환값이 없습니다. 이 주입 경계를 유지하고 테스트에서 원하는 완료 순서를 제어할 수 있게 합니다.
+`features/pickupPlanner/types/pickup.ts`의 `Day`, `Slot`, `LoadSlots`, `ReserveSlot`을 사용합니다. 조회 반환은 `Slot[]`이며, 예약은 성공 시 반환값이 없습니다. 이 주입 경계를 유지하고 테스트에서 원하는 완료 순서를 제어할 수 있게 합니다.
 
 - 오늘 조회: 1.8초, 오후 6시·7시.
 - 내일 조회: 0.5초, 첫 내일 조회만 실패, 이후 오전 10시·11시.
@@ -37,7 +37,7 @@
 ```sh
 pnpm install --frozen-lockfile
 pnpm dev:daily
-pnpm --filter @frontend-lab/daily-frontend exec vitest run problems/2026-10-08-pickup-slots/Problem.spec.tsx
+pnpm --filter @frontend-lab/daily-frontend exec vitest run problems/2026-10-08-pickup-slots/pages/PickupPlannerPage.spec.tsx
 pnpm --filter @frontend-lab/daily-frontend build
 ```
 
@@ -75,7 +75,7 @@ Daily에서 오늘 문제를 선택하거나 `#2026-10-08-pickup-slots`로 진�
 
 ## MSW 요청 환경
 
-`api.ts`의 함수는 실제 `fetch`를 호출하고, 같은 폴더의 `handlers.ts`가 기존 지연·첫 실패·성공 응답을 HTTP로 모킹합니다. 함수 주입 경계와 실습 요구사항은 유지합니다. HTTP 503 응답의 `message`는 API 함수가 Error로 변환하고, 사용 불가나 빈 목록은 정상 JSON 응답으로 처리합니다.
+`features/pickupPlanner/apis/`의 함수는 실제 `fetch`를 호출하고, 문제 폴더 바로 아래의 `handlers.ts`가 기존 지연·첫 실패·성공 응답을 HTTP로 모킹합니다. 함수 주입 경계와 실습 요구사항은 유지합니다. HTTP 503 응답의 `message`는 API 함수가 Error로 변환하고, 사용 불가나 빈 목록은 정상 JSON 응답으로 처리합니다.
 
 API 공장 함수마다 독립적인 모의 서버 세션을 사용하므로 화면 재진입 시 첫 실패 횟수가 초기화됩니다. 요청 취소나 오래된 응답의 화면 반영 여부는 MSW가 해결하지 않습니다. 기존 함수 주입 행동 테스트로 응답 순서를 제어하고, 제공 API 테스트는 실제 HTTP 경로를 검증합니다. MSW 작성은 풀이 대상이 아닙니다.
 

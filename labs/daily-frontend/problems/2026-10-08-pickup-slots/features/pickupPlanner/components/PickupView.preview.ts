@@ -1,5 +1,5 @@
-import { slotsByDay } from './api'
-import type { PickupViewProps } from './view'
+import { slotsByDay } from '../apis/slotsByDay'
+import type { PickupViewProps } from './PickupView'
 
 const base: PickupViewProps = {
   day: 'today',

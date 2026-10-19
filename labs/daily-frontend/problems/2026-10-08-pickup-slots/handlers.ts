@@ -1,7 +1,8 @@
 import { http, HttpResponse } from 'msw/http'
 import { delay } from 'msw/utils/delay'
 import { nextAttempt } from '../../src/mocks/scenario'
-import { slotsByDay, type Day } from './api'
+import { slotsByDay } from './features/pickupPlanner/apis/slotsByDay'
+import type { Day } from './features/pickupPlanner/types/pickup'
 export const handlers = [
   http.get('*/api/daily/2026-10-08-pickup-slots/slots', async ({ request }) => {
     const day = new URL(request.url).searchParams.get('day') as Day

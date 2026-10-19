@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { http, HttpResponse } from 'msw/http'
-import { server } from '../../src/mocks/server'
-import { createPickupMock } from './api'
+import { server } from '../../../../../src/mocks/server'
+import { createPickupMock } from './createPickupMock'
 
 describe('MSW HTTP 계약', () => {
   it('요청 URL·메서드·본문을 전달하고 HTTP 응답을 API 반환값으로 변환한다', async () => {
