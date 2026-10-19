@@ -8,7 +8,7 @@
 
 **현재 선택과 요청에 보낸 선택을 구분하는 규칙을 어디에 모아야, 성공·실패의 변경 범위를 쉽게 확인할 수 있을까요?**
 
-`starter.tsx`는 이미 동작합니다. 알림의 읽음 여부·선택·처리 대상·버튼 허용 조건·안내가 한 화면에 섞이고, 같은 조건이 여러 위치에서 반복됩니다. 파일이나 훅을 몇 개로 나눌지는 정하지 않습니다. [Frontend Fundamentals](https://frontend-fundamentals.com/code-quality/code/)의 가독성·예측 가능성·응집도·결합도를 참고하여 **외부 행동을 유지**하며 재구성하세요. 기능 추가나 버그 수정은 기본 과제가 아닙니다.
+`pages/NotificationInboxPage.tsx`는 이미 동작합니다. 알림의 읽음 여부·선택·처리 대상·버튼 허용 조건·안내가 한 화면에 섞이고, 같은 조건이 여러 위치에서 반복됩니다. 파일이나 훅을 몇 개로 나눌지는 정하지 않습니다. [Frontend Fundamentals](https://frontend-fundamentals.com/code-quality/code/)의 가독성·예측 가능성·응집도·결합도를 참고하여 **외부 행동을 유지**하며 재구성하세요. 기능 추가나 버그 수정은 기본 과제가 아닙니다.
 
 ## 보존할 사용자 행동
 
@@ -23,16 +23,16 @@
 
 ## 실행 환경·API
 
-`api.ts`의 `MarkRead`는 `(ids: string[]) => Promise<void>`입니다. `Problem`의 모의 API는 첫 요청을 1.8초 뒤 실패시키고 이후 요청은 성공시킵니다. 요청 취소·실제 외부 통신·서버 저장은 없습니다. 다른 문제로 이동하면 초기화됩니다. 최신 origin/develop의 실행 환경을 사용하며 아직 병합되지 않은 다른 출제 PR의 MSW 전환 변경을 섞지 않습니다.
+`features/notificationInbox/types/notification.ts`의 `MarkRead`는 `(ids: string[]) => Promise<void>`입니다. `Problem`의 모의 API는 첫 요청을 1.8초 뒤 실패시키고 이후 요청은 성공시킵니다. 요청 취소·실제 외부 통신·서버 저장은 없습니다. 다른 문제로 이동하면 초기화됩니다. 최신 origin/develop의 실행 환경을 사용하며 아직 병합되지 않은 다른 출제 PR의 MSW 전환 변경을 섞지 않습니다.
 
 ```sh
 pnpm install --frozen-lockfile
 pnpm dev:daily
-pnpm --filter @frontend-lab/daily-frontend exec vitest run problems/2026-10-12-read-batch/Problem.spec.tsx
+pnpm --filter @frontend-lab/daily-frontend exec vitest run problems/2026-10-12-read-batch/pages/NotificationInboxPage.spec.tsx
 pnpm --filter @frontend-lab/daily-frontend build
 ```
 
-Daily에서 오늘 항목을 선택하거나 `#2026-10-12-read-batch`로 진입하세요. 오늘 테스트는 전부 활성입니다. `NotificationInbox`의 주입 경계 `markRead`를 유지하세요. 테스트는 구조나 훅 이름이 아니라 행 조작·요청 ID·읽음 표시·선택 보존을 검증합니다.
+Daily에서 오늘 항목을 선택하거나 `#2026-10-12-read-batch`로 진입하세요. 오늘 테스트는 전부 활성입니다. `NotificationInboxPage`의 주입 경계 `markRead`를 유지하세요. 테스트는 구조나 훅 이름이 아니라 행 조작·요청 ID·읽음 표시·선택 보존을 검증합니다.
 
 ## 화면 맥락·SEED 구성
 

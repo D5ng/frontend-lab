@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { createReadMock } from './api'
-import { NotificationInbox } from './starter'
+import { createReadMock } from './features/notificationInbox/apis/createReadMock'
+import { NotificationInboxPage } from './pages/NotificationInboxPage'
 
 export function Problem() {
   const [markRead] = useState(createReadMock)
-  return <NotificationInbox markRead={markRead} />
+  return <NotificationInboxPage markRead={markRead} />
 }

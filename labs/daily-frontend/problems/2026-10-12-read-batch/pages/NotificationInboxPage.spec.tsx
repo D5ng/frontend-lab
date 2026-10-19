@@ -2,8 +2,9 @@ import '@testing-library/jest-dom/vitest'
 import { act, cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { createReadMock, notifications } from './api'
-import { NotificationInbox } from './starter'
+import { createReadMock } from '../features/notificationInbox/apis/createReadMock'
+import { notifications } from '../features/notificationInbox/apis/notifications'
+import { NotificationInboxPage } from './NotificationInboxPage'
 
 afterEach(() => {
   cleanup()
@@ -31,7 +32,7 @@ describe('일괄 읽음 처리의 기존 사용자 행동', () => {
   it('초기 상태는 안 읽은 3개·선택 0개이며 읽은 행과 실행 버튼은 잠겨 있다', async () => {
     const user = userEvent.setup(),
       markRead = vi.fn()
-    render(<NotificationInbox markRead={markRead} />)
+    render(<NotificationInboxPage markRead={markRead} />)
     expect(screen.getByText('안 읽은 알림 3개 · 선택 0개')).toBeVisible()
     expect(checkbox(3)).toBeDisabled()
     expect(row(3).getByText('읽음')).toBeVisible()
@@ -44,7 +45,7 @@ describe('일괄 읽음 처리의 기존 사용자 행동', () => {
     const user = userEvent.setup(),
       pending = deferred(),
       markRead = vi.fn().mockReturnValue(pending.promise)
-    render(<NotificationInbox markRead={markRead} />)
+    render(<NotificationInboxPage markRead={markRead} />)
     await user.click(screen.getByText(notifications[1].title))
     await user.click(screen.getByText(notifications[0].description))
     expect(checkbox(0)).toBeChecked()
@@ -66,7 +67,7 @@ describe('일괄 읽음 처리의 기존 사용자 행동', () => {
     const user = userEvent.setup(),
       pending = deferred(),
       markRead = vi.fn().mockReturnValueOnce(pending.promise).mockResolvedValueOnce(undefined)
-    render(<NotificationInbox markRead={markRead} />)
+    render(<NotificationInboxPage markRead={markRead} />)
     await user.click(checkbox(0))
     await user.click(screen.getByRole('button'))
     expect(screen.getByRole('status')).toHaveTextContent('1개 처리 중이에요.')
@@ -91,7 +92,7 @@ describe('일괄 읽음 처리의 기존 사용자 행동', () => {
       first = deferred(),
       retry = deferred()
     const markRead = vi.fn().mockReturnValueOnce(first.promise).mockReturnValueOnce(retry.promise)
-    render(<NotificationInbox markRead={markRead} />)
+    render(<NotificationInboxPage markRead={markRead} />)
     await user.click(checkbox(0))
     await user.click(screen.getByRole('button'))
     await user.click(checkbox(1))
@@ -112,7 +113,7 @@ describe('일괄 읽음 처리의 기존 사용자 행동', () => {
   it('실패 후 선택을 바꾸면 안내를 지우고 현재 선택만 재전송한다', async () => {
     const user = userEvent.setup(),
       markRead = vi.fn().mockRejectedValueOnce(new Error('실패')).mockResolvedValueOnce(undefined)
-    render(<NotificationInbox markRead={markRead} />)
+    render(<NotificationInboxPage markRead={markRead} />)
     await user.click(checkbox(0))
     await user.click(screen.getByRole('button'))
     expect(screen.getByRole('alert')).toBeVisible()
@@ -126,7 +127,7 @@ describe('일괄 읽음 처리의 기존 사용자 행동', () => {
   it('모두 읽으면 목록을 유지하고 선택·실행을 잠그며 완료 안내를 남긴다', async () => {
     const user = userEvent.setup(),
       markRead = vi.fn().mockResolvedValue(undefined)
-    render(<NotificationInbox markRead={markRead} />)
+    render(<NotificationInboxPage markRead={markRead} />)
     for (const index of [0, 1, 2]) await user.click(checkbox(index))
     await user.click(screen.getByRole('button'))
     expect(screen.getByText('모든 알림을 확인했어요.')).toBeVisible()

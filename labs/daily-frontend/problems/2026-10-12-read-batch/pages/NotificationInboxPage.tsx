@@ -3,9 +3,10 @@ import { Callout, Checkbox, Text, VStack } from '@seed-design/react'
 import { IconCheckmarkFatFill } from '@karrotmarket/react-monochrome-icon'
 import { ActionButton } from 'seed-design/ui/action-button'
 import { List, ListCheckItem } from 'seed-design/ui/list'
-import { notifications, type MarkRead } from './api'
+import { notifications } from '../features/notificationInbox/apis/notifications'
+import type { MarkRead } from '../features/notificationInbox/types/notification'
 
-export function NotificationInbox({ markRead }: { markRead: MarkRead }) {
+export function NotificationInboxPage({ markRead }: { markRead: MarkRead }) {
   const [items, setItems] = useState(notifications)
   const [selected, setSelected] = useState<string[]>([])
   const [processing, setProcessing] = useState<string[]>([])
