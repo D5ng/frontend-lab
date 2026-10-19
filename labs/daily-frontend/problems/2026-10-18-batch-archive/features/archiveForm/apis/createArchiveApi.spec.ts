@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { createArchiveApi } from './api'
+import { createArchiveApi } from './createArchiveApi'
 
 describe('보관 HTTP 모의 환경', () => {
   it('첫 요청에서 조명만 실패하고 같은 세션 재시도는 성공한다', async () => {

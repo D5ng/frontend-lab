@@ -2,8 +2,8 @@ import '@testing-library/jest-dom/vitest'
 import { act, cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { ArchiveForm } from './starter'
-import type { ArchiveResult } from './api'
+import { ArchiveFormPage } from './ArchiveFormPage'
+import type { ArchiveResult } from '../features/archiveForm/types/archive'
 
 afterEach(cleanup)
 
@@ -17,7 +17,7 @@ function deferred() {
 
 describe('관심 상품 보관 행동', () => {
   it('처음에는 세 상품이 미선택이고 제출할 수 없다', () => {
-    render(<ArchiveForm archiveProducts={vi.fn()} />)
+    render(<ArchiveFormPage archiveProducts={vi.fn()} />)
     expect(screen.getAllByRole('checkbox')).toHaveLength(3)
     screen.getAllByRole('checkbox').forEach((checkbox) => expect(checkbox).not.toBeChecked())
     expect(screen.getByRole('button', { name: '선택한 상품 보관' })).toBeDisabled()
@@ -26,7 +26,7 @@ describe('관심 상품 보관 행동', () => {
   it('선택과 해제를 개수에 반영하고 선택한 상품만 전송한다', async () => {
     const user = userEvent.setup()
     const archive = vi.fn().mockResolvedValue({ succeededIds: ['lamp'], failedIds: [] })
-    render(<ArchiveForm archiveProducts={archive} />)
+    render(<ArchiveFormPage archiveProducts={archive} />)
     await user.click(screen.getByRole('checkbox', { name: '원목 의자' }))
     await user.click(screen.getByRole('checkbox', { name: '책상 조명' }))
     await user.click(screen.getByRole('checkbox', { name: '원목 의자' }))
@@ -40,7 +40,7 @@ describe('관심 상품 보관 행동', () => {
     const user = userEvent.setup()
     const request = deferred()
     const archive = vi.fn(() => request.promise)
-    render(<ArchiveForm archiveProducts={archive} />)
+    render(<ArchiveFormPage archiveProducts={archive} />)
     await user.click(screen.getByRole('checkbox', { name: '원목 의자' }))
     await user.dblClick(screen.getByRole('button', { name: '선택한 상품 보관' }))
     expect(archive).toHaveBeenCalledTimes(1)
@@ -57,7 +57,7 @@ describe('관심 상품 보관 행동', () => {
       .fn()
       .mockResolvedValueOnce({ succeededIds: ['chair'], failedIds: ['lamp'] })
       .mockResolvedValueOnce({ succeededIds: ['lamp'], failedIds: [] })
-    render(<ArchiveForm archiveProducts={archive} />)
+    render(<ArchiveFormPage archiveProducts={archive} />)
     await user.click(screen.getByRole('checkbox', { name: '원목 의자' }))
     await user.click(screen.getByRole('checkbox', { name: '책상 조명' }))
     await user.click(screen.getByRole('button', { name: '선택한 상품 보관' }))
@@ -75,7 +75,7 @@ describe('관심 상품 보관 행동', () => {
 
   it('모든 항목이 실패한 응답은 목록과 선택을 보존한다', async () => {
     const user = userEvent.setup()
-    render(<ArchiveForm archiveProducts={vi.fn().mockResolvedValue({ succeededIds: [], failedIds: ['lamp'] })} />)
+    render(<ArchiveFormPage archiveProducts={vi.fn().mockResolvedValue({ succeededIds: [], failedIds: ['lamp'] })} />)
     await user.click(screen.getByRole('checkbox', { name: '책상 조명' }))
     await user.click(screen.getByRole('button', { name: '선택한 상품 보관' }))
     expect(screen.getAllByRole('checkbox')).toHaveLength(3)
@@ -88,7 +88,7 @@ describe('관심 상품 보관 행동', () => {
     const user = userEvent.setup()
     const retry = deferred()
     const archive = vi.fn().mockRejectedValueOnce(new Error('offline')).mockReturnValueOnce(retry.promise)
-    render(<ArchiveForm archiveProducts={archive} />)
+    render(<ArchiveFormPage archiveProducts={archive} />)
     await user.click(screen.getByRole('checkbox', { name: '원목 의자' }))
     await user.click(screen.getByRole('button', { name: '선택한 상품 보관' }))
     expect(screen.getByRole('alert')).toHaveTextContent('요청을 완료하지 못했어요. 선택은 그대로예요. 다시 시도해 주세요.')
@@ -102,7 +102,7 @@ describe('관심 상품 보관 행동', () => {
 
   it('결과 후 선택을 바꾸면 이전 안내를 지운다', async () => {
     const user = userEvent.setup()
-    render(<ArchiveForm archiveProducts={vi.fn().mockResolvedValue({ succeededIds: [], failedIds: ['lamp'] })} />)
+    render(<ArchiveFormPage archiveProducts={vi.fn().mockResolvedValue({ succeededIds: [], failedIds: ['lamp'] })} />)
     await user.click(screen.getByRole('checkbox', { name: '책상 조명' }))
     await user.click(screen.getByRole('button', { name: '선택한 상품 보관' }))
     await user.click(screen.getByRole('checkbox', { name: '책상 조명' }))
@@ -112,7 +112,7 @@ describe('관심 상품 보관 행동', () => {
 
   it('전부 성공하면 빈 목록과 성공 안내를 함께 남긴다', async () => {
     const user = userEvent.setup()
-    render(<ArchiveForm archiveProducts={vi.fn().mockResolvedValue({ succeededIds: ['chair', 'lamp', 'shelf'], failedIds: [] })} />)
+    render(<ArchiveFormPage archiveProducts={vi.fn().mockResolvedValue({ succeededIds: ['chair', 'lamp', 'shelf'], failedIds: [] })} />)
     for (const checkbox of screen.getAllByRole('checkbox')) await user.click(checkbox)
     await user.click(screen.getByRole('button', { name: '선택한 상품 보관' }))
     expect(screen.queryByRole('checkbox')).not.toBeInTheDocument()

@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { createArchiveApi } from './api'
-import { ArchiveForm } from './starter'
+import { createArchiveApi } from './features/archiveForm/apis/createArchiveApi'
+import { ArchiveFormPage } from './pages/ArchiveFormPage'
 
 export function Problem() {
   const [archiveProducts] = useState(createArchiveApi)
-  return <ArchiveForm archiveProducts={archiveProducts} />
+  return <ArchiveFormPage archiveProducts={archiveProducts} />
 }

@@ -7,7 +7,7 @@
 
 ## 시작하기
 
-`starter.tsx`는 이미 동작합니다. 기능 추가나 버그 수정이 아니라 **외부 동작을 유지하는 재구성**이 과제입니다. 먼저 화면과 테스트를 실행하고 `note.md`에 현재 책임과 설계 가설을 적어 보세요. 암산으로 실행 순서를 맞히는 과제가 아닙니다.
+`pages/ArchiveFormPage.tsx`는 이미 동작합니다. 기능 추가나 버그 수정이 아니라 **외부 동작을 유지하는 재구성**이 과제입니다. 먼저 화면과 테스트를 실행하고 `note.md`에 현재 책임과 설계 가설을 적어 보세요. 암산으로 실행 순서를 맞히는 과제가 아닙니다.
 
 ```sh
 pnpm install --frozen-lockfile
@@ -45,7 +45,7 @@ type ArchiveProducts = (productIds: string[]) => Promise<{
 }>
 ```
 
-- `api.ts`는 공통 HTTP 클라이언트, `handlers.ts`는 브라우저/Vitest 공통 MSW를 사용합니다. `POST /api/daily/2026-10-18/archive`, body는 `{ productIds: string[] }`입니다.
+- `features/archiveForm/apis/`는 공통 HTTP 클라이언트, `handlers.ts`는 브라우저/Vitest 공통 MSW를 사용합니다. `POST /api/daily/2026-10-18/archive`, body는 `{ productIds: string[] }`입니다.
 - 약 1초 후 응답합니다. 세션의 **첫 요청에 조명이 포함되면 조명만 실패**, 나머지는 성공합니다. 이후 요청은 모두 성공합니다. 화면에 다시 진입하면 새 세션입니다.
 - 응답의 두 배열은 요청 ID를 중복·누락 없이 나눕니다. 요청하지 않은 ID는 오지 않는다는 API 계약입니다. API/MSW는 풀이 대상이 아닙니다.
 - UI 테스트는 전체 실패와 네트워크 거절도 주입합니다. 기본 모의 서버에 없는 경로도 유지하세요.

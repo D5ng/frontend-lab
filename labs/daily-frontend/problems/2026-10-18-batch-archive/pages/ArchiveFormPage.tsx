@@ -3,9 +3,10 @@ import { Callout, Checkbox, Text, VStack } from '@seed-design/react'
 import { useState } from 'react'
 import { ActionButton } from 'seed-design/ui/action-button'
 import { List, ListCheckItem } from 'seed-design/ui/list'
-import { initialProducts, type ArchiveProducts } from './api'
+import { initialProducts } from '../features/archiveForm/apis/initialProducts'
+import type { ArchiveProducts } from '../features/archiveForm/types/archive'
 
-export function ArchiveForm({ archiveProducts }: { archiveProducts: ArchiveProducts }) {
+export function ArchiveFormPage({ archiveProducts }: { archiveProducts: ArchiveProducts }) {
   const [products, setProducts] = useState(initialProducts)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [pending, setPending] = useState(false)
