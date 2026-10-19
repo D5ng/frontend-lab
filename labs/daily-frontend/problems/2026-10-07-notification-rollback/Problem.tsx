@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { createNotificationMock } from './api'
-import { NotificationSettings } from './starter'
+import { createNotificationMock } from './features/notificationSettings/apis/createNotificationMock'
+import { NotificationSettingsPage } from './pages/NotificationSettingsPage'
 
 export function Problem() {
   const [updateNotification] = useState(() => createNotificationMock())
-  return <NotificationSettings updateNotification={updateNotification} />
+  return <NotificationSettingsPage updateNotification={updateNotification} />
 }

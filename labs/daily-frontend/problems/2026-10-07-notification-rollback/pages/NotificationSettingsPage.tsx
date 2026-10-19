@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { Callout, Switch, Text, VStack } from '@seed-design/react'
 import { List, ListSwitchItem } from 'seed-design/ui/list'
-import { products, type UpdateNotification } from './api'
+import { products } from '../features/notificationSettings/apis/products'
+import type { UpdateNotification } from '../features/notificationSettings/types/notification'
 
-export function NotificationSettings({ updateNotification }: { updateNotification: UpdateNotification }) {
+export function NotificationSettingsPage({ updateNotification }: { updateNotification: UpdateNotification }) {
   const [enabled, setEnabled] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(products.map((product) => [product.id, product.enabled])),
   )

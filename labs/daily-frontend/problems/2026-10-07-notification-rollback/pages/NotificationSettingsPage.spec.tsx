@@ -2,8 +2,8 @@ import '@testing-library/jest-dom/vitest'
 import { act, cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { createNotificationMock } from './api'
-import { NotificationSettings } from './starter'
+import { createNotificationMock } from '../features/notificationSettings/apis/createNotificationMock'
+import { NotificationSettingsPage } from './NotificationSettingsPage'
 
 afterEach(() => {
   cleanup()
@@ -25,7 +25,7 @@ const row = (title: string) => within(screen.getByRole('region', { name: title }
 
 describe('상품별 알림의 기존 행동', () => {
   it('초기 설정과 개수를 표시한다', () => {
-    render(<NotificationSettings updateNotification={vi.fn()} />)
+    render(<NotificationSettingsPage updateNotification={vi.fn()} />)
     expect(toggle('원목 책상')).not.toBeChecked()
     expect(toggle('소설 전집')).toBeChecked()
     expect(toggle('작은 화분')).not.toBeChecked()
@@ -36,7 +36,7 @@ describe('상품별 알림의 기존 행동', () => {
     const user = userEvent.setup()
     const request = deferred()
     const update = vi.fn().mockReturnValue(request.promise)
-    render(<NotificationSettings updateNotification={update} />)
+    render(<NotificationSettingsPage updateNotification={update} />)
     await user.click(toggle('원목 책상'))
     expect(toggle('원목 책상')).toBeChecked()
     expect(toggle('원목 책상')).toBeDisabled()
@@ -55,7 +55,7 @@ describe('상품별 알림의 기존 행동', () => {
     const desk = deferred()
     const books = deferred()
     const update = vi.fn(({ productId }: { productId: string; enabled: boolean }) => (productId === 'desk' ? desk.promise : books.promise))
-    render(<NotificationSettings updateNotification={update} />)
+    render(<NotificationSettingsPage updateNotification={update} />)
     await user.click(toggle('원목 책상'))
     await user.click(toggle('소설 전집'))
     expect(update).toHaveBeenNthCalledWith(2, { productId: 'books', enabled: false })
@@ -82,7 +82,7 @@ describe('상품별 알림의 기존 행동', () => {
 
   it('끔 요청 실패도 원래 켜짐으로 되돌린다', async () => {
     const user = userEvent.setup()
-    render(<NotificationSettings updateNotification={vi.fn().mockRejectedValue(new Error('실패'))} />)
+    render(<NotificationSettingsPage updateNotification={vi.fn().mockRejectedValue(new Error('실패'))} />)
     await user.click(toggle('소설 전집'))
     expect(toggle('소설 전집')).toBeChecked()
     expect(toggle('소설 전집')).toBeEnabled()
@@ -94,7 +94,7 @@ describe('상품별 알림의 기존 행동', () => {
     const user = userEvent.setup()
     const retry = deferred()
     const update = vi.fn().mockRejectedValueOnce(new Error('실패')).mockResolvedValueOnce(undefined).mockReturnValueOnce(retry.promise)
-    render(<NotificationSettings updateNotification={update} />)
+    render(<NotificationSettingsPage updateNotification={update} />)
     await user.click(toggle('원목 책상'))
     await user.click(toggle('작은 화분'))
     expect(row('원목 책상').getByRole('alert')).toBeInTheDocument()
@@ -110,7 +110,7 @@ describe('상품별 알림의 기존 행동', () => {
   it('키보드로도 행을 전환한다', async () => {
     const user = userEvent.setup()
     const update = vi.fn().mockResolvedValue(undefined)
-    render(<NotificationSettings updateNotification={update} />)
+    render(<NotificationSettingsPage updateNotification={update} />)
     toggle('원목 책상').focus()
     await user.keyboard(' ')
     expect(update).toHaveBeenCalledExactlyOnceWith({ productId: 'desk', enabled: true })

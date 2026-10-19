@@ -6,7 +6,7 @@
 
 ## 상황과 요구사항
 
-`starter.tsx`는 이미 동작합니다. 책상은 알림 꺼짐, 전집은 켜짐, 화분은 꺼짐으로 시작합니다. 상품별 표시값·요청 중 여부·안내 메시지가 서로 다른 곳에서 관리됩니다. 기능을 추가하거나 실패 복구를 새로 구현하는 문제가 아닙니다.
+`pages/NotificationSettingsPage.tsx`는 이미 동작합니다. 책상은 알림 꺼짐, 전집은 켜짐, 화분은 꺼짐으로 시작합니다. 상품별 표시값·요청 중 여부·안내 메시지가 서로 다른 곳에서 관리됩니다. 기능을 추가하거나 실패 복구를 새로 구현하는 문제가 아닙니다.
 
 1. 상품 행을 누르면 알림과 상단 개수가 즉시 바뀝니다. 개수에는 아직 서버 응답을 기다리는 화면의 값도 포함됩니다.
 2. 요청 중인 상품만 비활성화합니다. 다른 상품은 변경할 수 있고, 같은 상품의 요청은 중복 전송하지 않습니다.
@@ -19,15 +19,15 @@
 
 저장소 루트에서 `pnpm install --frozen-lockfile`, `pnpm dev:daily`를 실행하고 오늘 문제를 선택합니다. 직접 주소의 해시는 `#2026-10-07-notification-rollback`입니다.
 
-`api.ts`는 상품 목록과 `updateNotification({ productId, enabled }): Promise<void>`를 제공합니다. 책상의 첫 요청은 1.8초 후 실패하고 이후에는 성공합니다. 전집은 0.45초, 화분은 0.7초 후 성공합니다. 문제를 바꿨다가 돌아오면 초기화되며 실제 서버에 저장하지 않습니다.
+`features/notificationSettings/apis/`는 상품 목록과 `updateNotification({ productId, enabled }): Promise<void>`를 제공합니다. 책상의 첫 요청은 1.8초 후 실패하고 이후에는 성공합니다. 전집은 0.45초, 화분은 0.7초 후 성공합니다. 문제를 바꿨다가 돌아오면 초기화되며 실제 서버에 저장하지 않습니다.
 
 ## 완료 조건
 
-1. 기존 요구사항과 `Problem.spec.tsx`의 모든 활성 테스트를 유지합니다. 테스트를 삭제하거나 건너뛰어 통과시키지 않습니다.
+1. 기존 요구사항과 `pages/NotificationSettingsPage.spec.tsx`의 모든 활성 테스트를 유지합니다. 테스트를 삭제하거나 건너뛰어 통과시키지 않습니다.
 2. 상태 변경과 복구의 책임이 지금보다 이해하기 쉽게 읽히도록 재구성하고, 선택한 경계를 `note.md`에 설명합니다.
 3. 서로 다른 상품을 연속 변경한 뒤 실패·재시도 과정을 화면에서 확인하고, 실제 결과를 기록합니다.
 
-검사: `pnpm --filter @frontend-lab/daily-frontend exec vitest run problems/2026-10-07-notification-rollback/Problem.spec.tsx` 및 Daily lint/build.
+검사: `pnpm --filter @frontend-lab/daily-frontend exec vitest run problems/2026-10-07-notification-rollback/pages/NotificationSettingsPage.spec.tsx` 및 Daily lint/build.
 
 ## 핵심 설계 질문
 
@@ -45,7 +45,7 @@
 
 ## MSW 요청 환경
 
-`api.ts`의 함수는 실제 `fetch`를 호출하고, 같은 폴더의 `handlers.ts`가 기존 지연·첫 실패·성공 응답을 HTTP로 모킹합니다. 함수 주입 경계와 실습 요구사항은 유지합니다. HTTP 503 응답의 `message`는 API 함수가 Error로 변환하고, 사용 불가나 빈 목록은 정상 JSON 응답으로 처리합니다.
+`features/notificationSettings/apis/`의 함수는 실제 `fetch`를 호출하고, 문제 폴더 바로 아래의 `handlers.ts`가 기존 지연·첫 실패·성공 응답을 HTTP로 모킹합니다. 함수 주입 경계와 실습 요구사항은 유지합니다. HTTP 503 응답의 `message`는 API 함수가 Error로 변환하고, 사용 불가나 빈 목록은 정상 JSON 응답으로 처리합니다.
 
 API 공장 함수마다 독립적인 모의 서버 세션을 사용하므로 화면 재진입 시 첫 실패 횟수가 초기화됩니다. 요청 취소나 오래된 응답의 화면 반영 여부는 MSW가 해결하지 않습니다. 기존 함수 주입 행동 테스트로 응답 순서를 제어하고, 제공 API 테스트는 실제 HTTP 경로를 검증합니다. MSW 작성은 풀이 대상이 아닙니다.
 
