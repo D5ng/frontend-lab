@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { createDemoReservation } from './api'
-import { ProductReservation } from './starter'
+import { createDemoReservation } from './features/productReservation/apis/createDemoReservation'
+import { ProductReservationPage } from './pages/ProductReservationPage'
 
 export function Problem() {
   const [reserveProducts] = useState(createDemoReservation)
-  return <ProductReservation reserveProducts={reserveProducts} />
+  return <ProductReservationPage reserveProducts={reserveProducts} />
 }

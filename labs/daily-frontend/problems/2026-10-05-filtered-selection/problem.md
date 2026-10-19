@@ -11,7 +11,7 @@
 
 > 보이는 상품과 선택한 상품의 범위가 달라질 때, 화면 요약과 예약 요청에서 함께 바뀌어야 하는 규칙은 무엇이며 어디까지 묶는 것이 적절할까요?
 
-`starter.tsx`는 이미 동작합니다. 같은 상품 범위의 계산이 요약·비활성 조건·요청 곳곳에 있고, 선택을 변경하는 이벤트와 요청 결과 처리도 한 컴포넌트에 있습니다. 코드를 실행하고 읽은 뒤, 외부 동작을 유지하며 책임 경계를 판단하세요. 반복식을 없애는 것만 목표로 삼지 않습니다. 특정 함수·훅·파일 수나 정답 구조는 요구하지 않습니다.
+`pages/ProductReservationPage.tsx`는 이미 동작합니다. 같은 상품 범위의 계산이 요약·비활성 조건·요청 곳곳에 있고, 선택을 변경하는 이벤트와 요청 결과 처리도 한 컴포넌트에 있습니다. 코드를 실행하고 읽은 뒤, 외부 동작을 유지하며 책임 경계를 판단하세요. 반복식을 없애는 것만 목표로 삼지 않습니다. 특정 함수·훅·파일 수나 정답 구조는 요구하지 않습니다.
 
 [Frontend Fundamentals](https://frontend-fundamentals.com/code-quality/code/)의 가독성·예측 가능성·응집도·결합도를 판단의 참고 기준으로 사용합니다. 학습자의 재구성 답안은 제공하지 않습니다.
 
@@ -30,12 +30,12 @@ type ReserveProducts = (reservation: Reservation) => Promise<void>
 
 ## 입력과 실행 환경
 
-`api.ts`는 책상 12,000원, 소설책 5,000원, 화분 나눔의 고정 목록과 모의 API를 제공합니다. API는 0.8초 뒤 완료하며 첫 요청만 실패하고 이후 성공합니다. 화면을 나갔다 돌아오면 호출 횟수가 초기화됩니다. HTTP 요청은 MSW가 가로채며 실제 서버 저장은 없습니다. 테스트의 `reserveProducts` 주입 경계는 유지합니다.
+`features/productReservation/apis/`에서 `products.ts`는 책상 12,000원, 소설책 5,000원, 화분 나눔의 고정 목록을, `createDemoReservation.ts`는 모의 API를 제공합니다. 요청 타입은 `types/reservation.ts`에 있습니다. API는 0.8초 뒤 완료하며 첫 요청만 실패하고 이후 성공합니다. 화면을 나갔다 돌아오면 호출 횟수가 초기화됩니다. HTTP 요청은 MSW가 가로채며 실제 서버 저장은 없습니다. 테스트의 `reserveProducts` 주입 경계는 유지합니다.
 
 ```sh
 pnpm install --frozen-lockfile
 pnpm dev:daily
-pnpm --filter @frontend-lab/daily-frontend exec vitest run problems/2026-10-05-filtered-selection/Problem.spec.tsx
+pnpm --filter @frontend-lab/daily-frontend exec vitest run problems/2026-10-05-filtered-selection/pages/ProductReservationPage.spec.tsx
 pnpm --filter @frontend-lab/daily-frontend build
 ```
 
@@ -66,7 +66,7 @@ pnpm --filter @frontend-lab/daily-frontend build
 
 ## MSW 요청 환경
 
-`api.ts`의 함수는 실제 `fetch`를 호출하고, 같은 폴더의 `handlers.ts`가 기존 지연·첫 실패·성공 응답을 HTTP로 모킹합니다. 함수 주입 경계와 실습 요구사항은 유지합니다. HTTP 503 응답의 `message`는 API 함수가 Error로 변환하고, 사용 불가나 빈 목록은 정상 JSON 응답으로 처리합니다.
+`createDemoReservation.ts`의 함수는 실제 `fetch`를 호출하고, 문제 폴더 바로 아래의 `handlers.ts`가 기존 지연·첫 실패·성공 응답을 HTTP로 모킹합니다. 함수 주입 경계와 실습 요구사항은 유지합니다. HTTP 503 응답의 `message`는 API 함수가 Error로 변환하고, 사용 불가나 빈 목록은 정상 JSON 응답으로 처리합니다.
 
 API 공장 함수마다 독립적인 모의 서버 세션을 사용하므로 화면 재진입 시 첫 실패 횟수가 초기화됩니다. 요청 취소나 오래된 응답의 화면 반영 여부는 MSW가 해결하지 않습니다. 기존 함수 주입 행동 테스트로 응답 순서를 제어하고, 제공 API 테스트는 실제 HTTP 경로를 검증합니다. MSW 작성은 풀이 대상이 아닙니다.
 

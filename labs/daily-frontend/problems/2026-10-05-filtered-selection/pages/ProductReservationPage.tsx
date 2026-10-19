@@ -1,10 +1,11 @@
 import { Callout, Checkbox, List, SegmentedControl, Text, VStack } from '@seed-design/react'
 import { useState } from 'react'
-import { ActionButton } from '../../src/seed-design/ui/action-button'
-import { products, type ReserveProducts } from './api'
-import './styles.css'
+import { ActionButton } from '../../../src/seed-design/ui/action-button'
+import { products } from '../features/productReservation/apis/products'
+import type { ReserveProducts } from '../features/productReservation/types/reservation'
+import './ProductReservationPage.css'
 
-export function ProductReservation({ reserveProducts }: { reserveProducts: ReserveProducts }) {
+export function ProductReservationPage({ reserveProducts }: { reserveProducts: ReserveProducts }) {
   const [filter, setFilter] = useState('all')
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
