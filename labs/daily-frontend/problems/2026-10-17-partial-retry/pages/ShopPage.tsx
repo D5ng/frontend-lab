@@ -1,5 +1,5 @@
-import type { ShopApi } from './api'
-import { ShopView } from './view'
+import type { ShopApi } from '../features/shop/types/shop'
+import { ShopView } from '../features/shop/components/ShopView'
 
 export function ShopPage({ api }: { api: ShopApi }) {
   // TODO: 동시에 시작하는 두 조회와 영역별 성공·오류·재시도를 직접 구현하세요.

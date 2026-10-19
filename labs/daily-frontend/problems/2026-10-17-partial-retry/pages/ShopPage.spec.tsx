@@ -2,10 +2,10 @@ import '@testing-library/jest-dom/vitest'
 import { act, cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { ShopPage } from './starter'
-import { ShopView } from './view'
-import { previews, profileSample, reviewSamples } from './preview'
-import type { Review, ShopApi, ShopProfile } from './api'
+import { ShopPage } from './ShopPage'
+import { ShopView } from '../features/shop/components/ShopView'
+import { previews, profileSample, reviewSamples } from '../features/shop/components/ShopView.preview'
+import type { Review, ShopApi, ShopProfile } from '../features/shop/types/shop'
 
 afterEach(cleanup)
 const profileRegion = () => screen.getByRole('region', { name: '가게 소개' })

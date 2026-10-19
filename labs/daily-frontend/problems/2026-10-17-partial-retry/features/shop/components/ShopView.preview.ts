@@ -1,4 +1,4 @@
-import type { ShopViewProps } from './view'
+import type { ShopViewProps } from './ShopView'
 
 type Display = Omit<ShopViewProps, 'onRetryProfile' | 'onRetryReviews'>
 const idle: Display = { profile: null, profileBusy: false, profileError: '', reviews: null, reviewsBusy: false, reviewsError: '' }

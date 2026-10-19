@@ -7,7 +7,7 @@
 
 ## 시작하기
 
-`starter.tsx`에서 두 조회의 시작·결과 반영·실패·재시도를 직접 구현하세요. `view.tsx`는 표현만, `api.ts`와 `handlers.ts`는 실제 fetch/MSW 환경만 제공합니다. 시작 코드는 미조회 화면만 렌더하며 아직 요청하거나 재시도하지 않습니다. 정답 로직이나 권장 상태·훅 구조는 제공하지 않습니다.
+`pages/ShopPage.tsx`에서 두 조회의 시작·결과 반영·실패·재시도를 직접 구현하세요. `features/shop/components/ShopView.tsx`는 표현만, `features/shop/apis/`와 `handlers.ts`는 실제 fetch/MSW 환경만 제공합니다. 시작 코드는 미조회 화면만 렌더하며 아직 요청하거나 재시도하지 않습니다. 정답 로직이나 권장 상태·훅 구조는 제공하지 않습니다.
 
 ```sh
 pnpm install --frozen-lockfile
@@ -93,7 +93,7 @@ UI 출제 스킬의 Montage 지침보다 사용자 지정 Daily SEED 기준을 �
 
 ## 완료 조건
 
-1. `Problem.spec.tsx`의 실습자 행동 블록에서 `describe.skip`을 `describe`로 바꿔 7개를 통과합니다. 제공 UI 준비 4개·HTTP 3개의 검증 범위도 보존합니다.
+1. `pages/ShopPage.spec.tsx`의 실습자 행동 블록에서 `describe.skip`을 `describe`로 바꿔 7개를 통과합니다. 제공 UI 준비 4개·HTTP 3개의 검증 범위도 보존합니다.
 2. 부분 실패 → 후기만 재시도를 화면에서 확인하고, 두 요청의 시작과 완료 순서를 테스트에서 검증합니다. 정답 로직을 만드는 대신 테스트를 삭제·skip하지 않습니다.
 3. `note.md`에 상태의 원본, 선택한 경계와 비용, 예상과 실제 검증을 직접 기록합니다. 추가 기능이나 특정 추상화 형태는 요구하지 않습니다.
 

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { http, HttpResponse } from 'msw/http'
-import { server } from '../../src/mocks/server'
-import { createShopApi } from './api'
+import { server } from '../../../../../src/mocks/server'
+import { createShopApi } from './createShopApi'
 
 describe('제공 HTTP 환경', () => {
   it('가게 소개 경로의 응답을 전달한다', async () => {

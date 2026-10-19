@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { createShopApi } from './api'
-import { ShopPage } from './starter'
-import { ShopView } from './view'
-import { previews } from './preview'
+import { createShopApi } from './features/shop/apis/createShopApi'
+import { ShopPage } from './pages/ShopPage'
+import { ShopView } from './features/shop/components/ShopView'
+import { previews } from './features/shop/components/ShopView.preview'
 
 export function Problem() {
   const [api] = useState(createShopApi)

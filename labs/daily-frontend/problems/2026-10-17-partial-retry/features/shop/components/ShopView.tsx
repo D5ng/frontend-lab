@@ -2,7 +2,7 @@ import { useId } from 'react'
 import { Callout, Skeleton, Text, VStack } from '@seed-design/react'
 import { ActionButton } from 'seed-design/ui/action-button'
 import { List, ListItem } from 'seed-design/ui/list'
-import type { Review, ShopProfile } from './api'
+import type { Review, ShopProfile } from '../types/shop'
 
 export interface ShopViewProps {
   profile: ShopProfile | null
