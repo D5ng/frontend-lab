@@ -93,7 +93,7 @@ describe('제공한 화면·API의 검증', () => {
 })
 
 // 풀이를 시작할 때 .skip을 제거해 실패부터 확인하세요. 정답 로직은 제공하지 않습니다.
-describe.skip('직접 구현할 메모 저장 행동', () => {
+describe('직접 구현할 메모 저장 행동', () => {
   it('초기에는 변경이 없고 입력 후 되돌리면 마지막 저장값을 복원한다', async () => {
     const user = userEvent.setup(),
       saveMemo = vi.fn()
