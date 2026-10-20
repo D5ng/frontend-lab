@@ -1,7 +1,7 @@
 import { Callout, HStack, Text, VStack } from '@seed-design/react'
 import { ActionButton } from 'seed-design/ui/action-button'
 import { TextField, TextFieldTextarea } from 'seed-design/ui/text-field'
-import { SAVE_RESULT_NOTICE, SaveResult } from '../model/instructions'
+import { SAVE_RESULT_NOTICE, type SaveResult } from '../model/instructions'
 
 interface Props {
   draftText: string

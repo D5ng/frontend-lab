@@ -1,5 +1,5 @@
 import { List } from '@seed-design/react'
-import { NEIGHBORHOODS, Post } from './neighborhoodFeed.model'
+import { NEIGHBORHOODS, type Post } from './neighborhoodFeed.model'
 
 interface Props {
   posts: Post[]

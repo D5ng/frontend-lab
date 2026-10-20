@@ -1,5 +1,5 @@
 import { SegmentedControl } from '@seed-design/react'
-import { isNeighborhood, Neighborhood, NEIGHBORHOODS } from './neighborhoodFeed.model'
+import { isNeighborhood, type Neighborhood, NEIGHBORHOODS } from './neighborhoodFeed.model'
 
 interface Props {
   value: Neighborhood

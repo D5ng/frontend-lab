@@ -1,12 +1,12 @@
-import { useState } from 'react'
 import { ActionButton, Callout, VStack } from '@seed-design/react'
+import { useState } from 'react'
 import { TextField, TextFieldInput } from 'seed-design/ui/text-field'
-import { CancelReservation } from '../../../api'
+import type { CancelReservation } from '../../../api'
 import { useCancelReservationForm } from '../hooks/useCancelReservationForm'
 import { MIN_CANCEL_REASON_LENGTH } from '../models/cancelPolicy'
-import { ReservationId } from '../models/reservation'
-import { ReservationSelector } from './ReservationSelector'
+import type { ReservationId } from '../models/reservation'
 import { CancelPolicySummary } from './CancelPolicySummary'
+import { ReservationSelector } from './ReservationSelector'
 
 interface Props {
   cancelReservation: CancelReservation

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { LoadPosts, Neighborhood, NEIGHBORHOOS_ERROR_MESSAGE, Post } from './neighborhoodFeed.model'
+import { type LoadPosts, type Neighborhood, NEIGHBORHOOS_ERROR_MESSAGE, type Post } from './neighborhoodFeed.model'
 
 interface Params {
   func: LoadPosts

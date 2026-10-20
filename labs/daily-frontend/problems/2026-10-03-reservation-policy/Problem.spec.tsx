@@ -2,8 +2,8 @@ import '@testing-library/jest-dom/vitest'
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { CancellationPage } from './starter'
 import { createDemoCancellation } from './api'
+import { CancellationPage } from './starter'
 
 afterEach(cleanup)
 

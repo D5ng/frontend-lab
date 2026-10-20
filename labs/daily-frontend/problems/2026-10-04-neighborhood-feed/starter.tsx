@@ -1,8 +1,7 @@
 import { useState } from 'react'
-
-import { FeedView } from './view'
-import { LoadPosts, Neighborhood } from './neighborhoodFeed/neighborhoodFeed.model'
+import type { LoadPosts, Neighborhood } from './neighborhoodFeed/neighborhoodFeed.model'
 import { useNeighborhoodPosts } from './neighborhoodFeed/useNeighborhoodPosts'
+import { FeedView } from './view'
 
 export function NeighborhoodFeed({ loadPosts }: { loadPosts: LoadPosts }) {
   const [selectedNeighborhood, setSelectedNeighborhood] = useState<Neighborhood>('seongsu')

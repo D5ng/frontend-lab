@@ -1,4 +1,4 @@
-import { CartItem } from '../model/cart'
+import type { CartItem } from '../model/cart'
 import { CartItemRow } from './CartItemRow'
 
 interface Props {

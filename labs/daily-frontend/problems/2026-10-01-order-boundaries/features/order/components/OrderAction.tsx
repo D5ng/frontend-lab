@@ -1,5 +1,5 @@
 import { ActionButton } from '@seed-design/react'
-import { OrderType } from '../order.model'
+import type { OrderType } from '../order.model'
 
 interface Props {
   type: OrderType

@@ -1,11 +1,11 @@
 import { Text, VStack } from '@seed-design/react'
 import { ActionButton } from '../../src/seed-design/ui/action-button'
-import './style.css'
-import { Neighborhood, NEIGHBORHOODS, Post } from './neighborhoodFeed/neighborhoodFeed.model'
-import { NeighborhoodSelector } from './neighborhoodFeed/NeighborhoodSelector'
+import { type Neighborhood, NEIGHBORHOODS, type Post } from './neighborhoodFeed/neighborhoodFeed.model'
 import { NeighborhoodHeading } from './neighborhoodFeed/NeighborhoodHeading'
-import { PostStatusMessage } from './neighborhoodFeed/PostStatusMessage'
 import { NeighborhoodList } from './neighborhoodFeed/NeighborhoodList'
+import { NeighborhoodSelector } from './neighborhoodFeed/NeighborhoodSelector'
+import { PostStatusMessage } from './neighborhoodFeed/PostStatusMessage'
+import './style.css'
 
 export type FeedViewProps = {
   neighborhood: Neighborhood

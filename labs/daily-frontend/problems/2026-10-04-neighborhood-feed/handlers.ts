@@ -2,7 +2,7 @@ import { http, HttpResponse } from 'msw/http'
 import { delay } from 'msw/utils/delay'
 import { nextAttempt } from '../../src/mocks/scenario'
 import { examplePosts } from './api'
-import { Neighborhood } from './neighborhoodFeed/neighborhoodFeed.model'
+import type { Neighborhood } from './neighborhoodFeed/neighborhoodFeed.model'
 export const handlers = [
   http.get('*/api/daily/2026-10-04-neighborhood-feed/posts', async ({ request }) => {
     const neighborhood = new URL(request.url).searchParams.get('neighborhood') as Neighborhood

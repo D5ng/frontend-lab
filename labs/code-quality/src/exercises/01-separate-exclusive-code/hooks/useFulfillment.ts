@@ -1,4 +1,4 @@
-import { SubmitEventHandler, useState } from 'react'
+import { type SubmitEventHandler, useState } from 'react'
 
 type FulfillmentMethod = 'delivery' | 'pickup'
 

@@ -1,6 +1,6 @@
 import { afterAll, afterEach, beforeAll, vi } from 'vitest'
-import { server } from '../mocks/server'
 import { resetMockAttempts } from '../mocks/scenario'
+import { server } from '../mocks/server'
 
 beforeAll(() => server.listen({ onUnhandledFrame: 'error' }))
 afterEach(() => {

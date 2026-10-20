@@ -1,11 +1,11 @@
 import { FlexBox, Typography } from '@wanteddev/wds'
-import { DailyTask, DEFAULT_TASKS } from './model/task'
-import { useDailyTasks } from './hooks/useDailyTasks'
-import { TaskProgressSummary } from './components/TaskProgressSummary'
+import { useState } from 'react'
 import { TaskList } from './components/TaskList'
 import { TaskListControls } from './components/TaskListControls'
-import { useState } from 'react'
-import { filterVisibleTasks, TaskStatusFilter } from './model/filterVisibleTasks'
+import { TaskProgressSummary } from './components/TaskProgressSummary'
+import { useDailyTasks } from './hooks/useDailyTasks'
+import { filterVisibleTasks, type TaskStatusFilter } from './model/filterVisibleTasks'
+import { type DailyTask, DEFAULT_TASKS } from './model/task'
 
 type ProblemProps = {
   initialTasks?: readonly DailyTask[]

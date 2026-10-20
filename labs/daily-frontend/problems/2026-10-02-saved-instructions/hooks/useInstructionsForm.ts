@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { SaveInstructions } from '../api'
-import { INITIAL_INSTRUCTIONS, InstructionsForm, isDraftTextBlank } from '../model/instructions'
+import type { SaveInstructions } from '../api'
+import { INITIAL_INSTRUCTIONS, type InstructionsForm, isDraftTextBlank } from '../model/instructions'
 
 interface Params {
   saveInstructions: SaveInstructions
