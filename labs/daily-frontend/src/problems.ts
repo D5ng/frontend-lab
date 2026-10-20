@@ -4,6 +4,7 @@ import { Problem as SavedInstructions } from '../problems/2026-10-02-saved-instr
 import { Problem as ReservationPolicy } from '../problems/2026-10-03-reservation-policy/Problem'
 import { Problem as NeighborhoodFeed } from '../problems/2026-10-04-neighborhood-feed/Problem'
 import { Problem as FilteredSelection } from '../problems/2026-10-05-filtered-selection/Problem'
+import { Problem as SaveSnapshot } from '../problems/2026-10-06-save-snapshot/Problem'
 
 export const problems = [
   { id: '2026-09-30-async-search', title: '늦게 도착한 검색 결과', Component: AsyncSearch },
@@ -12,4 +13,5 @@ export const problems = [
   { id: '2026-10-03-reservation-policy', title: '예약 취소 정책의 변경 경계', Component: ReservationPolicy },
   { id: '2026-10-04-neighborhood-feed', title: '빠른 동네 선택과 늦은 게시글', Component: NeighborhoodFeed },
   { id: '2026-10-05-filtered-selection', title: '숨겨진 상품도 선택한 상품일까?', Component: FilteredSelection },
+  { id: '2026-10-06-save-snapshot', title: '저장 중에 새로 쓴 메모', Component: SaveSnapshot },
 ]
