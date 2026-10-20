@@ -1,0 +1,107 @@
+import '@testing-library/jest-dom/vitest'
+import { act, cleanup, render, screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { TransferPage } from './TransferPage'
+import type { TransferInput, TransferReceipt } from '../features/transfer/types/transfer'
+
+afterEach(cleanup)
+const success = (input: TransferInput) => Promise.resolve({ ...input, id: 'receipt' })
+const submitButton = () => screen.getByRole('button', { name: '송금 신청하기' })
+
+describe('송금 신청 행동', () => {
+  it('진입 시 요청하지 않고 빈 금액이면 제출을 잠근다', () => {
+    const send = vi.fn(success)
+    render(<TransferPage sendTransfer={send} />)
+    expect(send).not.toHaveBeenCalled()
+    expect(submitButton()).toBeDisabled()
+    expect(screen.getByRole('region', { name: '출금 요약' })).toHaveTextContent('총 출금액 0원')
+  })
+  it('같은 은행은 무료이고 금액을 콤마로 표시하며 같은 값을 보낸다', async () => {
+    const user = userEvent.setup()
+    const send = vi.fn(success)
+    render(<TransferPage sendTransfer={send} />)
+    await user.type(screen.getByRole('textbox', { name: '보낼 금액' }), '10000')
+    expect(screen.getByRole('textbox')).toHaveValue('10,000')
+    expect(screen.getByRole('region', { name: '출금 요약' })).toHaveTextContent('수수료 0원')
+    await user.click(submitButton())
+    expect(send).toHaveBeenCalledExactlyOnceWith({ accountId: 'living', bank: 'same', amount: 10000, fee: 0, totalDebit: 10000 })
+  })
+  it('다른 은행은 50,000원 경계 아래에서만 500원을 더한다', async () => {
+    const user = userEvent.setup()
+    const send = vi.fn(success)
+    render(<TransferPage sendTransfer={send} />)
+    await user.click(screen.getByRole('radio', { name: '다른 은행' }))
+    await user.type(screen.getByRole('textbox'), '49999')
+    expect(screen.getByRole('region', { name: '출금 요약' })).toHaveTextContent('총 출금액 50,499원')
+    await user.clear(screen.getByRole('textbox'))
+    await user.type(screen.getByRole('textbox'), '50000')
+    expect(screen.getByRole('region', { name: '출금 요약' })).toHaveTextContent('수수료 0원')
+    await user.click(submitButton())
+    expect(send).toHaveBeenCalledExactlyOnceWith({ accountId: 'living', bank: 'other', amount: 50000, fee: 0, totalDebit: 50000 })
+  })
+  it('송금액만 잔액과 같아도 수수료를 합쳐 초과하면 거절하고 은행 변경 후에는 보낼 수 있다', async () => {
+    const user = userEvent.setup()
+    const send = vi.fn(success)
+    render(<TransferPage sendTransfer={send} />)
+    await user.click(screen.getByRole('radio', { name: /용돈 계좌/ }))
+    await user.click(screen.getByRole('radio', { name: '다른 은행' }))
+    await user.type(screen.getByRole('textbox'), '10000')
+    await user.click(submitButton())
+    expect(send).not.toHaveBeenCalled()
+    expect(screen.getByRole('alert')).toHaveTextContent('수수료를 포함한 출금액이 잔액보다 많아요.')
+    await user.click(screen.getByRole('radio', { name: '같은 은행' }))
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+    await user.click(submitButton())
+    expect(send).toHaveBeenCalledExactlyOnceWith({ accountId: 'pocket', bank: 'same', amount: 10000, fee: 0, totalDebit: 10000 })
+  })
+  it('범위 밖 금액은 필드 오류만 표시하고 요청하지 않는다', async () => {
+    const user = userEvent.setup()
+    const send = vi.fn(success)
+    render(<TransferPage sendTransfer={send} />)
+    await user.type(screen.getByRole('textbox'), '999')
+    await user.click(submitButton())
+    expect(screen.getByRole('textbox')).toBeInvalid()
+    expect(screen.getByText('1,000원부터 1,000,000원까지 입력해 주세요.')).toBeInTheDocument()
+    expect(send).not.toHaveBeenCalled()
+    await user.clear(screen.getByRole('textbox'))
+    await user.type(screen.getByRole('textbox'), '1000001')
+    await user.click(submitButton())
+    expect(send).not.toHaveBeenCalled()
+    expect(screen.getByRole('textbox')).toBeInvalid()
+  })
+  it('실패 시 모든 입력을 보존하고 같은 금액·수수료로 재시도한다', async () => {
+    const user = userEvent.setup()
+    const send = vi.fn().mockRejectedValueOnce(new Error('fail')).mockImplementationOnce(success)
+    render(<TransferPage sendTransfer={send} />)
+    await user.click(screen.getByRole('radio', { name: '다른 은행' }))
+    await user.type(screen.getByRole('textbox'), '1000')
+    await user.click(submitButton())
+    expect(screen.getByRole('alert')).toHaveTextContent('송금 신청을 완료하지 못했어요. 다시 시도해 주세요.')
+    expect(screen.getByRole('textbox')).toHaveValue('1,000')
+    await user.click(submitButton())
+    const input = { accountId: 'living', bank: 'other', amount: 1000, fee: 500, totalDebit: 1500 }
+    expect(send.mock.calls).toEqual([[input], [input]])
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+    expect(screen.getByRole('status')).toHaveTextContent('총 출금액 1,500원')
+  })
+  it('요청 중 전역 잠금·중복 방지 후 서버가 확인한 신청 결과를 고정한다', async () => {
+    const user = userEvent.setup()
+    let resolve!: (receipt: TransferReceipt) => void
+    const promise = new Promise<TransferReceipt>((done) => {
+      resolve = done
+    })
+    const send = vi.fn(() => promise)
+    render(<TransferPage sendTransfer={send} />)
+    await user.type(screen.getByRole('textbox'), '1000')
+    await user.dblClick(submitButton())
+    expect(send).toHaveBeenCalledTimes(1)
+    expect(screen.getByRole('textbox')).toBeDisabled()
+    screen.getAllByRole('radio').forEach((item) => expect(item).toBeDisabled())
+    expect(screen.getByRole('button', { name: /신청 중/ })).toBeDisabled()
+    await act(async () => resolve({ accountId: 'living', bank: 'same', amount: 1000, fee: 0, totalDebit: 1000, id: 'receipt' }))
+    expect(screen.getByRole('button', { name: '신청 완료' })).toBeDisabled()
+    expect(screen.getByRole('textbox')).toBeDisabled()
+    expect(within(screen.getByRole('status')).getByText(/송금 신청을 완료했어요/)).toBeInTheDocument()
+  })
+})
