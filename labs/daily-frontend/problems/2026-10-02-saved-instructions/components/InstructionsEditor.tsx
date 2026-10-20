@@ -1,7 +1,7 @@
-import { type SaveInstructions } from '../api'
+import type { SaveInstructions } from '../api'
+import { useInstructionsForm } from '../hooks/useInstructionsForm'
 import { InstructionsForm } from './InstructionsForm'
 import { PublishedInstructions } from './PublishedInstructions'
-import { useInstructionsForm } from '../hooks/useInstructionsForm'
 
 export type InstructionsEditorProps = { saveInstructions: SaveInstructions }
 

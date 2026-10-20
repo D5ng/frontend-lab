@@ -1,6 +1,6 @@
 import { CheckMark, FlexBox, Typography } from '@wanteddev/wds'
-import { DailyTask } from '../model/task'
 import { IconSearch } from '@wanteddev/wds-icon'
+import type { DailyTask } from '../model/task'
 
 interface Props {
   visibleTasks: DailyTask[]

@@ -1,8 +1,8 @@
 import { VStack } from '@seed-design/react'
+import type { SaveResult } from '../model/instructions'
+import { InstructionsForm } from './InstructionsForm'
 import { InstructionsHeading } from './InstructionsHeading'
 import { PublishedInstructions } from './PublishedInstructions'
-import { InstructionsForm } from './InstructionsForm'
-import { SaveResult } from '../model/instructions'
 
 // 화면을 그리는 데 필요한 값입니다. 같은 이름의 상태를 모두 만들라는 뜻은 아닙니다.
 interface Props {

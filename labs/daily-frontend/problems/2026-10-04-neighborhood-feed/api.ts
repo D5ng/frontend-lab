@@ -1,5 +1,5 @@
 import { createApiClient } from '../../src/api/client'
-import { LoadPosts, Post } from './neighborhoodFeed/neighborhoodFeed.model'
+import type { LoadPosts, Post } from './neighborhoodFeed/neighborhoodFeed.model'
 
 export const examplePosts: Post[] = [
   { id: 's1', title: '주말에 읽기 좋은 에세이 두 권', price: 7000, neighborhood: 'seongsu' },

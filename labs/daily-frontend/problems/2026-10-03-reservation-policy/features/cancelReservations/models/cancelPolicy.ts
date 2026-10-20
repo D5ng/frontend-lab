@@ -1,5 +1,5 @@
 import { formatPrice } from '../../../utils/formatPrice'
-import { Reservation, ReservationId, ReservationTiming } from './reservation'
+import type { Reservation, ReservationId, ReservationTiming } from './reservation'
 
 /* 당일 취소 수수료 */
 const SAME_DAY_CANCEL_FEE = 2_000

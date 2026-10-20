@@ -1,6 +1,5 @@
-import type { SubmitEvent } from 'react'
 import { Button, FlexBox, FormControl, FormField, FormLabel, RadioGroup, RadioGroupItem, TextField, Typography } from '@wanteddev/wds'
-
+import type { SubmitEvent } from 'react'
 import { useEventRegistration } from './hooks/useEventRegistration'
 import type { EventFormData, EventType } from './model/eventForm'
 

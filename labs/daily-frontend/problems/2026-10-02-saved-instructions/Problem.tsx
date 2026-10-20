@@ -1,10 +1,10 @@
+import { VStack } from '@seed-design/react'
 import { useState } from 'react'
 import { createSaveMock } from './api'
-import { uiPreviews } from './preview'
 import { InstructionsEditor } from './components/InstructionsEditor'
-import { TestInstructionsView } from './components/TestInstructionsView'
 import { InstructionsHeading } from './components/InstructionsHeading'
-import { VStack } from '@seed-design/react'
+import { TestInstructionsView } from './components/TestInstructionsView'
+import { uiPreviews } from './preview'
 import './style.css'
 
 export function Problem() {

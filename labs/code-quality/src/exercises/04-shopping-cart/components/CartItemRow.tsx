@@ -1,7 +1,7 @@
 import { FlexBox, IconButton, Typography } from '@wanteddev/wds'
-import { formatPrice } from '../utils/formatPrice'
 import { IconMinus, IconPlus } from '@wanteddev/wds-icon'
-import { canDecreaseQuantity, CartItem } from '../model/cart'
+import { canDecreaseQuantity, type CartItem } from '../model/cart'
+import { formatPrice } from '../utils/formatPrice'
 
 interface Props {
   item: CartItem

@@ -3,10 +3,10 @@ import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createDemoLoader, examplePosts } from './api'
+import type { Post } from './neighborhoodFeed/neighborhoodFeed.model'
+import { previews } from './preview'
 import { NeighborhoodFeed } from './starter'
 import { FeedView } from './view'
-import { previews } from './preview'
-import { Post } from './neighborhoodFeed/neighborhoodFeed.model'
 
 afterEach(cleanup)
 

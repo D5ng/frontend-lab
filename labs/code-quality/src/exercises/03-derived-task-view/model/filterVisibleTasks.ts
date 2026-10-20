@@ -1,4 +1,4 @@
-import { DailyTask } from './task'
+import type { DailyTask } from './task'
 
 export type TaskStatusFilter = 'all' | 'todo' | 'completed'
 

@@ -3,10 +3,10 @@ import { act, cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createSaveMock } from './api'
-import { uiPreviews } from './preview'
 import { InstructionsEditor } from './components/InstructionsEditor'
 import { TestInstructionsView } from './components/TestInstructionsView'
 import { INITIAL_INSTRUCTIONS } from './model/instructions'
+import { uiPreviews } from './preview'
 
 afterEach(() => {
   cleanup()

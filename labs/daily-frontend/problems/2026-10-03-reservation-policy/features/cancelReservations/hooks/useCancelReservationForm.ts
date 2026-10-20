@@ -1,7 +1,7 @@
-import { SubmitEventHandler, useState } from 'react'
-import { CancelReservation } from '../../../api'
+import { type SubmitEventHandler, useState } from 'react'
+import type { CancelReservation } from '../../../api'
 import { getCancelFee, getRefundAmount, isCancellable, isCancelReasonTooShort, MIN_CANCEL_REASON_LENGTH } from '../models/cancelPolicy'
-import { INITIAL_RESERVATIONS, isReservationId, Reservation, ReservationId } from '../models/reservation'
+import { INITIAL_RESERVATIONS, isReservationId, type Reservation, type ReservationId } from '../models/reservation'
 
 export interface CancelReservationResult {
   tone: 'critical' | 'positive'

@@ -1,8 +1,8 @@
 import { VStack } from '@seed-design/react'
 import type { CancelReservation } from './api'
-import './style.css'
 import { CancelHeading } from './features/cancelReservations/components/CancelHeading'
 import { CancelReservationForm } from './features/cancelReservations/components/CancelReservationForm'
+import './style.css'
 
 export function CancellationPage({ cancelReservation }: { cancelReservation: CancelReservation }) {
   return (

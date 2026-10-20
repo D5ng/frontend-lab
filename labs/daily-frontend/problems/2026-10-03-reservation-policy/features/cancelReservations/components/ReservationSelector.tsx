@@ -1,5 +1,5 @@
 import { RadioGroup, RadioGroupItem } from 'seed-design/ui/radio-group'
-import { INITIAL_RESERVATIONS, ReservationId } from '../models/reservation'
+import { INITIAL_RESERVATIONS, type ReservationId } from '../models/reservation'
 
 interface Props {
   selectedId: ReservationId

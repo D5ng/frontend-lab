@@ -1,4 +1,4 @@
-import { INITIAL_INSTRUCTIONS, SaveResult } from './model/instructions'
+import { INITIAL_INSTRUCTIONS, type SaveResult } from './model/instructions'
 
 type INITIAL_STATE = {
   draftText: string
