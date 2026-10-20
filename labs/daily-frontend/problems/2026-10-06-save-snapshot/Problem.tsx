@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { INITIAL_MEMO } from './features/memoEditor/apis/initialMemo'
 import { createDemoSaver } from './features/memoEditor/apis/createDemoSaver'
+import { INITIAL_MEMO } from './features/memoEditor/apis/initialMemo'
+import { MemoView } from './features/memoEditor/components/MemoView'
 import { getPreview } from './features/memoEditor/components/MemoView.preview'
 import { MemoEditorPage } from './pages/MemoEditorPage'
-import { MemoView } from './features/memoEditor/components/MemoView'
 
 export function Problem() {
   const [saveMemo] = useState(createDemoSaver)

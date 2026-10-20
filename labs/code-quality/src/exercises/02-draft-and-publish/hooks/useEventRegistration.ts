@@ -1,5 +1,4 @@
 import { useState } from 'react'
-
 import { createInitialEventFormData, createSubmissionEventFormData, type EventFormData } from '../model/eventForm'
 import { getPublishValidationMessage } from '../policy/publishValidationMessage'
 

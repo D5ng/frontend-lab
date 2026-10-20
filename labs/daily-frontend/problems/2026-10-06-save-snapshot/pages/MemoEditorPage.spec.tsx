@@ -2,12 +2,12 @@ import '@testing-library/jest-dom/vitest'
 import { act, cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { INITIAL_MEMO } from '../features/memoEditor/apis/initialMemo'
 import { createDemoSaver } from '../features/memoEditor/apis/createDemoSaver'
-import type { Memo } from '../features/memoEditor/types/memo'
-import { previews } from '../features/memoEditor/components/MemoView.preview'
-import { MemoEditorPage } from './MemoEditorPage'
+import { INITIAL_MEMO } from '../features/memoEditor/apis/initialMemo'
 import { MemoView } from '../features/memoEditor/components/MemoView'
+import { previews } from '../features/memoEditor/components/MemoView.preview'
+import type { Memo } from '../features/memoEditor/types/memo'
+import { MemoEditorPage } from './MemoEditorPage'
 
 afterEach(() => {
   cleanup()

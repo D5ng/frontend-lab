@@ -1,4 +1,4 @@
-import { PickupDate } from './order.model'
+import type { PickupDate } from './order.model'
 
 /* 오늘 픽업 가능한 최대 수량 */
 export const TODAY_PICKUP_MAX_QUANTITY = 3

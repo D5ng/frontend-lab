@@ -1,8 +1,8 @@
-import { SubmitEventHandler, useState } from 'react'
-import { OrderFormState, OrderProduct, OrderRequest } from './order.model'
+import { type SubmitEventHandler, useState } from 'react'
+import { calculateShippingFee, createOrderRequest } from './order'
+import type { OrderFormState, OrderProduct, OrderRequest } from './order.model'
 import { validateDeliveryOrder } from './order-delivery'
 import { validatePickupOrder } from './order-pickup'
-import { calculateShippingFee, createOrderRequest } from './order'
 
 const INITIAL_ORDER_STATE: OrderFormState = {
   type: 'delivery',

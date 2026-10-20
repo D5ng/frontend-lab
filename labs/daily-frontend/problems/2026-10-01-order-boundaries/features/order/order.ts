@@ -1,5 +1,5 @@
+import type { OrderFormState, OrderRequest, OrderType } from './order.model'
 import { calculateDeliveryShippingFee } from './order-delivery'
-import { OrderFormState, OrderRequest, OrderType } from './order.model'
 
 interface CreateOrderRequestParams {
   orderData: OrderFormState
