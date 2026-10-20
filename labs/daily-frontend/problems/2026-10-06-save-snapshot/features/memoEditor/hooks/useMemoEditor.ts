@@ -24,11 +24,11 @@ export function useMemoEditor(saveMemo: SaveMemo, initialMemo?: string) {
   }
 
   const save = async () => {
-    setLoading(true)
-
     if (disabled) {
       return
     }
+
+    setLoading(true)
 
     try {
       const saved = await saveMemo({ memo: inputMemo })
