@@ -30,14 +30,13 @@ const restoreButton = () => screen.getByRole('button', { name: '저장된 내용
 const savedRegion = () => within(screen.getByRole('region', { name: '마지막 저장된 메모' }))
 
 describe('제공한 화면·API의 검증', () => {
-  it('스타터는 로직 미연결을 안내하고 초기 메모만 표시한다', () => {
-    const saveMemo = vi.fn()
-    render(<MemoEditorPage initialMemo={INITIAL_MEMO} saveMemo={saveMemo} />)
+  it('미연결 화면은 안내를 표시하고 입력을 읽기 전용으로, 버튼을 잠금으로 둔다', () => {
+    render(<MemoView {...previews.initial} unconnected />)
     expect(screen.getByText(/아직 입력·저장·되돌리기 로직이 연결되지 않았어요/)).toBeVisible()
     expect(input()).toHaveValue(INITIAL_MEMO)
     expect(input()).toHaveAttribute('readonly')
     expect(saveButton()).toBeDisabled()
-    expect(saveMemo).not.toHaveBeenCalled()
+    expect(restoreButton()).toBeDisabled()
   })
 
   it('입력 라벨과 편집·저장·되돌리기 콜백을 연결한다', async () => {
@@ -94,7 +93,7 @@ describe('제공한 화면·API의 검증', () => {
 })
 
 // 풀이를 시작할 때 .skip을 제거해 실패부터 확인하세요. 정답 로직은 제공하지 않습니다.
-describe.skip('직접 구현할 메모 저장 행동', () => {
+describe('직접 구현할 메모 저장 행동', () => {
   it('초기에는 변경이 없고 입력 후 되돌리면 마지막 저장값을 복원한다', async () => {
     const user = userEvent.setup(),
       saveMemo = vi.fn()
