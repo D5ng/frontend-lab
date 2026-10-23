@@ -5,8 +5,10 @@ import { Problem as ReservationPolicy } from '../problems/2026-10-03-reservation
 import { Problem as NeighborhoodFeed } from '../problems/2026-10-04-neighborhood-feed/Problem'
 import { Problem as FilteredSelection } from '../problems/2026-10-05-filtered-selection/Problem'
 import { Problem as SaveSnapshot } from '../problems/2026-10-06-save-snapshot/Problem'
+import { Problem as RoutePlanner } from '../problems/2026-10-23-route-planner/Problem'
 
 export const problems = [
+  { id: '2026-10-23-route-planner', title: '도착지는 바뀌었는데 이전 경로가 도착한다면?', Component: RoutePlanner },
   { id: '2026-09-30-async-search', title: '늦게 도착한 검색 결과', Component: AsyncSearch },
   { id: '2026-10-01-order-boundaries', title: '배송과 픽업, 어디까지 함께 둘까?', Component: OrderBoundaries },
   { id: '2026-10-02-saved-instructions', title: '작성 중인 안내와 저장된 안내', Component: SavedInstructions },
