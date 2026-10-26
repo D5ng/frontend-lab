@@ -220,7 +220,7 @@ export function DayTripPage({ api }: { api: TripApi }) {
                       <ActionButton
                         type="button"
                         variant="neutralWeak"
-                        size="medium"
+                        size="large"
                         disabled={saving}
                         aria-label={place.name + ' 앞으로'}
                         onClick={() => {
