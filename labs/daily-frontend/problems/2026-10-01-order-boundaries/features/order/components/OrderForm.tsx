@@ -1,10 +1,10 @@
-import { OrderPayment } from './OrderPayment'
-import { OrderAction } from './OrderAction'
-import { OrderProduct, OrderRequest } from '../order.model'
-import { useOrderForm } from '../useOrderForm'
+import { TextField } from '@seed-design/react'
 import { RadioGroup, RadioGroupItem } from 'seed-design/ui/radio-group'
 import { SelectContent, SelectGroup, SelectItem, SelectRoot, SelectTrigger } from 'seed-design/ui/select'
-import { TextField } from '@seed-design/react'
+import type { OrderProduct, OrderRequest } from '../order.model'
+import { useOrderForm } from '../useOrderForm'
+import { OrderAction } from './OrderAction'
+import { OrderPayment } from './OrderPayment'
 
 interface Props {
   product: OrderProduct

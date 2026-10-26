@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/set-state-in-effect -- 비동기 검색 버그를 분석하기 위한 실습 초기 코드 */
-import { useEffect, useState } from 'react'
-import { Badge, HStack, Text, VStack } from '@seed-design/react'
 import { IconMagnifyingglassLine } from '@karrotmarket/react-monochrome-icon'
-import { TextField, TextFieldInput } from 'seed-design/ui/text-field'
-import { List, ListItem } from 'seed-design/ui/list'
+import { Badge, HStack, Text, VStack } from '@seed-design/react'
+import { useEffect, useState } from 'react'
 import { ContentPlaceholder } from 'seed-design/ui/content-placeholder'
+import { List, ListItem } from 'seed-design/ui/list'
 import { ProgressCircle } from 'seed-design/ui/progress-circle'
+import { TextField, TextFieldInput } from 'seed-design/ui/text-field'
 import './style.css'
 
 type Product = {

@@ -1,9 +1,8 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
-
-import { Problem } from './Problem'
 import type { DailyTask } from './model/task'
+import { Problem } from './Problem'
 
 describe('생활 할 일', () => {
   it('할 일 현황과 전체 목록을 보여준다', () => {

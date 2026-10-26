@@ -1,0 +1,9 @@
+.neighborhood-feed {
+  overflow-wrap: anywhere;
+}
+.neighborhood-feed .feed-neighborhoods {
+  width: 100%;
+}
+.neighborhood-feed .feed-neighborhood {
+  min-height: var(--seed-dimension-x12);
+}

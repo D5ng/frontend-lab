@@ -1,4 +1,4 @@
-import { OrderRequest } from './order.model'
+import type { OrderRequest } from './order.model'
 
 // eslint-disable-next-line unused-imports/no-unused-vars
 export async function sendDemoOrder(_request: OrderRequest) {

@@ -1,9 +1,10 @@
 import eslint from '@eslint/js'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
+import simpleImportSort from 'eslint-plugin-simple-import-sort'
+import unusedImports from 'eslint-plugin-unused-imports'
 import globals from 'globals'
 import typescriptEslint from 'typescript-eslint'
-import unusedImports from 'eslint-plugin-unused-imports'
 
 export default typescriptEslint.config(
   {
@@ -23,6 +24,7 @@ export default typescriptEslint.config(
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      'simple-import-sort': simpleImportSort,
       'unused-imports': unusedImports,
     },
     rules: {
@@ -32,6 +34,22 @@ export default typescriptEslint.config(
       'unused-imports/no-unused-imports': 'error',
       'unused-imports/no-unused-vars': 'error',
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      // import는 외부 패키지 → 별칭 → 상대 경로 → CSS 순으로 빈 줄 없이 정렬하고, 타입만 가져오면 import type으로 표시한다.
+      'simple-import-sort/imports': [
+        'error',
+        { groups: [['^\\u0000(?!.*\\.css$)', '^@?\\w', '^seed-design/', '^\\.', '^\\u0000.*\\.css$']] },
+      ],
+      '@typescript-eslint/consistent-type-imports': ['error', { fixStyle: 'inline-type-imports' }],
+      '@typescript-eslint/no-import-type-side-effects': 'error',
+    },
+  },
+  {
+    // SEED CLI가 설치한 스니펫은 원본과 비교할 수 있도록 import를 다시 정렬하지 않는다.
+    files: ['**/src/seed-design/**'],
+    rules: {
+      'simple-import-sort/imports': 'off',
+      '@typescript-eslint/consistent-type-imports': 'off',
+      '@typescript-eslint/no-import-type-side-effects': 'off',
     },
   },
 )
