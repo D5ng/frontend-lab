@@ -15,5 +15,5 @@ export const problems = [
   { id: '2026-10-04-neighborhood-feed', title: '빠른 동네 선택과 늦은 게시글', Component: NeighborhoodFeed },
   { id: '2026-10-05-filtered-selection', title: '숨겨진 상품도 선택한 상품일까?', Component: FilteredSelection },
   { id: '2026-10-06-save-snapshot', title: '저장 중에 새로 쓴 메모', Component: SaveSnapshot },
-  { id: '2026-10-09-report-reasons', title: '신고 사유에 따라 함께 바뀌는 규칙', Component: ReportReasons },
+  { id: '2026-10-09-report-reasons', title: '시간과 예산 안에서 하루 여행 만들기', Component: ReportReasons },
 ]

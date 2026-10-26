@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { createReportMock } from './features/reportForm/apis/createReportMock'
-import { ReportFormPage } from './pages/ReportFormPage'
+import { DayTripPage } from './pages/DayTripPage'
+import { createTripApi } from './trip/api'
 
 export function Problem() {
-  const [sendReport] = useState(createReportMock)
-  return <ReportFormPage sendReport={sendReport} />
+  const [api] = useState(createTripApi)
+  return <DayTripPage api={api} />
 }
