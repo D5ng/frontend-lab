@@ -1,6 +1,6 @@
 import { Badge, Text } from '@seed-design/react'
 import { formatPrice } from '../../../utils/formatPrice'
-import { OrderProduct } from '../order.model'
+import type { OrderProduct } from '../order.model'
 
 interface Props {
   product: OrderProduct

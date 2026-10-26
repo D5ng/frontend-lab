@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { canDecreaseQuantity, CartItem, MIN_CART_ITEM_QUANTITY } from '../model/cart'
+import { canDecreaseQuantity, type CartItem, MIN_CART_ITEM_QUANTITY } from '../model/cart'
 
 const INITIAL_CART_ITEMS = [
   {

@@ -1,0 +1,11 @@
+.filtered-selection {
+  overflow-wrap: anywhere;
+}
+
+.reservation-filter {
+  width: 100%;
+}
+
+.reservation-filter label {
+  min-height: var(--seed-dimension-x12);
+}

@@ -1,5 +1,3 @@
-export const INITIAL_INSTRUCTIONS = '평일 저녁 7시 이후, 아파트 정문에서 만나요.'
-
 export type SaveInstructions = (request: { text: string }) => Promise<{ text: string }>
 
 // 브라우저에서 실패 후 재시도를 경험하도록 첫 요청만 실패합니다.

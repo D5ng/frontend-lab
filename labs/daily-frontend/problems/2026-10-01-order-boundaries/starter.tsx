@@ -1,8 +1,8 @@
-import { DUMMY_ORDER_PRODUCT, OrderProduct, OrderRequest } from './features/order/order.model'
-import { sendDemoOrder } from './features/order/order.api'
+import { OrderForm } from './features/order/components/OrderForm'
 import { OrderHeading } from './features/order/components/OrderHeading'
 import { OrderProductSummary } from './features/order/components/OrderProductSummary'
-import { OrderForm } from './features/order/components/OrderForm'
+import { sendDemoOrder } from './features/order/order.api'
+import { DUMMY_ORDER_PRODUCT, type OrderProduct, type OrderRequest } from './features/order/order.model'
 
 interface Props {
   product?: OrderProduct
