@@ -1,5 +1,8 @@
-export const products = [
-  { id: 'desk', title: '원목 책상', detail: '가격이 내려가면 알려드려요', enabled: false },
-  { id: 'books', title: '소설 전집', detail: '가격이 내려가면 알려드려요', enabled: true },
-  { id: 'plant', title: '작은 화분', detail: '가격이 내려가면 알려드려요', enabled: false },
-] as const
+import type { Product } from '../types/notification'
+
+export const products: Product[] = [
+  { id: 'desk', title: '접이식 원목 책상', neighborhood: '연희동', price: 42000, available: true },
+  { id: 'lamp', title: '작은 유리 조명', neighborhood: '성산동', price: 18000, available: true },
+  { id: 'books', title: '주말에 읽는 소설 세트', neighborhood: '연남동', price: 12000, available: true },
+  { id: 'chair', title: '라탄 의자', neighborhood: '망원동', price: 25000, available: false },
+]

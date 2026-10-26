@@ -15,5 +15,5 @@ export const problems = [
   { id: '2026-10-04-neighborhood-feed', title: '빠른 동네 선택과 늦은 게시글', Component: NeighborhoodFeed },
   { id: '2026-10-05-filtered-selection', title: '숨겨진 상품도 선택한 상품일까?', Component: FilteredSelection },
   { id: '2026-10-06-save-snapshot', title: '저장 중에 새로 쓴 메모', Component: SaveSnapshot },
-  { id: '2026-10-07-notification-rollback', title: '하나의 알림 실패가 다른 상품을 바꾸지 않게', Component: NotificationRollback },
+  { id: '2026-10-07-notification-rollback', title: '관심 상품을 고르고 알림 만들기', Component: NotificationRollback },
 ]

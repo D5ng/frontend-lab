@@ -1,0 +1,13 @@
+.notification-plan > form {
+  width: 100%;
+}
+
+.notification-plan__icon {
+  display: flex;
+  width: fit-content;
+  color: var(--seed-color-fg-brand);
+}
+
+.notification-plan [role='radiogroup'] label {
+  min-height: 44px;
+}

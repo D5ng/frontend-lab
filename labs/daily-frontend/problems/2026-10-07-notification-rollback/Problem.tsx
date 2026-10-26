@@ -3,6 +3,6 @@ import { createNotificationMock } from './features/notificationSettings/apis/cre
 import { NotificationSettingsPage } from './pages/NotificationSettingsPage'
 
 export function Problem() {
-  const [updateNotification] = useState(() => createNotificationMock())
-  return <NotificationSettingsPage updateNotification={updateNotification} />
+  const [api] = useState(() => createNotificationMock())
+  return <NotificationSettingsPage api={api} />
 }
