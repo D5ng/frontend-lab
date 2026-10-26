@@ -1,9 +1,8 @@
+import { ThemeProvider } from '@wanteddev/wds'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { ThemeProvider } from '@wanteddev/wds'
-import '@wanteddev/wds/global.css'
-
 import { App } from './App'
+import '@wanteddev/wds/global.css'
 import './styles.css'
 
 const rootElement = document.getElementById('root')

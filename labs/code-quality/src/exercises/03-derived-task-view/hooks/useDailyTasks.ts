@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DailyTask } from '../model/task'
+import type { DailyTask } from '../model/task'
 
 export function useDailyTasks(defaultTasks: readonly DailyTask[]) {
   const [tasks, setTasks] = useState<DailyTask[]>(() => [...defaultTasks])
