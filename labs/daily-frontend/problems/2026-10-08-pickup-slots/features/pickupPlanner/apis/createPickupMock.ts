@@ -1,5 +1,5 @@
 import { createApiClient } from '../../../../../src/api/client'
-import type { Slot, LoadSlots, ReserveSlot } from '../types/pickup'
+import type { LoadSlots, ReserveSlot, Slot } from '../types/pickup'
 
 // HTTP 응답 모킹은 handlers.ts에 두고 기존 함수 주입 계약을 유지한다.
 export function createPickupMock(): { loadSlots: LoadSlots; reserveSlot: ReserveSlot } {

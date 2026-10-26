@@ -15,5 +15,5 @@ export const problems = [
   { id: '2026-10-04-neighborhood-feed', title: '빠른 동네 선택과 늦은 게시글', Component: NeighborhoodFeed },
   { id: '2026-10-05-filtered-selection', title: '숨겨진 상품도 선택한 상품일까?', Component: FilteredSelection },
   { id: '2026-10-06-save-snapshot', title: '저장 중에 새로 쓴 메모', Component: SaveSnapshot },
-  { id: '2026-10-08-pickup-slots', title: '현재 날짜에 유효한 픽업 시간', Component: PickupSlots },
+  { id: '2026-10-08-pickup-slots', title: '함께 쓴 돈, 공평하게 나누기', Component: PickupSlots },
 ]

@@ -1,0 +1,3 @@
+.expense-split [role='radiogroup'] label {
+  min-height: 44px;
+}

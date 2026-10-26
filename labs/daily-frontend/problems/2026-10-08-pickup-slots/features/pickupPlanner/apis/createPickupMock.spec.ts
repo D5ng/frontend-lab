@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest'
 import { http, HttpResponse } from 'msw/http'
+import { describe, expect, it } from 'vitest'
 import { server } from '../../../../../src/mocks/server'
 import { createPickupMock } from './createPickupMock'
 

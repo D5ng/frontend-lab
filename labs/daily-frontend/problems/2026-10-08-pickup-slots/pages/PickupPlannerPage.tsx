@@ -1,5 +1,5 @@
-import type { LoadSlots, ReserveSlot } from '../features/pickupPlanner/types/pickup'
 import { PickupView } from '../features/pickupPlanner/components/PickupView'
+import type { LoadSlots, ReserveSlot } from '../features/pickupPlanner/types/pickup'
 
 export type PickupPlannerProps = { loadSlots: LoadSlots; reserveSlot: ReserveSlot }
 

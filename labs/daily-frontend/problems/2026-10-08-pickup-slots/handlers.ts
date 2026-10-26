@@ -3,7 +3,9 @@ import { delay } from 'msw/utils/delay'
 import { nextAttempt } from '../../src/mocks/scenario'
 import { slotsByDay } from './features/pickupPlanner/apis/slotsByDay'
 import type { Day } from './features/pickupPlanner/types/pickup'
+import { splitHandlers } from './split/handlers'
 export const handlers = [
+  ...splitHandlers,
   http.get('*/api/daily/2026-10-08-pickup-slots/slots', async ({ request }) => {
     const day = new URL(request.url).searchParams.get('day') as Day
     const fail = day === 'tomorrow' && nextAttempt(request, 'tomorrow') === 1

@@ -4,10 +4,10 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createPickupMock } from '../features/pickupPlanner/apis/createPickupMock'
 import { slotsByDay } from '../features/pickupPlanner/apis/slotsByDay'
-import type { Slot } from '../features/pickupPlanner/types/pickup'
-import { previews } from '../features/pickupPlanner/components/PickupView.preview'
-import { PickupPlannerPage } from './PickupPlannerPage'
 import { PickupView } from '../features/pickupPlanner/components/PickupView'
+import { previews } from '../features/pickupPlanner/components/PickupView.preview'
+import type { Slot } from '../features/pickupPlanner/types/pickup'
+import { PickupPlannerPage } from './PickupPlannerPage'
 
 afterEach(() => {
   cleanup()
