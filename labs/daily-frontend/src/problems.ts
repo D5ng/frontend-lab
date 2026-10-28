@@ -5,6 +5,7 @@ import { Problem as ReservationPolicy } from '../problems/2026-10-03-reservation
 import { Problem as NeighborhoodFeed } from '../problems/2026-10-04-neighborhood-feed/Problem'
 import { Problem as FilteredSelection } from '../problems/2026-10-05-filtered-selection/Problem'
 import { Problem as SaveSnapshot } from '../problems/2026-10-06-save-snapshot/Problem'
+import { Problem as NotificationRollback } from '../problems/2026-10-07-notification-rollback/Problem'
 
 export const problems = [
   { id: '2026-09-30-async-search', title: '늦게 도착한 검색 결과', Component: AsyncSearch },
@@ -14,4 +15,5 @@ export const problems = [
   { id: '2026-10-04-neighborhood-feed', title: '빠른 동네 선택과 늦은 게시글', Component: NeighborhoodFeed },
   { id: '2026-10-05-filtered-selection', title: '숨겨진 상품도 선택한 상품일까?', Component: FilteredSelection },
   { id: '2026-10-06-save-snapshot', title: '저장 중에 새로 쓴 메모', Component: SaveSnapshot },
+  { id: '2026-10-07-notification-rollback', title: '관심 상품을 고르고 알림 만들기', Component: NotificationRollback },
 ]
