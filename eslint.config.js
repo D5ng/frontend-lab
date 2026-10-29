@@ -8,7 +8,8 @@ import typescriptEslint from 'typescript-eslint'
 
 export default typescriptEslint.config(
   {
-    ignores: ['**/dist/**', '**/coverage/**', '**/node_modules/**'],
+    // legacy는 보관만 하고 실행·검사하지 않는다.
+    ignores: ['**/dist/**', '**/coverage/**', '**/node_modules/**', 'legacy/**'],
   },
   eslint.configs.recommended,
   ...typescriptEslint.configs.recommended,
