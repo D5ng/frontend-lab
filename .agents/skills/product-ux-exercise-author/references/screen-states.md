@@ -2,15 +2,17 @@
 
 성공 경로만 있는 화면은 제품이 아니다. 아래 다섯 가지를 화면마다 정하고, 정하지 않기로 했다면 그 이유를 적는다.
 
-## 상태 목록과 Montage 매핑
+## 상태 목록과 SEED 매핑
 
-| 상태 | 언제 | 무엇을 보여 주는가 | Montage |
+| 상태 | 언제 | 무엇을 보여 주는가 | SEED |
 | --- | --- | --- | --- |
-| **Empty** | 보여 줄 데이터가 없다 | 상황 설명 + 다음 행동 하나 | `FallbackView` + `FallbackViewImage` / `FallbackViewText` / `FallbackViewButton` |
-| **Loading** | 데이터를 기다린다 | 들어올 내용의 모양 | 목록·카드는 `Skeleton`, `CardSkeleton`, `ThumbnailSkeleton` / 버튼 내부는 `Button loading` / 전체는 `Loading` |
-| **Error** | 요청이 실패했다 | 원인과 다시 시도 | 일시적 결과는 `Toast variant="negative"` / 화면에 남아야 하면 `SectionMessage variant="negative"` / 입력값 문제는 `FormErrorMessage` |
+| **Empty** | 보여 줄 데이터가 없다 | 상황 설명 + 다음 행동 하나 | 문구 + `ActionButton` 하나. 이미지가 필요하면 `ContentPlaceholder` |
+| **Loading** | 데이터를 기다린다 | 들어올 내용의 모양 | 목록·카드 자리는 `Skeleton` / 버튼 안은 `ActionButton loading` / 작은 영역은 `ProgressCircle` |
+| **Error** | 요청이 실패했다 | 원인과 다시 시도 | 잠깐 알리면 `Snackbar variant="critical"` / 화면에 남아야 하면 `Callout tone="critical"` 또는 `InlineBanner` / 입력값 문제는 `TextField`의 오류 표시 |
 | **Disabled** | 지금은 조작할 수 없다 | 왜 못 하는지 | 각 컴포넌트의 `disabled` + 필요하면 보조 문구 |
-| **Success** | 작업이 끝났다 | 끝났다는 사실, 필요하면 되돌리기 | `Toast` / 되돌리기가 있으면 `Snackbar` + `SnackbarAction` |
+| **Success** | 작업이 끝났다 | 끝났다는 사실, 필요하면 되돌리기 | `Snackbar variant="positive"` / 되돌리기가 있으면 `actionLabel`과 `onAction` / 흐름이 끝나면 완료 화면 |
+
+SEED에는 Toast가 따로 없다. 잠깐 뜨는 결과 안내는 모두 Snackbar다.
 
 ## 상태별 판단 규칙
 
@@ -28,7 +30,7 @@
 ### Error
 
 - 오류 문구는 원인과 다음 행동을 함께 담는다. `작업을 완료하지 못했어요. 다시 시도해 주세요.`
-- 입력값 문제는 화면 아래 토스트보다 해당 필드 옆이 낫다. 사용자가 고쳐야 할 위치를 가리킨다.
+- 입력값 문제는 화면 아래 스낵바보다 해당 필드 옆이 낫다. 사용자가 고쳐야 할 위치를 가리킨다.
 - 여러 검증이 동시에 실패할 수 있다면 순서를 정한다. 무작위 순서는 사용자에게 학습되지 않는다.
 
 ### Disabled
@@ -56,6 +58,6 @@ Success   → 화면 처리(유지 / 초기화 / 이동)
 
 ## 이 저장소의 확인 방법
 
-- 각 상태를 `Problem.spec.tsx`에서 사용자 행동으로 검증한다. 상태 이름이 아니라 사용자가 보는 것을 검증한다.
-- Loading은 해결되지 않는 Promise를 주입해 고정한다. `createDeferred()` 패턴을 쓴다.
-- Error는 거부되는 Promise를 주입해 고정한다.
+- 드릴은 각 상태를 테스트에서 사용자 행동으로 검증한다. 상태 이름이 아니라 사용자가 보는 것을 검증한다.
+- Loading과 Error는 테스트 안에서 MSW 핸들러를 `server.use(...)`로 덮어 고정한다. 끝나지 않는 응답은 `await new Promise(() => {})`, 실패는 `HttpResponse.json(..., { status: 500 })`.
+- 과제는 테스트를 주지 않는다. 대신 처음엔 안 보이는 상태를 정적 UI의 주석 블록으로 넣고, 언제 보여 줄지 한 줄을 붙인다. 이 문서의 다섯 상태가 곧 그 주석 블록 목록이다.
