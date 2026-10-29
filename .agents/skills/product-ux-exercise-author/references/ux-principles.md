@@ -13,8 +13,8 @@
 ## 2. 한 화면에는 하나의 주요 목적
 
 - 주요 목적은 하단 주 버튼 하나로 끝난다. 주 버튼이 둘이면 목적이 둘이다.
-- 보조 작업(임시 저장, 미리보기, 삭제)은 주 버튼과 시각적 위계를 다르게 둔다. `ActionAreaButton`의 `variant="main" | "alternative" | "sub"`가 이 위계를 표현한다.
-- 단계가 여럿이면 `ProgressIndicator` 또는 `ProgressTracker`로 현재 위치를 알린다.
+- 보조 작업(임시 저장, 미리보기, 삭제)은 주 버튼과 시각적 위계를 다르게 둔다. `ActionButton`의 `variant`로 표현한다. 주 버튼은 `brandSolid`, 보조는 `neutralWeak`나 `ghost`.
+- 단계가 여럿이면 앱 바 제목이나 부제(`AppBarMain`의 `subtitle`)로 현재 위치를 알린다.
 
 ## 3. 정보를 한꺼번에 노출하지 않는다
 
@@ -26,11 +26,11 @@
 
 대부분의 모바일 흐름은 이 구조로 환원된다.
 
-| 단계 | 하는 일 | Montage |
+| 단계 | 하는 일 | SEED |
 | --- | --- | --- |
-| List | 선택 가능한 것들을 훑는다 | `List` + `ListCell`, `Card`, `CardList` |
-| Detail | 하나를 자세히 본다 | 별도 화면, `Accordion`, `Bottom sheet` |
-| Action | 결정을 실행한다 | `ActionArea` + `ActionAreaButton` |
+| List | 선택 가능한 것들을 훑는다 | `List` + `ListItem` / `ListButtonItem` |
+| Detail | 하나를 자세히 본다 | Stackflow로 다음 화면 `push`, `Accordion`, `BottomSheet` |
+| Action | 결정을 실행한다 | 하단 고정 `ActionButton` |
 
 설정 화면도 같다. 설정 목록(List) → 값 고르기(Detail) → 저장(Action). 이 구조가 맞지 않는다면 왜 다른지 설명할 수 있어야 한다.
 
@@ -38,24 +38,24 @@
 
 패턴을 고르기 전에 이 표에서 근거를 찾는다. 근거를 한 줄로 쓰지 못하면 그 패턴을 쓰지 않는다.
 
-| 상황 | 패턴 | Montage | 쓰지 않는 경우 |
+| 상황 | 패턴 | SEED | 쓰지 않는 경우 |
 | --- | --- | --- | --- |
-| 값 하나를 고른다. 취소해도 잃을 것이 없다 | **Bottom Sheet** | `Modal` + `ModalContainer variant="bottom"` | 입력이 길거나 여러 단계면 별도 화면 |
-| 달력·시간·목록에서 고른다 | **Bottom Sheet** | 시트 안에 `DateCalendar`, `TimeView`, `List` | 값이 두세 개면 `SegmentedControl`이나 `RadioGroup`으로 인라인 |
-| 되돌릴 수 없는 결정을 확인한다 | **Dialog** | `Modal` + `ModalContainer variant="popup"`, `Alert` | 단순 안내는 Dialog가 아니라 Toast |
-| 작업이 성공했다 | **Toast** | `Toast` + `ToastContent` | 사용자가 조치해야 하면 Toast가 아니라 인라인 메시지 |
-| 성공 + 되돌리기 제공 | **Snackbar** | `Snackbar` + `SnackbarAction` | 되돌릴 수 없으면 Toast |
-| 입력값이 규칙에 맞지 않다 | **인라인 필드 오류** | `FormErrorMessage`, `TextField invalid` | 화면 전체에 영향을 주면 `SectionMessage` |
-| 화면 전체에 영향을 주는 경고 | **Section Message** | `SectionMessage variant="cautionary" \| "negative"` | 일시적인 결과 안내면 Toast |
-| 짧은 선택 메뉴 | **Menu / Popover** | `Menu`, `Popover` | 모바일 전면 선택은 Bottom Sheet |
+| 값 하나를 고른다. 취소해도 잃을 것이 없다 | **Bottom Sheet** | `BottomSheetRoot` + `BottomSheetContent` | 입력이 길거나 여러 단계면 별도 화면 |
+| 달력·시간·목록에서 고른다 | **Bottom Sheet** | 시트 안에 `DatePicker`, `TimePicker`, `List` | 값이 두세 개면 `SegmentedControl`, `Chip.RadioItem`, `RadioGroup`으로 인라인 |
+| 되돌릴 수 없는 결정을 확인한다 | **Dialog** | `AlertDialog` 스니펫 | 단순 안내는 Dialog가 아니라 Snackbar |
+| 작업이 성공했다 | **Snackbar** | `Snackbar variant="positive"` | 사용자가 조치해야 하면 Snackbar가 아니라 인라인 메시지 |
+| 성공 + 되돌리기 제공 | **Snackbar** | `Snackbar`의 `actionLabel`, `onAction` | 되돌릴 수 없으면 액션 없는 Snackbar |
+| 입력값이 규칙에 맞지 않다 | **인라인 필드 오류** | `TextField`의 오류 표시 | 화면 전체에 영향을 주면 `Callout` |
+| 화면 전체에 영향을 주는 경고 | **Callout / InlineBanner** | `Callout tone="warning" \| "critical"`, `InlineBanner` | 일시적인 결과 안내면 Snackbar |
+| 짧은 선택 메뉴 | **Menu Sheet** | `MenuSheet`, `ActionSheet` | 고른 값을 확인·적용해야 하면 Bottom Sheet |
 | 켜는 즉시 반영되는 설정 | **Switch** | `Switch` | 저장 버튼을 눌러야 반영되면 Switch가 아니다 |
-| 폼 안에서 켜고 끄는 항목 | **Checkbox** | `Checkbox` + `ListCellContent variant="checkbox"` | 즉시 반영되는 설정이면 Switch |
+| 폼 안에서 켜고 끄는 항목 | **Checkbox** | `Checkbox`, `ListCheckItem` | 즉시 반영되는 설정이면 Switch |
 
 보조 규칙
 
 - 한 화면에 시트와 다이얼로그를 겹쳐 띄우지 않는다. 겹쳐야 한다면 흐름이 잘못 쪼개진 것이다.
 - 시트에서 고른 값을 언제 확정할지 정한다. 즉시 확정인가, `적용`을 눌러야 확정인가. 이것이 곧 상태 설계다.
-- Toast는 사라진다. 사라지면 안 되는 정보는 Toast에 담지 않는다.
+- Snackbar는 사라진다. 사라지면 안 되는 정보는 Snackbar에 담지 않는다.
 - **Switch는 "이미 적용됨"이라는 약속이다.** iOS HIG와 Material 모두 스위치는 누르는 즉시 반영되는 설정에 쓰고 저장 버튼을 요구하지 말라고 한다. 같은 화면에 `저장`이나 `완료`가 있다면 그 안의 on/off는 Checkbox다. 스위치처럼 보이는 폼은 사용자에게 "이미 켜졌다"고 거짓말한다.
 - **켜면 값을 요구하는 항목은 반쪽 상태를 만든다.** 켰는데 값이 비어 있으면 완성된 것처럼 보이지만 제출 시점에 거절된다. 켜는 즉시 그 자리에서 알리거나, 값을 고르는 시트를 열어 확정시킨다.
 
@@ -69,11 +69,11 @@
 - 설정 한 항목과 그 항목의 입력은 한 그룹이다. 서로 다른 설정은 다른 그룹이다.
 - 그룹이 하나뿐이라면 Card 없이 `List`와 여백만으로 충분한지 먼저 본다.
 
-## 10. Montage 우선, 커스텀 최소
+## 10. SEED 우선, 커스텀 최소
 
 - 색·타이포·간격·라운드는 토큰으로 해결한다. 임의의 hex, px 폰트 크기를 쓰지 않는다.
 - 커스텀 CSS는 화면 배치(고정 하단 바, 페이지 여백, 최대 폭)까지만 허용한다.
-- 컴포넌트가 제공하는 슬롯(`leadingContent`, `trailingContent`, `caption`, `textProps`)을 먼저 찾는다. 대부분 직접 배치할 필요가 없다.
+- 컴포넌트가 제공하는 슬롯(`ListItem`의 `prefix`, `suffix`, `detail`, `BottomSheetFooter` 등)을 먼저 찾는다. 대부분 직접 배치할 필요가 없다.
 
 ## 11. 결정마다 근거를 남긴다
 
@@ -85,7 +85,7 @@
 
 구현 전에 마지막으로 확인한다.
 
-- 같은 일을 Wanted·토스·당근은 몇 화면으로 나누는가?
+- 같은 일을 실제로 쓰이는 앱들은 몇 화면으로 나누는가?
 - 그 앱들은 이 값을 인라인으로 받는가, 시트로 받는가?
 - 우리 화면에만 있는 단계가 있다면, 그것은 학습 목적 때문인가 설계 실수인가?
 

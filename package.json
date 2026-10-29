@@ -9,14 +9,14 @@
     "pnpm": ">=10.0.0"
   },
   "scripts": {
-    "dev": "pnpm --filter @frontend-lab/code-quality dev",
+    "dev": "pnpm --filter @frontend-lab/drills dev",
     "lint": "pnpm -r --if-present lint",
     "format": "prettier --write .",
     "format:check": "pnpm -r --if-present format:check",
     "test": "pnpm -r --if-present test",
     "build": "pnpm -r --if-present build",
     "prepare": "husky",
-    "dev:daily": "pnpm --filter @frontend-lab/daily-frontend dev"
+    "dev:assignments": "pnpm --filter @frontend-lab/assignments dev"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

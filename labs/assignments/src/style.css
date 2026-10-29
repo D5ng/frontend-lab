@@ -1,0 +1,72 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--seed-color-bg-layer-basement);
+  color: var(--seed-color-fg-neutral);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+:focus-visible {
+  outline: 2px solid var(--seed-color-stroke-focus-ring);
+  outline-offset: 3px;
+}
+.lab-app {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 480px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  background: var(--seed-color-bg-layer-default);
+}
+.lab-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--seed-dimension-x3);
+  min-height: 64px;
+  padding: var(--seed-dimension-x4) var(--seed-dimension-x5);
+  border-bottom: 1px solid var(--seed-color-stroke-neutral-subtle);
+}
+.lab-selector {
+  padding: var(--seed-dimension-x3) var(--seed-dimension-x5);
+}
+.lab-empty {
+  padding: var(--seed-dimension-x10) var(--seed-dimension-x5);
+  color: var(--seed-color-fg-neutral-muted);
+  text-align: center;
+}
+/* Stackflow 앱 화면은 부모를 기준으로 absolute로 그려진다. 문제 화면은 이 틀 안에 그려지고 남은 높이를 채운다.
+   contain은 바텀시트처럼 fixed로 그려지는 요소가 브라우저 전체가 아니라 이 틀을 기준으로 놓이게 한다.
+   틀 자체는 스크롤하지 않는다(clip). 스크롤은 AppScreenContent가 맡고, 틀이 스크롤되면 열리는 시트를 따라 화면이 밀려 올라간다. */
+.app-frame {
+  position: relative;
+  contain: layout paint;
+  flex: 1;
+  min-height: 560px;
+  overflow: clip;
+  isolation: isolate;
+}
+@media (min-width: 600px) {
+  .lab-app {
+    margin: 32px auto;
+    border: 1px solid var(--seed-color-stroke-neutral-subtle);
+    border-radius: var(--seed-radius-r4);
+    overflow: clip;
+    min-height: calc(100dvh - 64px);
+  }
+}

@@ -27,22 +27,25 @@
 
 처음이라면 아래 두 기록을 순서대로 읽어 보세요. 유형은 다르지만 하나의 질문으로 이어집니다.
 
-**[10월 3일 · 예약 취소 정책의 변경 경계](labs/daily-frontend/problems/2026-10-03-reservation-policy/note.md)** · 리팩터링형 · [PR #32](https://github.com/D5ng/frontend-lab/pull/32)
+**[10월 3일 · 예약 취소 정책의 변경 경계](legacy/daily-frontend/problems/2026-10-03-reservation-policy/note.md)** · 리팩터링형 · [PR #32](https://github.com/D5ng/frontend-lab/pull/32)
 
 안내 문구, 환불 금액, 서버 요청에 흩어진 취소 규칙을 한곳으로 모읍니다. 숫자 `2000`처럼 같은 글자로 반복되는 중복은 처음부터 모았지만, "이미 시작한 예약은 취소할 수 없다"처럼 같은 뜻이 다른 모양으로 흩어진 규칙은 리뷰를 받고서야 찾았습니다. 쓰는 쪽이 `reset()`을 빠뜨리면 생기는 버그를, 주의가 아니라 구조로 막은 과정도 담겨 있습니다.
 
-**[10월 4일 · 빠른 동네 선택과 늦은 게시글](labs/daily-frontend/problems/2026-10-04-neighborhood-feed/note.md)** · 직접 구현형 · [PR #39](https://github.com/D5ng/frontend-lab/pull/39)
+**[10월 4일 · 빠른 동네 선택과 늦은 게시글](legacy/daily-frontend/problems/2026-10-04-neighborhood-feed/note.md)** · 직접 구현형 · [PR #39](https://github.com/D5ng/frontend-lab/pull/39)
 
 동네를 빠르게 바꿀 때 늦게 도착한 이전 응답이 화면을 덮지 않게 만듭니다. "요청은 막을 수 없으니 상태 업데이트를 막아야 한다"에서 출발해, 성공뿐 아니라 실패와 완료에서도 오래된 응답을 걸러야 하는 이유를 시점별 화면으로 따라갑니다. 마지막 항목에서는 10월 3일과 달리 선택 상태를 훅 밖에 둔 이유를 "쓰는 쪽에게 지켜야 할 약속이 남는가"로 비교합니다.
 
 ## 실습 공간
 
-| 폴더                                                   | 무엇을 하나                                                                | 실행             |
-| ------------------------------------------------------ | -------------------------------------------------------------------------- | ---------------- |
-| [`labs/daily-frontend`](labs/daily-frontend/README.md) | 하루 25~40분, 설계 질문 하나를 푸는 날짜별 문제                            | `pnpm dev:daily` |
-| [`labs/code-quality`](labs/code-quality/README.md)     | 제품에 가까운 화면에 요구사항을 더해 가며 함께 바뀌는 코드를 관찰하는 연습 | `pnpm dev`       |
+| 폴더                                             | 무엇을 하나                                                    | 실행                   |
+| ------------------------------------------------ | -------------------------------------------------------------- | ---------------------- |
+| [`labs/drills`](labs/drills/README.md)           | 기법 하나를 지식 → 리마인드 → 적용 → 확인, 하루 세 문제로      | `pnpm dev`             |
+| [`labs/assignments`](labs/assignments/README.md) | 드릴 여섯 번마다 한 번, 요구사항 분석부터 페이지 하나를 끝까지 | `pnpm dev:assignments` |
+| [`briefs`](briefs)                               | 매일 아침 읽는 브리핑: 클린 코드 처방, 생각하는 법, 기본기     | 읽기만                 |
 
-등록된 문제 목록, 출제 기준, 디자인 시스템과 모의 서버 구성은 각 폴더의 README에 있습니다.
+출제 방식은 [Clean Code Drills 계획](docs/tracks/clean-code-drills.md)에, 디자인 시스템과 모의 서버 구성은 각 앱의 README에 있습니다.
+
+[`legacy/`](legacy)에는 이전 방식의 실습(`daily-frontend`, `code-quality`)을 보관합니다. 더 이상 새 문제를 내지 않고, 워크스페이스와 CI에서도 빠져 있어 실행하지 않습니다. 풀이 기록과 코드는 그대로 읽을 수 있습니다.
 
 다음 단계는 아직 코드 없이 문서로만 계획해 두었습니다.
 
@@ -53,16 +56,9 @@
 
 Node.js 24 이상과 pnpm 10 이상이 필요합니다.
 
-`labs/code-quality`가 쓰는 Montage 디자인 시스템(`@wanteddev/wds`)은 GitHub Packages에서 받습니다. 설치 전에 `read:packages` 권한이 있는 GitHub 토큰을 환경 변수 `GITHUB_TOKEN`에 두고, `~/.npmrc`에 아래 두 줄을 추가합니다.
-
-```ini
-@wanteddev:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-```
-
 ```bash
 pnpm install
-pnpm dev:daily
+pnpm dev
 ```
 
 변경을 올리기 전에는 CI와 같은 검사를 실행합니다. 모든 실습 패키지가 대상입니다.
