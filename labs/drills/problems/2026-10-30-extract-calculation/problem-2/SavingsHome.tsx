@@ -1,6 +1,6 @@
 import { HStack, Skeleton, Text, VStack } from '@seed-design/react'
 import { type ActivityComponentType, useActions } from '@stackflow/react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ActionButton } from 'seed-design/ui/action-button'
 import { AppBar, AppBarMain } from 'seed-design/ui/app-bar'
 import { AppScreen, AppScreenContent } from 'seed-design/ui/app-screen'
@@ -8,36 +8,19 @@ import { BottomSheetRoot } from 'seed-design/ui/bottom-sheet'
 import { Callout } from 'seed-design/ui/callout'
 import { SegmentedControl, SegmentedControlItem } from 'seed-design/ui/segmented-control'
 import { TextField, TextFieldInput } from 'seed-design/ui/text-field'
-import { fetchSavingsProduct, type SavingsProduct } from './api'
+import { MaturitySummary } from './components/MaturitySummary'
+import { useProduct } from './hooks/useProduct'
+import { calculateSavingsMaturity, isMonthlyAmountInRange } from './savings'
 import { TermCompareSheet } from './TermCompareSheet'
+import { formatAnnualRate, formatWon } from './utils/format'
 
 export const SavingsHome: ActivityComponentType = () => {
   const { push } = useActions()
-  const [product, setProduct] = useState<SavingsProduct | null>(null)
-  const [loadFailed, setLoadFailed] = useState(false)
-  const [reloadCount, setReloadCount] = useState(0)
+  const { product, loadFailed, handleReload } = useProduct()
+
   const [amountText, setAmountText] = useState('')
   const [months, setMonths] = useState(12)
   const [compareOpen, setCompareOpen] = useState(false)
-
-  useEffect(() => {
-    let ignore = false
-    fetchSavingsProduct()
-      .then((data) => {
-        if (!ignore) setProduct(data)
-      })
-      .catch(() => {
-        if (!ignore) setLoadFailed(true)
-      })
-    return () => {
-      ignore = true
-    }
-  }, [reloadCount])
-
-  function handleReload() {
-    setLoadFailed(false)
-    setReloadCount((count) => count + 1)
-  }
 
   if (!product) {
     return (
@@ -66,13 +49,15 @@ export const SavingsHome: ActivityComponentType = () => {
   }
 
   const monthlyAmount = Number(amountText)
-  const isAmountValid = amountText !== '' && monthlyAmount >= product.minMonthlyAmount && monthlyAmount <= product.maxMonthlyAmount
-  const selectedTerm = product.terms.find((term) => term.months === months) ?? product.terms[0]
+  const isAmountValid = amountText !== '' && isMonthlyAmountInRange(monthlyAmount, product)
+  console.log('isAmountValid', isAmountValid)
 
-  const principal = monthlyAmount * months
-  const interest = Math.floor(monthlyAmount * (selectedTerm.annualRate / 100 / 12) * ((months * (months + 1)) / 2))
-  const tax = Math.floor(interest * 0.154)
-  const maturityAmount = principal + interest - tax
+  const selectedTerm = product.terms.find((term) => term.months === months) ?? product.terms[0]
+  const { principal, interest, tax, afterTaxInterest, maturityAmount } = calculateSavingsMaturity(
+    monthlyAmount,
+    months,
+    selectedTerm.annualRate,
+  )
 
   return (
     // 시트는 스크롤되는 AppScreenContent 밖에 둬야 화면 아래에 제자리로 열린다.
@@ -90,8 +75,8 @@ export const SavingsHome: ActivityComponentType = () => {
                 value={amountText}
                 onValueChange={({ value }) => setAmountText(value.replace(/\D/g, ''))}
                 invalid={amountText !== '' && !isAmountValid}
-                description={`한 달에 ${product.minMonthlyAmount.toLocaleString('ko-KR')}원부터 ${product.maxMonthlyAmount.toLocaleString('ko-KR')}원까지 넣을 수 있어요.`}
-                errorMessage={`${product.minMonthlyAmount.toLocaleString('ko-KR')}원부터 ${product.maxMonthlyAmount.toLocaleString('ko-KR')}원 사이로 넣어 주세요.`}
+                description={`한 달에 ${formatWon(product.minMonthlyAmount)}부터 ${formatWon(product.maxMonthlyAmount)}까지 넣을 수 있어요.`}
+                errorMessage={`${formatWon(product.minMonthlyAmount)}부터 ${formatWon(product.maxMonthlyAmount)} 사이로 넣어 주세요.`}
               >
                 <TextFieldInput inputMode="numeric" placeholder="300000" />
               </TextField>
@@ -100,7 +85,7 @@ export const SavingsHome: ActivityComponentType = () => {
                 <HStack justifyContent="space-between">
                   <Text textStyle="t4Bold">기간</Text>
                   <Text textStyle="t4Regular" color="fg.neutralSubtle">
-                    연 {selectedTerm.annualRate.toFixed(1)}% · 단리
+                    연 {formatAnnualRate(selectedTerm.annualRate)} · 단리
                   </Text>
                 </HStack>
                 <SegmentedControl aria-label="기간" value={String(months)} onValueChange={(value) => setMonths(Number(value))}>
@@ -113,25 +98,12 @@ export const SavingsHome: ActivityComponentType = () => {
               </VStack>
 
               {isAmountValid ? (
-                <VStack gap="x3">
-                  <VStack gap="x3" p="x4" bg="bg.neutralWeak" borderRadius="r3">
-                    <HStack justifyContent="space-between">
-                      <Text color="fg.neutralSubtle">넣는 돈</Text>
-                      <Text>{principal.toLocaleString('ko-KR')}원</Text>
-                    </HStack>
-                    <HStack justifyContent="space-between">
-                      <Text color="fg.neutralSubtle">이자 (세금 15.4% 뗀 뒤)</Text>
-                      <Text>{(interest - tax).toLocaleString('ko-KR')}원</Text>
-                    </HStack>
-                    <HStack justifyContent="space-between">
-                      <Text textStyle="t5Bold">만기에 받는 돈</Text>
-                      <Text textStyle="t5Bold">{maturityAmount.toLocaleString('ko-KR')}원</Text>
-                    </HStack>
-                  </VStack>
-                  <ActionButton variant="neutralWeak" size="medium" onClick={() => setCompareOpen(true)}>
-                    기간별로 비교하기
-                  </ActionButton>
-                </VStack>
+                <MaturitySummary
+                  principal={principal}
+                  afterTaxInterest={afterTaxInterest}
+                  maturityAmount={maturityAmount}
+                  onCompareOpen={() => setCompareOpen(true)}
+                />
               ) : (
                 <Text textStyle="t4Regular" color="fg.neutralSubtle">
                   매달 넣을 금액을 입력하면 만기에 받는 돈을 알려 드려요.
@@ -161,6 +133,10 @@ export const SavingsHome: ActivityComponentType = () => {
                     monthlyAmount,
                     months,
                     annualRate: selectedTerm.annualRate,
+                    principal,
+                    interest,
+                    tax,
+                    maturityAmount,
                   })
                 }
               >
