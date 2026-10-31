@@ -3,6 +3,7 @@ import { type ActivityComponentType, useActions } from '@stackflow/react'
 import { ActionButton } from 'seed-design/ui/action-button'
 import { AppBar, AppBarMain } from 'seed-design/ui/app-bar'
 import { AppScreen, AppScreenContent } from 'seed-design/ui/app-screen'
+import { formatWon } from './utils/format'
 
 type SavingsDoneParams = {
   monthlyAmount: number
@@ -11,6 +12,7 @@ type SavingsDoneParams = {
 
 export const SavingsDone: ActivityComponentType<SavingsDoneParams> = ({ params }) => {
   const { pop } = useActions()
+  const { monthlyAmount, months } = params
 
   return (
     <AppScreen>
@@ -24,7 +26,7 @@ export const SavingsDone: ActivityComponentType<SavingsDoneParams> = ({ params }
               적금에 가입했어요
             </Text>
             <Text textStyle="t4Regular" color="fg.neutralSubtle">
-              매달 {params.monthlyAmount.toLocaleString('ko-KR')}원씩 {params.months}개월 동안 모아요. 만기가 되면 알려 드릴게요.
+              매달 {formatWon(monthlyAmount)}씩 {months}개월 동안 모아요. 만기가 되면 알려 드릴게요.
             </Text>
           </VStack>
           <VStack px="x5" pb="x5">

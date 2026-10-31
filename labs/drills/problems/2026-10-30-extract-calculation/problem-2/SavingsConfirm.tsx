@@ -1,11 +1,12 @@
 import { Divider, HStack, Text, VStack } from '@seed-design/react'
-import { type ActivityComponentType, useActions } from '@stackflow/react'
-import { useState } from 'react'
+import type { ActivityComponentType } from '@stackflow/react'
 import { ActionButton } from 'seed-design/ui/action-button'
 import { AppBar, AppBarBackButton, AppBarLeft, AppBarMain } from 'seed-design/ui/app-bar'
 import { AppScreen, AppScreenContent } from 'seed-design/ui/app-screen'
 import { Callout } from 'seed-design/ui/callout'
-import { openSavingsAccount } from './api'
+import { useOpenSavingsAccount } from './hooks/useOpenSavingsAccount'
+import { INTEREST_TAX_PERCENT } from './savings'
+import { formatAnnualRate, formatWon } from './utils/format'
 
 type SavingsConfirmParams = {
   productId: string
@@ -13,29 +14,15 @@ type SavingsConfirmParams = {
   monthlyAmount: number
   months: number
   annualRate: number
+  interest: number
+  tax: number
+  principal: number
+  maturityAmount: number
 }
 
 export const SavingsConfirm: ActivityComponentType<SavingsConfirmParams> = ({ params }) => {
-  const { replace } = useActions()
-  const [submitting, setSubmitting] = useState(false)
-  const [failed, setFailed] = useState(false)
-  const { monthlyAmount, months, annualRate } = params
-
-  const principal = monthlyAmount * months
-  const interest = Math.floor(monthlyAmount * (annualRate / 100 / 12) * ((months * (months + 1)) / 2))
-  const tax = Math.floor(interest * 0.154)
-
-  async function handleSubmit() {
-    setSubmitting(true)
-    setFailed(false)
-    try {
-      await openSavingsAccount({ productId: params.productId, monthlyAmount, months })
-      replace('SavingsDone', { monthlyAmount, months })
-    } catch {
-      setFailed(true)
-      setSubmitting(false)
-    }
-  }
+  const { productId, monthlyAmount, months, annualRate, interest, tax, principal, maturityAmount } = params
+  const { submitting, failed, handleSubmit } = useOpenSavingsAccount({ productId, monthlyAmount, months })
 
   return (
     <AppScreen>
@@ -64,7 +51,7 @@ export const SavingsConfirm: ActivityComponentType<SavingsConfirmParams> = ({ pa
               </HStack>
               <HStack justifyContent="space-between">
                 <Text color="fg.neutralSubtle">매달 넣는 돈</Text>
-                <Text>{monthlyAmount.toLocaleString('ko-KR')}원</Text>
+                <Text>{formatWon(monthlyAmount)}</Text>
               </HStack>
               <HStack justifyContent="space-between">
                 <Text color="fg.neutralSubtle">기간</Text>
@@ -72,7 +59,7 @@ export const SavingsConfirm: ActivityComponentType<SavingsConfirmParams> = ({ pa
               </HStack>
               <HStack justifyContent="space-between">
                 <Text color="fg.neutralSubtle">금리</Text>
-                <Text>연 {annualRate.toFixed(1)}%</Text>
+                <Text>연 {formatAnnualRate(annualRate)}</Text>
               </HStack>
             </VStack>
 
@@ -81,19 +68,19 @@ export const SavingsConfirm: ActivityComponentType<SavingsConfirmParams> = ({ pa
             <VStack gap="x3">
               <HStack justifyContent="space-between">
                 <Text color="fg.neutralSubtle">넣는 돈 합계</Text>
-                <Text>{principal.toLocaleString('ko-KR')}원</Text>
+                <Text>{formatWon(principal)}</Text>
               </HStack>
               <HStack justifyContent="space-between">
                 <Text color="fg.neutralSubtle">세전 이자</Text>
-                <Text>{interest.toLocaleString('ko-KR')}원</Text>
+                <Text>{formatWon(interest)}</Text>
               </HStack>
               <HStack justifyContent="space-between">
-                <Text color="fg.neutralSubtle">이자에 붙는 세금 (15.4%)</Text>
-                <Text>-{tax.toLocaleString('ko-KR')}원</Text>
+                <Text color="fg.neutralSubtle">{`이자에 붙는 세금 (${INTEREST_TAX_PERCENT}%)`}</Text>
+                <Text>-{formatWon(tax)}</Text>
               </HStack>
               <HStack justifyContent="space-between">
                 <Text textStyle="t5Bold">만기에 받는 돈</Text>
-                <Text textStyle="t5Bold">{(principal + interest - tax).toLocaleString('ko-KR')}원</Text>
+                <Text textStyle="t5Bold">{formatWon(maturityAmount)}</Text>
               </HStack>
             </VStack>
 
