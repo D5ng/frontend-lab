@@ -31,8 +31,8 @@ problems/
       problem.md         # 첫 줄 제목이 목록에 보이는 이름
       Problem.tsx        # Problem 컴포넌트를 내보낸다
       handlers.ts        # 이 문제의 MSW 핸들러 (필요할 때만)
+      note.md            # 이 문제의 풀이 기록. 문제 폴더마다 하나
     problem-3/           # 확인: 문제 2를 이어받는 변경 요청
-    note.md              # 문제마다 질문 하나, 2~3줄 답
 ```
 
 - 화면이 있는 문제는 `problem-N/Problem.tsx`를 두기만 하면 목록에 나옵니다. 등록 파일이 따로 없어서 동시에 열린 PR끼리 충돌하지 않습니다.
