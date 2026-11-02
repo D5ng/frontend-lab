@@ -8,9 +8,10 @@ import { BottomSheetRoot } from 'seed-design/ui/bottom-sheet'
 import { Checkbox } from 'seed-design/ui/checkbox'
 import { SegmentedControl, SegmentedControlItem } from 'seed-design/ui/segmented-control'
 import { TextField, TextFieldInput } from 'seed-design/ui/text-field'
-import type { SavingsProduct, SavingsTerm } from '../api'
+import type { SavingsProduct } from '../api'
 import { useAmountInput } from '../hooks/useAmountInput'
-import { AUTO_TRANSFER_BONUS_RATE, calculateAppliedRate, calculateSavingsMaturity, getInitialMonths } from '../savings'
+import { useSelectedTerm } from '../hooks/useSelectedTerm'
+import { AUTO_TRANSFER_BONUS_RATE, calculateAppliedRate, calculateSavingsMaturity } from '../savings'
 import { formatAnnualRate, formatWon } from '../utils/format'
 import { BottomActionBar } from './BottomActionBar'
 import { MaturitySummary } from './MaturitySummary'
@@ -24,16 +25,14 @@ export function SavingsCalculator({ product }: Props) {
   const { push } = useActions()
 
   const { amountText, monthlyAmount, amountStatus, handleAmountChange } = useAmountInput(product)
-  const [selectedMonths, setSelectedMonths] = useState(getInitialMonths(product.terms))
+  const { selectedTerm, selectMonths } = useSelectedTerm(product.terms)
   const [compareOpen, setCompareOpen] = useState(false)
   const [autoTransfer, setAutoTransfer] = useState(false)
 
-  // NOTE: selectedMonths는 초기값과 변경될 값들이 product.terms을 기준으로 변경되어 항상 값이 있다는것을 보장한다.
-  const selectedTerm = product.terms.find((term) => term.months === selectedMonths) as SavingsTerm
   const appliedRate = calculateAppliedRate(selectedTerm.annualRate, autoTransfer)
   const { principal, interest, tax, afterTaxInterest, maturityAmount } = calculateSavingsMaturity(
     monthlyAmount,
-    selectedMonths,
+    selectedTerm.months,
     appliedRate,
   )
 
@@ -68,9 +67,9 @@ export function SavingsCalculator({ product }: Props) {
                 </HStack>
                 <SegmentedControl
                   aria-label="기간"
-                  value={String(selectedMonths)}
+                  value={String(selectedTerm.months)}
                   onValueChange={(value) => {
-                    setSelectedMonths(Number(value))
+                    selectMonths(Number(value))
                   }}
                 >
                   {product.terms.map((term) => (
@@ -111,7 +110,7 @@ export function SavingsCalculator({ product }: Props) {
                     productId: product.id,
                     productName: product.name,
                     monthlyAmount,
-                    months: selectedMonths,
+                    months: selectedTerm.months,
                     appliedRate,
                     principal,
                     interest,
@@ -129,10 +128,10 @@ export function SavingsCalculator({ product }: Props) {
         <TermCompareSheet
           terms={product.terms}
           monthlyAmount={monthlyAmount}
-          selectedMonths={selectedMonths}
+          selectedMonths={selectedTerm.months}
           autoTransfer={autoTransfer}
           onSelect={(nextMonths) => {
-            setSelectedMonths(nextMonths)
+            selectMonths(nextMonths)
             setCompareOpen(false)
           }}
         />
