@@ -10,7 +10,7 @@ import { SegmentedControl, SegmentedControlItem } from 'seed-design/ui/segmented
 import { TextField, TextFieldInput } from 'seed-design/ui/text-field'
 import type { SavingsProduct, SavingsTerm } from '../api'
 import { useAmountInput } from '../hooks/useAmountInput'
-import { AUTO_TRANSFER_RATE, calculateAppliedRate, calculateSavingsMaturity, getInitialMonths } from '../savings'
+import { AUTO_TRANSFER_BONUS_RATE, calculateAppliedRate, calculateSavingsMaturity, getInitialMonths } from '../savings'
 import { formatAnnualRate, formatWon } from '../utils/format'
 import { BottomActionBar } from './BottomActionBar'
 import { MaturitySummary } from './MaturitySummary'
@@ -24,14 +24,18 @@ export function SavingsCalculator({ product }: Props) {
   const { push } = useActions()
 
   const { amountText, monthlyAmount, amountStatus, handleAmountChange } = useAmountInput(product)
-  const [months, setMonths] = useState(getInitialMonths(product.terms))
+  const [selectedMonths, setSelectedMonths] = useState(getInitialMonths(product.terms))
   const [compareOpen, setCompareOpen] = useState(false)
   const [autoTransfer, setAutoTransfer] = useState(false)
 
-  // NOTE: months는 기본 값도 변경되는 값도 product.terms에서 항상 찾을 수 있다.
-  const selectedTerm = product.terms.find((term) => term.months === months) as SavingsTerm
+  // NOTE: selectedMonths는 초기값과 변경될 값들이 product.terms을 기준으로 변경되어 항상 값이 있다는것을 보장한다.
+  const selectedTerm = product.terms.find((term) => term.months === selectedMonths) as SavingsTerm
   const appliedRate = calculateAppliedRate(selectedTerm.annualRate, autoTransfer)
-  const { principal, interest, tax, afterTaxInterest, maturityAmount } = calculateSavingsMaturity(monthlyAmount, months, appliedRate)
+  const { principal, interest, tax, afterTaxInterest, maturityAmount } = calculateSavingsMaturity(
+    monthlyAmount,
+    selectedMonths,
+    appliedRate,
+  )
 
   return (
     // 시트는 스크롤되는 AppScreenContent 밖에 둬야 화면 아래에 제자리로 열린다.
@@ -64,9 +68,9 @@ export function SavingsCalculator({ product }: Props) {
                 </HStack>
                 <SegmentedControl
                   aria-label="기간"
-                  value={String(months)}
+                  value={String(selectedMonths)}
                   onValueChange={(value) => {
-                    setMonths(Number(value))
+                    setSelectedMonths(Number(value))
                   }}
                 >
                   {product.terms.map((term) => (
@@ -77,9 +81,9 @@ export function SavingsCalculator({ product }: Props) {
                 </SegmentedControl>
                 {/* 문제 3: 체크 상태와 우대 금리 계산은 직접 연결한다. */}
                 <Checkbox
-                  label={`자동이체로 넣고 연 ${formatAnnualRate(AUTO_TRANSFER_RATE)}p 더 받기`}
+                  label={`자동이체로 넣고 연 ${formatAnnualRate(AUTO_TRANSFER_BONUS_RATE)}p 더 받기`}
                   checked={autoTransfer}
-                  onCheckedChange={(checked) => setAutoTransfer(checked)}
+                  onCheckedChange={setAutoTransfer}
                 />
               </VStack>
 
@@ -107,7 +111,7 @@ export function SavingsCalculator({ product }: Props) {
                     productId: product.id,
                     productName: product.name,
                     monthlyAmount,
-                    months,
+                    months: selectedMonths,
                     appliedRate,
                     principal,
                     interest,
@@ -125,10 +129,10 @@ export function SavingsCalculator({ product }: Props) {
         <TermCompareSheet
           terms={product.terms}
           monthlyAmount={monthlyAmount}
-          selectedMonths={months}
+          selectedMonths={selectedMonths}
           autoTransfer={autoTransfer}
           onSelect={(nextMonths) => {
-            setMonths(nextMonths)
+            setSelectedMonths(nextMonths)
             setCompareOpen(false)
           }}
         />

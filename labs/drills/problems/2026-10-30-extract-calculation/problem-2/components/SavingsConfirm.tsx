@@ -5,7 +5,7 @@ import { AppBar, AppBarBackButton, AppBarLeft, AppBarMain } from 'seed-design/ui
 import { AppScreen, AppScreenContent } from 'seed-design/ui/app-screen'
 import { Callout } from 'seed-design/ui/callout'
 import { useOpenSavingsAccount } from '../hooks/useOpenSavingsAccount'
-import { AUTO_TRANSFER_RATE, INTEREST_TAX_PERCENT } from '../savings'
+import { AUTO_TRANSFER_BONUS_RATE, INTEREST_TAX_PERCENT } from '../savings'
 import { formatAnnualRate, formatWon } from '../utils/format'
 import { BottomActionBar } from './BottomActionBar'
 
@@ -66,7 +66,7 @@ export const SavingsConfirm: ActivityComponentType<SavingsConfirmParams> = ({ pa
                   {/* 문제 3: 자동이체로 가입할 때만 보여 준다. */}
                   {autoTransfer && (
                     <Text textStyle="t3Regular" color="fg.brand">
-                      {`자동이체 우대 ${formatAnnualRate(AUTO_TRANSFER_RATE)}p 포함`}
+                      {`자동이체 우대 ${formatAnnualRate(AUTO_TRANSFER_BONUS_RATE)}p 포함`}
                     </Text>
                   )}
                 </VStack>

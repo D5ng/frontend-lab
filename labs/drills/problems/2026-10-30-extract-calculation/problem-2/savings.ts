@@ -2,7 +2,7 @@ import type { SavingsProduct, SavingsTerm } from './api'
 
 export const INTEREST_TAX_PERCENT = 15.4
 
-export const AUTO_TRANSFER_RATE = 0.5
+export const AUTO_TRANSFER_BONUS_RATE = 0.5
 
 export const DEFAULT_SAVINGS_MONTHS = 12
 
@@ -26,12 +26,12 @@ export function calculateSavingsMaturity(monthlyAmount: number, months: number, 
   }
 }
 
-export function calculateAppliedRate(rate: number, isAutoTransfer: boolean) {
+export function calculateAppliedRate(annualRate: number, isAutoTransfer: boolean) {
   if (!isAutoTransfer) {
-    return rate
+    return annualRate
   }
 
-  return rate + AUTO_TRANSFER_RATE
+  return annualRate + AUTO_TRANSFER_BONUS_RATE
 }
 
 export function isMonthlyAmountInRange(monthlyAmount: number, product: SavingsProduct): boolean {
