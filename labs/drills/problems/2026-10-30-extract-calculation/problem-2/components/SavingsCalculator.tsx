@@ -8,8 +8,8 @@ import { BottomSheetRoot } from 'seed-design/ui/bottom-sheet'
 import { Checkbox } from 'seed-design/ui/checkbox'
 import { SegmentedControl, SegmentedControlItem } from 'seed-design/ui/segmented-control'
 import { TextField, TextFieldInput } from 'seed-design/ui/text-field'
-import { parseAmountInput } from '../amountInput'
 import type { SavingsProduct, SavingsTerm } from '../api'
+import { useAmountInput } from '../hooks/useAmountInput'
 import { AUTO_TRANSFER_RATE, calculateAppliedRate, calculateSavingsMaturity, getInitialMonths } from '../savings'
 import { formatAnnualRate, formatWon } from '../utils/format'
 import { MaturitySummary } from './MaturitySummary'
@@ -22,12 +22,10 @@ interface Props {
 export function SavingsCalculator({ product }: Props) {
   const { push } = useActions()
 
-  const [amountText, setAmountText] = useState('')
+  const { amountText, monthlyAmount, amountStatus, handleAmountChange } = useAmountInput(product)
   const [months, setMonths] = useState(getInitialMonths(product.terms))
   const [compareOpen, setCompareOpen] = useState(false)
   const [autoTransfer, setAutoTransfer] = useState(false)
-
-  const { monthlyAmount, amountStatus } = parseAmountInput(amountText, product)
 
   // NOTE: months는 기본 값도 변경되는 값도 product.terms에서 항상 찾을 수 있다.
   const selectedTerm = product.terms.find((term) => term.months === months) as SavingsTerm
@@ -48,7 +46,7 @@ export function SavingsCalculator({ product }: Props) {
                 label="매달 넣을 금액"
                 suffix="원"
                 value={amountText}
-                onValueChange={({ value }) => setAmountText(value.replace(/\D/g, ''))}
+                onValueChange={({ value }) => handleAmountChange(value)}
                 invalid={amountStatus === 'outOfRange'}
                 description={`한 달에 ${formatWon(product.minMonthlyAmount)}부터 ${formatWon(product.maxMonthlyAmount)}까지 넣을 수 있어요.`}
                 errorMessage={`${formatWon(product.minMonthlyAmount)}부터 ${formatWon(product.maxMonthlyAmount)} 사이로 넣어 주세요.`}
