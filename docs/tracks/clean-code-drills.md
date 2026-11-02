@@ -266,8 +266,7 @@ labs/
   drills/problems/                       드릴 앱
     2026-11-02-change-together/          하루 한 폴더
       knowledge.md                       첫 줄 제목이 기법 이름
-      problem-1/  problem-2/  problem-3/
-      note.md
+      problem-1/  problem-2/  problem-3/   문제마다 problem.md와 note.md
   assignments/problems/                  과제 앱
     2026-11-08-salon-booking/            과제 하나
       problem.md

@@ -24,7 +24,7 @@ async function setUpWithAutoTransfer() {
 
 // 요청을 구현한 뒤 it.skip을 it으로 바꿔 통과시킨다.
 describe('자동이체 우대 금리', () => {
-  it.skip('자동이체로 넣기를 체크하면 우대 금리로 다시 계산하고, 풀면 기본 금리로 돌아간다', async () => {
+  it('자동이체로 넣기를 체크하면 우대 금리로 다시 계산하고, 풀면 기본 금리로 돌아간다', async () => {
     const user = await setUpWithAutoTransfer()
 
     expect(screen.getByText('연 4.0% · 단리')).toBeInTheDocument()
@@ -37,7 +37,7 @@ describe('자동이체 우대 금리', () => {
     expect(screen.getByText('3,657,740원')).toBeInTheDocument()
   })
 
-  it.skip('기간별 비교에도 우대 금리를 더한 만기 금액을 보여 준다', async () => {
+  it('기간별 비교에도 우대 금리를 더한 만기 금액을 보여 준다', async () => {
     const user = await setUpWithAutoTransfer()
 
     await user.click(screen.getByRole('button', { name: '기간별로 비교하기' }))
@@ -48,7 +48,7 @@ describe('자동이체 우대 금리', () => {
     expect(within(sheet).getByText('7,485,525원')).toBeInTheDocument()
   })
 
-  it.skip('가입 확인에 우대 금리가 들어간 것을 알리고 계산기와 같은 금액을 보여 준다', async () => {
+  it('가입 확인에 우대 금리가 들어간 것을 알리고 계산기와 같은 금액을 보여 준다', async () => {
     const user = await setUpWithAutoTransfer()
 
     await user.click(screen.getByRole('button', { name: '가입하기' }))
@@ -60,7 +60,7 @@ describe('자동이체 우대 금리', () => {
     expect(screen.getAllByText('3,665,988원')).toHaveLength(2)
   })
 
-  it.skip('가입 요청에 자동이체로 넣는다는 것을 함께 보낸다', async () => {
+  it('가입 요청에 자동이체로 넣는다는 것을 함께 보낸다', async () => {
     let requestBody: unknown
     server.use(
       http.post(`${BASE}/accounts`, async ({ request }) => {
