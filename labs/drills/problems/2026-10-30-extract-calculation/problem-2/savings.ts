@@ -4,6 +4,8 @@ export const INTEREST_TAX_PERCENT = 15.4
 
 export const AUTO_TRANSFER_RATE = 0.5
 
+export const DEFAULT_SAVINGS_MONTHS = 12
+
 export function isMonthlyAmountInRange(monthlyAmount: number, product: SavingsProduct): boolean {
   return product.minMonthlyAmount <= monthlyAmount && monthlyAmount <= product.maxMonthlyAmount
 }
