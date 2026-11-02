@@ -3,7 +3,7 @@ import { useActivityZIndexBase } from '@seed-design/stackflow'
 import { BottomSheetBody, BottomSheetContent } from 'seed-design/ui/bottom-sheet'
 import { List, ListButtonItem } from 'seed-design/ui/list'
 import type { SavingsTerm } from '../api'
-import { calculateAppliedRate, calculateSavingsMaturity } from '../savings'
+import { calculateTermMaturity } from '../savings'
 import { formatAnnualRate, formatWon } from '../utils/format'
 
 type TermCompareSheetProps = {
@@ -27,8 +27,7 @@ export function TermCompareSheet({ terms, monthlyAmount, selectedMonths, autoTra
       <BottomSheetBody>
         <List>
           {terms.map((term) => {
-            const appliedRate = calculateAppliedRate(term.annualRate, autoTransfer)
-            const { maturityAmount } = calculateSavingsMaturity(monthlyAmount, term.months, appliedRate)
+            const { appliedRate, maturityAmount } = calculateTermMaturity(monthlyAmount, term, autoTransfer)
             const formattedAnnualRate = formatAnnualRate(appliedRate)
             return (
               <ListButtonItem

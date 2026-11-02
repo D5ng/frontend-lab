@@ -11,7 +11,7 @@ import { TextField, TextFieldInput } from 'seed-design/ui/text-field'
 import type { SavingsProduct } from '../api'
 import { useAmountInput } from '../hooks/useAmountInput'
 import { useSelectedTerm } from '../hooks/useSelectedTerm'
-import { AUTO_TRANSFER_BONUS_RATE, calculateAppliedRate, calculateSavingsMaturity } from '../savings'
+import { AUTO_TRANSFER_BONUS_RATE, calculateTermMaturity } from '../savings'
 import { formatAnnualRate, formatWon } from '../utils/format'
 import { BottomActionBar } from './BottomActionBar'
 import { MaturitySummary } from './MaturitySummary'
@@ -29,11 +29,10 @@ export function SavingsCalculator({ product }: Props) {
   const [compareOpen, setCompareOpen] = useState(false)
   const [autoTransfer, setAutoTransfer] = useState(false)
 
-  const appliedRate = calculateAppliedRate(selectedTerm.annualRate, autoTransfer)
-  const { principal, interest, tax, afterTaxInterest, maturityAmount } = calculateSavingsMaturity(
+  const { appliedRate, principal, interest, tax, afterTaxInterest, maturityAmount } = calculateTermMaturity(
     monthlyAmount,
-    selectedTerm.months,
-    appliedRate,
+    selectedTerm,
+    autoTransfer,
   )
 
   return (
