@@ -35,7 +35,8 @@ export function SavingsCalculator({ product }: Props) {
   const [autoTransfer, setAutoTransfer] = useState(false)
 
   const monthlyAmount = Number(amountText)
-  const isAmountValid = amountText !== '' && isMonthlyAmountInRange(monthlyAmount, product)
+  const isAmountEntered = amountText !== ''
+  const isAmountValid = isAmountEntered && isMonthlyAmountInRange(monthlyAmount, product)
   const selectedTerm = product.terms.find((term) => term.months === months) as SavingsTerm
   const appliedRate = calculateAppliedRate(selectedTerm.annualRate, autoTransfer)
   const { principal, interest, tax, afterTaxInterest, maturityAmount } = calculateSavingsMaturity(monthlyAmount, months, appliedRate)
@@ -55,7 +56,7 @@ export function SavingsCalculator({ product }: Props) {
                 suffix="원"
                 value={amountText}
                 onValueChange={({ value }) => setAmountText(value.replace(/\D/g, ''))}
-                invalid={amountText !== '' && !isAmountValid}
+                invalid={isAmountEntered && !isAmountValid}
                 description={`한 달에 ${formatWon(product.minMonthlyAmount)}부터 ${formatWon(product.maxMonthlyAmount)}까지 넣을 수 있어요.`}
                 errorMessage={`${formatWon(product.minMonthlyAmount)}부터 ${formatWon(product.maxMonthlyAmount)} 사이로 넣어 주세요.`}
               >
