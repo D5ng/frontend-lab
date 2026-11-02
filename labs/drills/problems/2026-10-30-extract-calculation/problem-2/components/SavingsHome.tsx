@@ -9,11 +9,11 @@ import { Callout } from 'seed-design/ui/callout'
 import { Checkbox } from 'seed-design/ui/checkbox'
 import { SegmentedControl, SegmentedControlItem } from 'seed-design/ui/segmented-control'
 import { TextField, TextFieldInput } from 'seed-design/ui/text-field'
-import { MaturitySummary } from './components/MaturitySummary'
-import { useProduct } from './hooks/useProduct'
-import { AUTO_TRANSFER_RATE, calculateAppliedRate, calculateSavingsMaturity, isMonthlyAmountInRange } from './savings'
+import { useProduct } from '../hooks/useProduct'
+import { AUTO_TRANSFER_RATE, calculateAppliedRate, calculateSavingsMaturity, isMonthlyAmountInRange } from '../savings'
+import { formatAnnualRate, formatWon } from '../utils/format'
+import { MaturitySummary } from './MaturitySummary'
 import { TermCompareSheet } from './TermCompareSheet'
-import { formatAnnualRate, formatWon } from './utils/format'
 
 export const SavingsHome: ActivityComponentType = () => {
   const { push } = useActions()

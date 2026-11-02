@@ -2,9 +2,9 @@ import { Text } from '@seed-design/react'
 import { useActivityZIndexBase } from '@seed-design/stackflow'
 import { BottomSheetBody, BottomSheetContent } from 'seed-design/ui/bottom-sheet'
 import { List, ListButtonItem } from 'seed-design/ui/list'
-import type { SavingsTerm } from './api'
-import { calculateAppliedRate, calculateSavingsMaturity } from './savings'
-import { formatAnnualRate, formatWon } from './utils/format'
+import type { SavingsTerm } from '../api'
+import { calculateAppliedRate, calculateSavingsMaturity } from '../savings'
+import { formatAnnualRate, formatWon } from '../utils/format'
 
 type TermCompareSheetProps = {
   terms: SavingsTerm[]

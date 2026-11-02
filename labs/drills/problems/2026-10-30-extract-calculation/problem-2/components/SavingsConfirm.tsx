@@ -4,9 +4,9 @@ import { ActionButton } from 'seed-design/ui/action-button'
 import { AppBar, AppBarBackButton, AppBarLeft, AppBarMain } from 'seed-design/ui/app-bar'
 import { AppScreen, AppScreenContent } from 'seed-design/ui/app-screen'
 import { Callout } from 'seed-design/ui/callout'
-import { useOpenSavingsAccount } from './hooks/useOpenSavingsAccount'
-import { AUTO_TRANSFER_RATE, INTEREST_TAX_PERCENT } from './savings'
-import { formatAnnualRate, formatWon } from './utils/format'
+import { useOpenSavingsAccount } from '../hooks/useOpenSavingsAccount'
+import { AUTO_TRANSFER_RATE, INTEREST_TAX_PERCENT } from '../savings'
+import { formatAnnualRate, formatWon } from '../utils/format'
 
 type SavingsConfirmParams = {
   productId: string

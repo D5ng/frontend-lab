@@ -3,7 +3,7 @@ import { type ActivityComponentType, useActions } from '@stackflow/react'
 import { ActionButton } from 'seed-design/ui/action-button'
 import { AppBar, AppBarMain } from 'seed-design/ui/app-bar'
 import { AppScreen, AppScreenContent } from 'seed-design/ui/app-screen'
-import { formatWon } from './utils/format'
+import { formatWon } from '../utils/format'
 
 type SavingsDoneParams = {
   monthlyAmount: number
