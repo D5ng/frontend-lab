@@ -9,13 +9,7 @@ import { Checkbox } from 'seed-design/ui/checkbox'
 import { SegmentedControl, SegmentedControlItem } from 'seed-design/ui/segmented-control'
 import { TextField, TextFieldInput } from 'seed-design/ui/text-field'
 import type { SavingsProduct, SavingsTerm } from '../api'
-import {
-  AUTO_TRANSFER_RATE,
-  calculateAppliedRate,
-  calculateSavingsMaturity,
-  DEFAULT_SAVINGS_MONTHS,
-  isMonthlyAmountInRange,
-} from '../savings'
+import { AUTO_TRANSFER_RATE, calculateAppliedRate, calculateSavingsMaturity, getInitialMonths, isMonthlyAmountInRange } from '../savings'
 import { formatAnnualRate, formatWon } from '../utils/format'
 import { MaturitySummary } from './MaturitySummary'
 import { TermCompareSheet } from './TermCompareSheet'
@@ -28,15 +22,14 @@ export function SavingsCalculator({ product }: Props) {
   const { push } = useActions()
 
   const [amountText, setAmountText] = useState('')
-  const [months, setMonths] = useState(
-    product.terms.some((term) => term.months === DEFAULT_SAVINGS_MONTHS) ? DEFAULT_SAVINGS_MONTHS : product.terms[0].months,
-  )
+  const [months, setMonths] = useState(getInitialMonths(product.terms))
   const [compareOpen, setCompareOpen] = useState(false)
   const [autoTransfer, setAutoTransfer] = useState(false)
 
   const monthlyAmount = Number(amountText)
   const isAmountEntered = amountText !== ''
   const isAmountValid = isAmountEntered && isMonthlyAmountInRange(monthlyAmount, product)
+  // NOTE: months는 기본 값도 변경되는 값도 product.terms에서 항상 찾을 수 있다.
   const selectedTerm = product.terms.find((term) => term.months === months) as SavingsTerm
   const appliedRate = calculateAppliedRate(selectedTerm.annualRate, autoTransfer)
   const { principal, interest, tax, afterTaxInterest, maturityAmount } = calculateSavingsMaturity(monthlyAmount, months, appliedRate)

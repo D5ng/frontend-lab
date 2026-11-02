@@ -1,10 +1,14 @@
-import type { SavingsProduct } from './api'
+import type { SavingsProduct, SavingsTerm } from './api'
 
 export const INTEREST_TAX_PERCENT = 15.4
 
 export const AUTO_TRANSFER_RATE = 0.5
 
 export const DEFAULT_SAVINGS_MONTHS = 12
+
+export function getInitialMonths(terms: SavingsTerm[]) {
+  return terms.some((term) => term.months === DEFAULT_SAVINGS_MONTHS) ? DEFAULT_SAVINGS_MONTHS : terms[0].months
+}
 
 export function isMonthlyAmountInRange(monthlyAmount: number, product: SavingsProduct): boolean {
   return product.minMonthlyAmount <= monthlyAmount && monthlyAmount <= product.maxMonthlyAmount
