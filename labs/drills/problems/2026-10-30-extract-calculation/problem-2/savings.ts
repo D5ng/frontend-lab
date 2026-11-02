@@ -34,16 +34,6 @@ export function calculateAppliedRate(rate: number, isAutoTransfer: boolean) {
   return rate + AUTO_TRANSFER_RATE
 }
 
-type AmountInputStatus = 'empty' | 'outOfRange' | 'valid'
-
-export function getAmountInputStatus(amountText: string, product: SavingsProduct): AmountInputStatus {
-  if (amountText === '') {
-    return 'empty'
-  }
-
-  return isMonthlyAmountInRange(Number(amountText), product) ? 'valid' : 'outOfRange'
-}
-
 export function isMonthlyAmountInRange(monthlyAmount: number, product: SavingsProduct): boolean {
   return product.minMonthlyAmount <= monthlyAmount && monthlyAmount <= product.maxMonthlyAmount
 }

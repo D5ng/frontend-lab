@@ -8,8 +8,9 @@ import { BottomSheetRoot } from 'seed-design/ui/bottom-sheet'
 import { Checkbox } from 'seed-design/ui/checkbox'
 import { SegmentedControl, SegmentedControlItem } from 'seed-design/ui/segmented-control'
 import { TextField, TextFieldInput } from 'seed-design/ui/text-field'
+import { parseAmountInput } from '../amountInput'
 import type { SavingsProduct, SavingsTerm } from '../api'
-import { AUTO_TRANSFER_RATE, calculateAppliedRate, calculateSavingsMaturity, getAmountInputStatus, getInitialMonths } from '../savings'
+import { AUTO_TRANSFER_RATE, calculateAppliedRate, calculateSavingsMaturity, getInitialMonths } from '../savings'
 import { formatAnnualRate, formatWon } from '../utils/format'
 import { MaturitySummary } from './MaturitySummary'
 import { TermCompareSheet } from './TermCompareSheet'
@@ -26,8 +27,7 @@ export function SavingsCalculator({ product }: Props) {
   const [compareOpen, setCompareOpen] = useState(false)
   const [autoTransfer, setAutoTransfer] = useState(false)
 
-  const monthlyAmount = Number(amountText)
-  const amountStatus = getAmountInputStatus(amountText, product)
+  const { monthlyAmount, amountStatus } = parseAmountInput(amountText, product)
 
   // NOTE: months는 기본 값도 변경되는 값도 product.terms에서 항상 찾을 수 있다.
   const selectedTerm = product.terms.find((term) => term.months === months) as SavingsTerm
