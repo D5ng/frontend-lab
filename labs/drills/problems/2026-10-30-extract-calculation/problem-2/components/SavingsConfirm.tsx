@@ -1,4 +1,4 @@
-import { Divider, HStack, Text, VStack } from '@seed-design/react'
+import { Divider, Text, VStack } from '@seed-design/react'
 import type { ActivityComponentType } from '@stackflow/react'
 import { ActionButton } from 'seed-design/ui/action-button'
 import { AppBar, AppBarBackButton, AppBarLeft, AppBarMain } from 'seed-design/ui/app-bar'
@@ -8,6 +8,7 @@ import { useOpenSavingsAccount } from '../hooks/useOpenSavingsAccount'
 import { AUTO_TRANSFER_BONUS_RATE, INTEREST_TAX_PERCENT } from '../savings'
 import { formatAnnualRate, formatWon } from '../utils/format'
 import { BottomActionBar } from './BottomActionBar'
+import { SummaryRow } from './SummaryRow'
 
 type SavingsConfirmParams = {
   productId: string
@@ -47,51 +48,24 @@ export const SavingsConfirm: ActivityComponentType<SavingsConfirmParams> = ({ pa
             </VStack>
 
             <VStack gap="x3">
-              <HStack justifyContent="space-between">
-                <Text color="fg.neutralSubtle">상품</Text>
-                <Text>{params.productName}</Text>
-              </HStack>
-              <HStack justifyContent="space-between">
-                <Text color="fg.neutralSubtle">매달 넣는 돈</Text>
-                <Text>{formatWon(monthlyAmount)}</Text>
-              </HStack>
-              <HStack justifyContent="space-between">
-                <Text color="fg.neutralSubtle">기간</Text>
-                <Text>{months}개월</Text>
-              </HStack>
-              <HStack justifyContent="space-between">
-                <Text color="fg.neutralSubtle">금리</Text>
-                <VStack alignItems="flex-end" gap="x0_5">
-                  <Text>연 {formatAnnualRate(appliedRate)}</Text>
-                  {/* 문제 3: 자동이체로 가입할 때만 보여 준다. */}
-                  {autoTransfer && (
-                    <Text textStyle="t3Regular" color="fg.brand">
-                      {`자동이체 우대 ${formatAnnualRate(AUTO_TRANSFER_BONUS_RATE)}p 포함`}
-                    </Text>
-                  )}
-                </VStack>
-              </HStack>
+              <SummaryRow label="상품" value={params.productName} />
+              <SummaryRow label="매달 넣는 돈" value={formatWon(monthlyAmount)} />
+              <SummaryRow label="기간" value={`${months}개월`} />
+              {/* 문제 3: 자동이체로 가입할 때만 보여 준다. */}
+              <SummaryRow
+                label="금리"
+                value={`연 ${formatAnnualRate(appliedRate)}`}
+                description={autoTransfer ? `자동이체 우대 ${formatAnnualRate(AUTO_TRANSFER_BONUS_RATE)}p 포함` : undefined}
+              />
             </VStack>
 
             <Divider />
 
             <VStack gap="x3">
-              <HStack justifyContent="space-between">
-                <Text color="fg.neutralSubtle">넣는 돈 합계</Text>
-                <Text>{formatWon(principal)}</Text>
-              </HStack>
-              <HStack justifyContent="space-between">
-                <Text color="fg.neutralSubtle">세전 이자</Text>
-                <Text>{formatWon(interest)}</Text>
-              </HStack>
-              <HStack justifyContent="space-between">
-                <Text color="fg.neutralSubtle">{`이자에 붙는 세금 (${INTEREST_TAX_PERCENT}%)`}</Text>
-                <Text>-{formatWon(tax)}</Text>
-              </HStack>
-              <HStack justifyContent="space-between">
-                <Text textStyle="t5Bold">만기에 받는 돈</Text>
-                <Text textStyle="t5Bold">{formatWon(maturityAmount)}</Text>
-              </HStack>
+              <SummaryRow label="넣는 돈 합계" value={formatWon(principal)} />
+              <SummaryRow label="세전 이자" value={formatWon(interest)} />
+              <SummaryRow label={`이자에 붙는 세금 (${INTEREST_TAX_PERCENT}%)`} value={`-${formatWon(tax)}`} />
+              <SummaryRow label="만기에 받는 돈" value={formatWon(maturityAmount)} isTotal />
             </VStack>
 
             {failed && <Callout tone="critical" description="가입하지 못했어요. 잠시 후 다시 시도해 주세요." />}
