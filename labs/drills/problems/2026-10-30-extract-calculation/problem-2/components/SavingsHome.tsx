@@ -8,7 +8,7 @@ import { useProduct } from '../hooks/useProduct'
 import { SavingsCalculator } from './SavingsCalculator'
 
 export const SavingsHome: ActivityComponentType = () => {
-  const { product, loadFailed, handleReload } = useProduct()
+  const { product, loadFailed, reload } = useProduct()
 
   if (!product) {
     return (
@@ -20,7 +20,7 @@ export const SavingsHome: ActivityComponentType = () => {
           {loadFailed ? (
             <VStack gap="x4" px="x5" py="x6">
               <Callout tone="critical" description="상품 정보를 불러오지 못했어요. 잠시 후 다시 불러와 주세요." />
-              <ActionButton variant="neutralWeak" size="medium" onClick={handleReload}>
+              <ActionButton variant="neutralWeak" size="medium" onClick={reload}>
                 다시 불러오기
               </ActionButton>
             </VStack>

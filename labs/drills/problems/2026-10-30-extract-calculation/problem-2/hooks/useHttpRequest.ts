@@ -36,7 +36,7 @@ export function useHttpRequest<TData>(request: (...args: unknown[]) => Promise<T
     }
   }, [request, reloadCount])
 
-  function handleReload() {
+  function reload() {
     setError(false)
     setReloadCount((count) => count + 1)
   }
@@ -45,6 +45,6 @@ export function useHttpRequest<TData>(request: (...args: unknown[]) => Promise<T
     data,
     loading,
     error,
-    handleReload,
+    reload,
   }
 }
