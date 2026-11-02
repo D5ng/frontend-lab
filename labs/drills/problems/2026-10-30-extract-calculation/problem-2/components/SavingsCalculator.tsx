@@ -9,7 +9,7 @@ import { Checkbox } from 'seed-design/ui/checkbox'
 import { SegmentedControl, SegmentedControlItem } from 'seed-design/ui/segmented-control'
 import { TextField, TextFieldInput } from 'seed-design/ui/text-field'
 import type { SavingsProduct, SavingsTerm } from '../api'
-import { AUTO_TRANSFER_RATE, calculateAppliedRate, calculateSavingsMaturity, getInitialMonths, isMonthlyAmountInRange } from '../savings'
+import { AUTO_TRANSFER_RATE, calculateAppliedRate, calculateSavingsMaturity, getAmountInputStatus, getInitialMonths } from '../savings'
 import { formatAnnualRate, formatWon } from '../utils/format'
 import { MaturitySummary } from './MaturitySummary'
 import { TermCompareSheet } from './TermCompareSheet'
@@ -27,8 +27,7 @@ export function SavingsCalculator({ product }: Props) {
   const [autoTransfer, setAutoTransfer] = useState(false)
 
   const monthlyAmount = Number(amountText)
-  const isAmountEntered = amountText !== ''
-  const isAmountValid = isAmountEntered && isMonthlyAmountInRange(monthlyAmount, product)
+  const amountStatus = getAmountInputStatus(amountText, product)
 
   // NOTE: months는 기본 값도 변경되는 값도 product.terms에서 항상 찾을 수 있다.
   const selectedTerm = product.terms.find((term) => term.months === months) as SavingsTerm
@@ -50,7 +49,7 @@ export function SavingsCalculator({ product }: Props) {
                 suffix="원"
                 value={amountText}
                 onValueChange={({ value }) => setAmountText(value.replace(/\D/g, ''))}
-                invalid={isAmountEntered && !isAmountValid}
+                invalid={amountStatus === 'outOfRange'}
                 description={`한 달에 ${formatWon(product.minMonthlyAmount)}부터 ${formatWon(product.maxMonthlyAmount)}까지 넣을 수 있어요.`}
                 errorMessage={`${formatWon(product.minMonthlyAmount)}부터 ${formatWon(product.maxMonthlyAmount)} 사이로 넣어 주세요.`}
               >
@@ -85,7 +84,7 @@ export function SavingsCalculator({ product }: Props) {
                 />
               </VStack>
 
-              {isAmountValid ? (
+              {amountStatus === 'valid' ? (
                 <MaturitySummary
                   principal={principal}
                   afterTaxInterest={afterTaxInterest}
@@ -112,7 +111,7 @@ export function SavingsCalculator({ product }: Props) {
               <ActionButton
                 variant="brandSolid"
                 size="large"
-                disabled={!isAmountValid}
+                disabled={amountStatus !== 'valid'}
                 onClick={() =>
                   push('SavingsConfirm', {
                     productId: product.id,
