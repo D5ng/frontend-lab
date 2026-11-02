@@ -7,6 +7,7 @@ import { Callout } from 'seed-design/ui/callout'
 import { useOpenSavingsAccount } from '../hooks/useOpenSavingsAccount'
 import { AUTO_TRANSFER_RATE, INTEREST_TAX_PERCENT } from '../savings'
 import { formatAnnualRate, formatWon } from '../utils/format'
+import { BottomActionBar } from './BottomActionBar'
 
 type SavingsConfirmParams = {
   productId: string
@@ -96,20 +97,11 @@ export const SavingsConfirm: ActivityComponentType<SavingsConfirmParams> = ({ pa
             {failed && <Callout tone="critical" description="가입하지 못했어요. 잠시 후 다시 시도해 주세요." />}
           </VStack>
 
-          <VStack
-            position="sticky"
-            bottom={0}
-            bg="bg.layerDefault"
-            borderTopWidth={1}
-            borderColor="stroke.neutralSubtle"
-            px="x5"
-            pt="x3"
-            pb="x5"
-          >
+          <BottomActionBar>
             <ActionButton variant="brandSolid" size="large" loading={submitting} disabled={submitting} onClick={handleSubmit}>
               가입하기
             </ActionButton>
-          </VStack>
+          </BottomActionBar>
         </VStack>
       </AppScreenContent>
     </AppScreen>

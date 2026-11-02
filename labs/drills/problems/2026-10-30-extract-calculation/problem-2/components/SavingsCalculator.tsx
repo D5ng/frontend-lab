@@ -12,6 +12,7 @@ import type { SavingsProduct, SavingsTerm } from '../api'
 import { useAmountInput } from '../hooks/useAmountInput'
 import { AUTO_TRANSFER_RATE, calculateAppliedRate, calculateSavingsMaturity, getInitialMonths } from '../savings'
 import { formatAnnualRate, formatWon } from '../utils/format'
+import { BottomActionBar } from './BottomActionBar'
 import { MaturitySummary } from './MaturitySummary'
 import { TermCompareSheet } from './TermCompareSheet'
 
@@ -96,16 +97,7 @@ export function SavingsCalculator({ product }: Props) {
               )}
             </VStack>
 
-            <VStack
-              position="sticky"
-              bottom={0}
-              bg="bg.layerDefault"
-              borderTopWidth={1}
-              borderColor="stroke.neutralSubtle"
-              px="x5"
-              pt="x3"
-              pb="x5"
-            >
+            <BottomActionBar>
               <ActionButton
                 variant="brandSolid"
                 size="large"
@@ -127,7 +119,7 @@ export function SavingsCalculator({ product }: Props) {
               >
                 가입하기
               </ActionButton>
-            </VStack>
+            </BottomActionBar>
           </VStack>
         </AppScreenContent>
         <TermCompareSheet
