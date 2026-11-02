@@ -29,6 +29,7 @@ export function SavingsCalculator({ product }: Props) {
   const monthlyAmount = Number(amountText)
   const isAmountEntered = amountText !== ''
   const isAmountValid = isAmountEntered && isMonthlyAmountInRange(monthlyAmount, product)
+
   // NOTE: months는 기본 값도 변경되는 값도 product.terms에서 항상 찾을 수 있다.
   const selectedTerm = product.terms.find((term) => term.months === months) as SavingsTerm
   const appliedRate = calculateAppliedRate(selectedTerm.annualRate, autoTransfer)
@@ -111,7 +112,6 @@ export function SavingsCalculator({ product }: Props) {
               <ActionButton
                 variant="brandSolid"
                 size="large"
-
                 disabled={!isAmountValid}
                 onClick={() =>
                   push('SavingsConfirm', {
