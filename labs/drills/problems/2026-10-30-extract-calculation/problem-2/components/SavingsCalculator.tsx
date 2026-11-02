@@ -1,20 +1,18 @@
-import { HStack, Text, VStack } from '@seed-design/react'
+import { Text, VStack } from '@seed-design/react'
 import { useActions } from '@stackflow/react'
 import { useState } from 'react'
 import { ActionButton } from 'seed-design/ui/action-button'
 import { AppBar, AppBarMain } from 'seed-design/ui/app-bar'
 import { AppScreen, AppScreenContent } from 'seed-design/ui/app-screen'
 import { BottomSheetRoot } from 'seed-design/ui/bottom-sheet'
-import { Checkbox } from 'seed-design/ui/checkbox'
-import { SegmentedControl, SegmentedControlItem } from 'seed-design/ui/segmented-control'
-import { TextField, TextFieldInput } from 'seed-design/ui/text-field'
 import type { SavingsProduct } from '../api'
 import { useAmountInput } from '../hooks/useAmountInput'
 import { useSelectedTerm } from '../hooks/useSelectedTerm'
-import { AUTO_TRANSFER_BONUS_RATE, calculateTermMaturity } from '../savings'
-import { formatAnnualRate, formatWon } from '../utils/format'
+import { calculateTermMaturity } from '../savings'
 import { BottomActionBar } from './BottomActionBar'
 import { MaturitySummary } from './MaturitySummary'
+import { MonthlyAmountField } from './MonthlyAmountField'
+import { TermAndAutoTransferField } from './TermAndAutoTransferField'
 import { TermCompareSheet } from './TermCompareSheet'
 
 interface Props {
@@ -35,6 +33,20 @@ export function SavingsCalculator({ product }: Props) {
     autoTransfer,
   )
 
+  const goToConfirm = () =>
+    push('SavingsConfirm', {
+      productId: product.id,
+      productName: product.name,
+      monthlyAmount,
+      months: selectedTerm.months,
+      appliedRate,
+      principal,
+      interest,
+      tax,
+      maturityAmount,
+      autoTransfer,
+    })
+
   return (
     // 시트는 스크롤되는 AppScreenContent 밖에 둬야 화면 아래에 제자리로 열린다.
     <BottomSheetRoot open={compareOpen} onOpenChange={setCompareOpen}>
@@ -45,45 +57,22 @@ export function SavingsCalculator({ product }: Props) {
         <AppScreenContent>
           <VStack minHeight="full">
             <VStack flexGrow gap="x8" px="x5" py="x6">
-              <TextField
-                label="매달 넣을 금액"
-                suffix="원"
-                value={amountText}
-                onValueChange={({ value }) => handleAmountChange(value)}
-                invalid={amountStatus === 'outOfRange'}
-                description={`한 달에 ${formatWon(product.minMonthlyAmount)}부터 ${formatWon(product.maxMonthlyAmount)}까지 넣을 수 있어요.`}
-                errorMessage={`${formatWon(product.minMonthlyAmount)}부터 ${formatWon(product.maxMonthlyAmount)} 사이로 넣어 주세요.`}
-              >
-                <TextFieldInput inputMode="numeric" placeholder="300000" />
-              </TextField>
+              <MonthlyAmountField
+                amountText={amountText}
+                isOutOfRange={amountStatus === 'outOfRange'}
+                minMonthlyAmount={product.minMonthlyAmount}
+                maxMonthlyAmount={product.maxMonthlyAmount}
+                onAmountChange={handleAmountChange}
+              />
 
-              <VStack gap="x3">
-                <HStack justifyContent="space-between">
-                  <Text textStyle="t4Bold">기간</Text>
-                  <Text textStyle="t4Regular" color="fg.neutralSubtle">
-                    연 {formatAnnualRate(appliedRate)} · 단리
-                  </Text>
-                </HStack>
-                <SegmentedControl
-                  aria-label="기간"
-                  value={String(selectedTerm.months)}
-                  onValueChange={(value) => {
-                    selectMonths(Number(value))
-                  }}
-                >
-                  {product.terms.map((term) => (
-                    <SegmentedControlItem key={term.months} value={String(term.months)}>
-                      {term.months}개월
-                    </SegmentedControlItem>
-                  ))}
-                </SegmentedControl>
-                {/* 문제 3: 체크 상태와 우대 금리 계산은 직접 연결한다. */}
-                <Checkbox
-                  label={`자동이체로 넣고 연 ${formatAnnualRate(AUTO_TRANSFER_BONUS_RATE)}p 더 받기`}
-                  checked={autoTransfer}
-                  onCheckedChange={setAutoTransfer}
-                />
-              </VStack>
+              <TermAndAutoTransferField
+                appliedRate={appliedRate}
+                selectedMonths={selectedTerm.months}
+                terms={product.terms}
+                autoTransfer={autoTransfer}
+                onSelectMonths={selectMonths}
+                onAutoTransferChange={setAutoTransfer}
+              />
 
               {amountStatus === 'valid' ? (
                 <MaturitySummary
@@ -100,25 +89,7 @@ export function SavingsCalculator({ product }: Props) {
             </VStack>
 
             <BottomActionBar>
-              <ActionButton
-                variant="brandSolid"
-                size="large"
-                disabled={amountStatus !== 'valid'}
-                onClick={() =>
-                  push('SavingsConfirm', {
-                    productId: product.id,
-                    productName: product.name,
-                    monthlyAmount,
-                    months: selectedTerm.months,
-                    appliedRate,
-                    principal,
-                    interest,
-                    tax,
-                    maturityAmount,
-                    autoTransfer,
-                  })
-                }
-              >
+              <ActionButton variant="brandSolid" size="large" disabled={amountStatus !== 'valid'} onClick={goToConfirm}>
                 가입하기
               </ActionButton>
             </BottomActionBar>
