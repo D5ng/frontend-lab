@@ -6,11 +6,12 @@ import { AppBar, AppBarMain } from 'seed-design/ui/app-bar'
 import { AppScreen, AppScreenContent } from 'seed-design/ui/app-screen'
 import { BottomSheetRoot } from 'seed-design/ui/bottom-sheet'
 import { Callout } from 'seed-design/ui/callout'
+import { Checkbox } from 'seed-design/ui/checkbox'
 import { SegmentedControl, SegmentedControlItem } from 'seed-design/ui/segmented-control'
 import { TextField, TextFieldInput } from 'seed-design/ui/text-field'
 import { MaturitySummary } from './components/MaturitySummary'
 import { useProduct } from './hooks/useProduct'
-import { calculateSavingsMaturity, isMonthlyAmountInRange } from './savings'
+import { AUTO_TRANSFER_RATE, calculateAppliedRate, calculateSavingsMaturity, isMonthlyAmountInRange } from './savings'
 import { TermCompareSheet } from './TermCompareSheet'
 import { formatAnnualRate, formatWon } from './utils/format'
 
@@ -21,6 +22,7 @@ export const SavingsHome: ActivityComponentType = () => {
   const [amountText, setAmountText] = useState('')
   const [months, setMonths] = useState(12)
   const [compareOpen, setCompareOpen] = useState(false)
+  const [autoTransfer, setAutoTransfer] = useState(false)
 
   if (!product) {
     return (
@@ -50,14 +52,9 @@ export const SavingsHome: ActivityComponentType = () => {
 
   const monthlyAmount = Number(amountText)
   const isAmountValid = amountText !== '' && isMonthlyAmountInRange(monthlyAmount, product)
-  console.log('isAmountValid', isAmountValid)
-
   const selectedTerm = product.terms.find((term) => term.months === months) ?? product.terms[0]
-  const { principal, interest, tax, afterTaxInterest, maturityAmount } = calculateSavingsMaturity(
-    monthlyAmount,
-    months,
-    selectedTerm.annualRate,
-  )
+  const appliedRate = calculateAppliedRate(selectedTerm.annualRate, autoTransfer)
+  const { principal, interest, tax, afterTaxInterest, maturityAmount } = calculateSavingsMaturity(monthlyAmount, months, appliedRate)
 
   return (
     // 시트는 스크롤되는 AppScreenContent 밖에 둬야 화면 아래에 제자리로 열린다.
@@ -85,7 +82,7 @@ export const SavingsHome: ActivityComponentType = () => {
                 <HStack justifyContent="space-between">
                   <Text textStyle="t4Bold">기간</Text>
                   <Text textStyle="t4Regular" color="fg.neutralSubtle">
-                    연 {formatAnnualRate(selectedTerm.annualRate)} · 단리
+                    연 {formatAnnualRate(appliedRate)} · 단리
                   </Text>
                 </HStack>
                 <SegmentedControl aria-label="기간" value={String(months)} onValueChange={(value) => setMonths(Number(value))}>
@@ -95,6 +92,12 @@ export const SavingsHome: ActivityComponentType = () => {
                     </SegmentedControlItem>
                   ))}
                 </SegmentedControl>
+                {/* 문제 3: 체크 상태와 우대 금리 계산은 직접 연결한다. */}
+                <Checkbox
+                  label={`자동이체로 넣고 연 ${formatAnnualRate(AUTO_TRANSFER_RATE)}p 더 받기`}
+                  checked={autoTransfer}
+                  onCheckedChange={(checked) => setAutoTransfer(checked)}
+                />
               </VStack>
 
               {isAmountValid ? (
@@ -132,11 +135,12 @@ export const SavingsHome: ActivityComponentType = () => {
                     productName: product.name,
                     monthlyAmount,
                     months,
-                    annualRate: selectedTerm.annualRate,
+                    appliedRate,
                     principal,
                     interest,
                     tax,
                     maturityAmount,
+                    autoTransfer,
                   })
                 }
               >
@@ -149,6 +153,7 @@ export const SavingsHome: ActivityComponentType = () => {
           terms={product.terms}
           monthlyAmount={monthlyAmount}
           selectedMonths={months}
+          autoTransfer={autoTransfer}
           onSelect={(nextMonths) => {
             setMonths(nextMonths)
             setCompareOpen(false)

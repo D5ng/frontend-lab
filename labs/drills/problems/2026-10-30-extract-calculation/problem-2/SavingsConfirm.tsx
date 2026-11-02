@@ -5,7 +5,7 @@ import { AppBar, AppBarBackButton, AppBarLeft, AppBarMain } from 'seed-design/ui
 import { AppScreen, AppScreenContent } from 'seed-design/ui/app-screen'
 import { Callout } from 'seed-design/ui/callout'
 import { useOpenSavingsAccount } from './hooks/useOpenSavingsAccount'
-import { INTEREST_TAX_PERCENT } from './savings'
+import { AUTO_TRANSFER_RATE, INTEREST_TAX_PERCENT } from './savings'
 import { formatAnnualRate, formatWon } from './utils/format'
 
 type SavingsConfirmParams = {
@@ -13,16 +13,17 @@ type SavingsConfirmParams = {
   productName: string
   monthlyAmount: number
   months: number
-  annualRate: number
+  appliedRate: number
   interest: number
   tax: number
   principal: number
   maturityAmount: number
+  autoTransfer: boolean
 }
 
 export const SavingsConfirm: ActivityComponentType<SavingsConfirmParams> = ({ params }) => {
-  const { productId, monthlyAmount, months, annualRate, interest, tax, principal, maturityAmount } = params
-  const { submitting, failed, handleSubmit } = useOpenSavingsAccount({ productId, monthlyAmount, months })
+  const { productId, monthlyAmount, months, appliedRate, interest, tax, principal, maturityAmount, autoTransfer } = params
+  const { submitting, failed, handleSubmit } = useOpenSavingsAccount({ productId, monthlyAmount, months, autoTransfer })
 
   return (
     <AppScreen>
@@ -59,7 +60,15 @@ export const SavingsConfirm: ActivityComponentType<SavingsConfirmParams> = ({ pa
               </HStack>
               <HStack justifyContent="space-between">
                 <Text color="fg.neutralSubtle">금리</Text>
-                <Text>연 {formatAnnualRate(annualRate)}</Text>
+                <VStack alignItems="flex-end" gap="x0_5">
+                  <Text>연 {formatAnnualRate(appliedRate)}</Text>
+                  {/* 문제 3: 자동이체로 가입할 때만 보여 준다. */}
+                  {autoTransfer && (
+                    <Text textStyle="t3Regular" color="fg.brand">
+                      {`자동이체 우대 ${formatAnnualRate(AUTO_TRANSFER_RATE)}p 포함`}
+                    </Text>
+                  )}
+                </VStack>
               </HStack>
             </VStack>
 

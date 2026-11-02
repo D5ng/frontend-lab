@@ -6,9 +6,10 @@ interface Params {
   productId: string
   monthlyAmount: number
   months: number
+  autoTransfer: boolean
 }
 
-export function useOpenSavingsAccount({ productId, monthlyAmount, months }: Params) {
+export function useOpenSavingsAccount({ productId, monthlyAmount, months, autoTransfer }: Params) {
   const { replace } = useActions()
   const [submitting, setSubmitting] = useState(false)
   const [failed, setFailed] = useState(false)
@@ -17,7 +18,7 @@ export function useOpenSavingsAccount({ productId, monthlyAmount, months }: Para
     setSubmitting(true)
     setFailed(false)
     try {
-      await openSavingsAccount({ productId: productId, monthlyAmount, months })
+      await openSavingsAccount({ productId: productId, monthlyAmount, months, autoTransfer })
       replace('SavingsDone', { monthlyAmount, months })
     } catch {
       setFailed(true)

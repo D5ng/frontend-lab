@@ -15,6 +15,7 @@ export type OpenAccountRequest = {
   productId: string
   monthlyAmount: number
   months: number
+  autoTransfer: boolean
 }
 
 const BASE = '/api/drills/2026-10-30/savings'

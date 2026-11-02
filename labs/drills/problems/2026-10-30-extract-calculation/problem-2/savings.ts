@@ -2,6 +2,8 @@ import type { SavingsProduct } from './api'
 
 export const INTEREST_TAX_PERCENT = 15.4
 
+export const AUTO_TRANSFER_RATE = 0.5
+
 export function isMonthlyAmountInRange(monthlyAmount: number, product: SavingsProduct): boolean {
   return product.minMonthlyAmount <= monthlyAmount && monthlyAmount <= product.maxMonthlyAmount
 }
@@ -20,4 +22,12 @@ export function calculateSavingsMaturity(monthlyAmount: number, months: number, 
     afterTaxInterest,
     maturityAmount,
   }
+}
+
+export function calculateAppliedRate(rate: number, isAutoTransfer: boolean) {
+  if (!isAutoTransfer) {
+    return rate
+  }
+
+  return rate + AUTO_TRANSFER_RATE
 }
