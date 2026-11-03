@@ -1,15 +1,14 @@
-import { Badge, HStack, Skeleton, Text, VStack } from '@seed-design/react'
-import type { ActivityComponentType } from '@stackflow/react'
-import { useEffect, useState } from 'react'
+import { Badge, HStack, Text, VStack } from '@seed-design/react'
 import { ActionButton } from 'seed-design/ui/action-button'
 import { AppBar, AppBarBackButton, AppBarLeft, AppBarMain } from 'seed-design/ui/app-bar'
 import { AppScreen, AppScreenContent } from 'seed-design/ui/app-screen'
-import { Callout } from 'seed-design/ui/callout'
 import { ContentPlaceholder } from 'seed-design/ui/content-placeholder'
 import { List, ListItem } from 'seed-design/ui/list'
 import { ListHeader } from 'seed-design/ui/list-header'
 import { Snackbar, useSnackbarAdapter } from 'seed-design/ui/snackbar'
-import { fetchRoom, requestVisit, type RoomDetailResponse } from './api'
+import type { DetailRoom } from '../../../room/room'
+import { formatManwon, formatMonthDay, formatWithComma } from '../../../shared/utils/format'
+import { useVisitRequest } from '../hooks/useVisitRequest'
 
 const OPTION_LABELS: Record<string, string> = {
   AIRCON: '에어컨',
@@ -20,80 +19,31 @@ const OPTION_LABELS: Record<string, string> = {
   DESK: '책상',
 }
 
-type RoomDetailParams = {
-  roomId: number
-}
-
-export const RoomDetail: ActivityComponentType<RoomDetailParams> = ({ params }) => {
+export function RoomDetailContent({
+  id,
+  deposit,
+  monthlyRent,
+  title,
+  maintenanceFee,
+  monthlyCost,
+  areaM2,
+  pyeong,
+  floor,
+  totalFloor,
+  availableFrom,
+  options,
+  description,
+}: DetailRoom) {
   const snackbar = useSnackbarAdapter()
-  const [room, setRoom] = useState<RoomDetailResponse | null>(null)
-  const [loadFailed, setLoadFailed] = useState(false)
-  const [reloadCount, setReloadCount] = useState(0)
-  const [visitStatus, setVisitStatus] = useState<'idle' | 'pending' | 'done'>('idle')
-
-  useEffect(() => {
-    let ignore = false
-    fetchRoom(params.roomId)
-      .then((data) => {
-        if (!ignore) setRoom(data)
-      })
-      .catch(() => {
-        if (!ignore) setLoadFailed(true)
-      })
-    return () => {
-      ignore = true
-    }
-  }, [params.roomId, reloadCount])
-
-  function handleReload() {
-    setLoadFailed(false)
-    setReloadCount((count) => count + 1)
-  }
-
-  async function handleRequestVisit() {
-    setVisitStatus('pending')
-    try {
-      await requestVisit(params.roomId)
-      setVisitStatus('done')
+  const { visitStatus, handleRequestVisit } = useVisitRequest({
+    id,
+    onSuccess: () => {
       snackbar.create({ render: () => <Snackbar variant="positive" message="방 보기를 요청했어요. 집주인이 연락하면 알려 드릴게요." /> })
-    } catch {
-      setVisitStatus('idle')
+    },
+    onError: () => {
       snackbar.create({ render: () => <Snackbar variant="critical" message="요청하지 못했어요. 잠시 후 다시 시도해 주세요." /> })
-    }
-  }
-
-  if (!room) {
-    return (
-      <AppScreen>
-        <AppBar>
-          <AppBarLeft>
-            <AppBarBackButton />
-          </AppBarLeft>
-          <AppBarMain title="방 정보" />
-        </AppBar>
-        <AppScreenContent>
-          {loadFailed ? (
-            <VStack gap="x4" px="x5" py="x6">
-              <Callout tone="critical" description="방 정보를 불러오지 못했어요. 잠시 후 다시 불러와 주세요." />
-              <ActionButton variant="neutralWeak" size="medium" onClick={handleReload}>
-                다시 불러오기
-              </ActionButton>
-            </VStack>
-          ) : (
-            <VStack gap="x5" px="x5" py="x6" aria-busy="true" aria-label="방 정보를 불러오는 중">
-              <Skeleton height="x24" radius="8" />
-              <Skeleton height="x10" radius="8" />
-              <Skeleton height="x24" radius="8" />
-            </VStack>
-          )}
-        </AppScreenContent>
-      </AppScreen>
-    )
-  }
-
-  const [floor, totalFloors] = room.floor.split('/')
-  const pyeong = Math.round(room.area_m2 / 3.3058)
-  const [, moveInMonth, moveInDay] = room.available_from?.split('-') ?? []
+    },
+  })
 
   return (
     <AppScreen>
@@ -110,20 +60,20 @@ export const RoomDetail: ActivityComponentType<RoomDetailParams> = ({ params }) 
 
             <VStack gap="x1" px="x5">
               <Text as="h2" textStyle="t7Bold">
-                월세 {room.deposit.toLocaleString('ko-KR')}/{room.monthly_rent}
+                월세 {formatWithComma(deposit)}/{monthlyRent}
               </Text>
-              <Text color="fg.neutralSubtle">{room.title}</Text>
+              <Text color="fg.neutralSubtle">{title}</Text>
             </VStack>
 
             <VStack>
               <ListHeader>돈</ListHeader>
               <List>
-                <ListItem title="보증금" suffix={<Text>{room.deposit.toLocaleString('ko-KR')}만원</Text>} />
-                <ListItem title="월세" suffix={<Text>{room.monthly_rent}만원</Text>} />
-                <ListItem title="관리비" suffix={<Text>{room.maintenance_fee}만원</Text>} />
+                <ListItem title="보증금" suffix={<Text>{formatManwon(deposit)}</Text>} />
+                <ListItem title="월세" suffix={<Text>{formatManwon(monthlyRent)}</Text>} />
+                <ListItem title="관리비" suffix={<Text>{formatManwon(maintenanceFee)}</Text>} />
                 <ListItem
                   title={<Text textStyle="t5Bold">매달 드는 돈</Text>}
-                  suffix={<Text textStyle="t5Bold">{room.monthly_rent + room.maintenance_fee}만원</Text>}
+                  suffix={<Text textStyle="t5Bold">{formatManwon(monthlyCost)}</Text>}
                 />
               </List>
             </VStack>
@@ -135,7 +85,7 @@ export const RoomDetail: ActivityComponentType<RoomDetailParams> = ({ params }) 
                   title="크기"
                   suffix={
                     <Text>
-                      {room.area_m2}㎡ ({pyeong}평)
+                      {areaM2}㎡ ({pyeong}평)
                     </Text>
                   }
                 />
@@ -143,15 +93,13 @@ export const RoomDetail: ActivityComponentType<RoomDetailParams> = ({ params }) 
                   title="층"
                   suffix={
                     <Text>
-                      {floor}층 (전체 {totalFloors}층)
+                      {floor}층 (전체 {totalFloor}층)
                     </Text>
                   }
                 />
                 <ListItem
                   title="입주"
-                  suffix={
-                    <Text>{room.available_from ? `${Number(moveInMonth)}월 ${Number(moveInDay)}일부터` : '바로 들어갈 수 있어요'}</Text>
-                  }
+                  suffix={<Text>{availableFrom === null ? '바로 들어갈 수 있어요' : `${formatMonthDay(availableFrom)}부터`}</Text>}
                 />
               </List>
             </VStack>
@@ -161,13 +109,13 @@ export const RoomDetail: ActivityComponentType<RoomDetailParams> = ({ params }) 
                 옵션
               </Text>
               <HStack gap="x2" wrap>
-                {room.options.map((option) => (
+                {options.map((option) => (
                   <Badge key={option} variant="outline" size="large">
                     {OPTION_LABELS[option] ?? option}
                   </Badge>
                 ))}
               </HStack>
-              <Text color="fg.neutralSubtle">{room.description}</Text>
+              <Text color="fg.neutralSubtle">{description}</Text>
             </VStack>
           </VStack>
 
