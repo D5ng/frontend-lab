@@ -8,7 +8,8 @@
 
 - 그대로 둔 필드: `title`, `deposit`
 - 이름만 카멜케이스로 바꾼 필드: `id`, `monthlyRent`, `maintenanceFee`, `areaM2`, `availableFrom`
-- 추가한 것: `floor`, `totalFloor`, `monthlyCost`, `pyeong`
+- 모양을 바꾼 필드: `floor`(지금 층), `totalFloor`(전체 층)
+- 추가한 것: `monthlyCost`, `pyeong`
 
 #### (리뷰)
 
