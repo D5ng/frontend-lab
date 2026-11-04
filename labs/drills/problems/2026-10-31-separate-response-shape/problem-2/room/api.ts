@@ -4,7 +4,7 @@ export type RoomSummaryResponse = {
   title: string
   deposit: number
   monthly_rent: number
-  maintenance_fee: number
+  maintenance_fee: number | null
   area_m2: number
   floor: string
   available_from: string | null

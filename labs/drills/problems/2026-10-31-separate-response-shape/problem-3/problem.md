@@ -26,6 +26,25 @@
 
 `Problem.spec.tsx`가 관리비를 정하지 않은 방(`room_id: 306`)을 응답에 넣어 둡니다. `it.skip`을 `it`으로 바꾸고 테스트를 돌리면 세 테스트가 실패합니다. 그게 재현입니다.
 
+### 테스트 돌리기
+
+이 테스트는 `problem-2/Problem`을 그대로 불러와 확인합니다. 그래서 고치는 곳은 문제 2의 코드입니다. 서버 응답은 테스트 안에서 `server.use(...)`로 방 306·305 두 개만 내려 주도록 덮어 두었으니 `handlers.ts`는 건드리지 않아도 됩니다.
+
+저장소 루트에서 돌립니다.
+
+```bash
+# 문제 3만
+pnpm --filter @frontend-lab/drills exec vitest run problems/2026-10-31-separate-response-shape/problem-3
+
+# 고치는 동안 저장할 때마다 다시 돌리기
+pnpm --filter @frontend-lab/drills exec vitest problems/2026-10-31-separate-response-shape/problem-3
+
+# 문제 2·3 같이 (문제 2가 깨지지 않았는지도 확인)
+pnpm --filter @frontend-lab/drills exec vitest run problems/2026-10-31-separate-response-shape
+```
+
+### 화면에서 보기
+
 화면에서 직접 보고 싶으면 `problem-2/handlers.ts`의 `rooms` 끝에 아래 방을 잠깐 넣습니다. 확인한 뒤에는 지웁니다. 문제 2 테스트는 방이 다섯 개라고 가정합니다.
 
 ```ts

@@ -51,7 +51,7 @@ async function renderProblem() {
 
 // 버그를 고친 뒤 it.skip을 it으로 바꿔 통과시킨다.
 describe('관리비를 아직 정하지 않은 방', () => {
-  it.skip('목록에서 관리비를 물어봐야 한다고 보여 준다', async () => {
+  it('목록에서 관리비를 물어봐야 한다고 보여 준다', async () => {
     await renderProblem()
 
     const room = await screen.findByRole('button', { name: /^월세 300\/35/ })
@@ -59,7 +59,7 @@ describe('관리비를 아직 정하지 않은 방', () => {
     expect(within(room).getByText('관리비 문의 · 10평 · 2층')).toBeInTheDocument()
   })
 
-  it.skip('매달 드는 돈 적은 순에서는 관리비를 아는 방 뒤에 보여 준다', async () => {
+  it('매달 드는 돈 적은 순에서는 관리비를 아는 방 뒤에 보여 준다', async () => {
     const user = await renderProblem()
     await screen.findByRole('button', { name: /^월세 300\/35/ })
 
@@ -70,7 +70,7 @@ describe('관리비를 아직 정하지 않은 방', () => {
     expect(names[1]).toMatch(/^월세 300\/35/)
   })
 
-  it.skip('방 정보에서 관리비를 물어봐야 한다고 알리고, 매달 드는 돈에 관리비가 빠졌다고 보여 준다', async () => {
+  it('방 정보에서 관리비를 물어봐야 한다고 알리고, 매달 드는 돈에 관리비가 빠졌다고 보여 준다', async () => {
     const user = await renderProblem()
     await user.click(await screen.findByRole('button', { name: /^월세 300\/35/ }))
     await screen.findByRole('heading', { name: '월세 300/35' })
