@@ -3,12 +3,12 @@ export interface Room {
   title: string
   deposit: number
   monthlyRent: number
-  maintenanceFee: number
+  maintenanceFee: number | null
   areaM2: number
   floor: string
   totalFloor: string
   availableFrom: string | null
-  monthlyCost: number
+  monthlyCost: number | null
   pyeong: number
 }
 

@@ -23,7 +23,7 @@ export function RoomListItem({ room, onSelect }: RoomListItemProps) {
         <VStack gap="x1">
           <Text>{title}</Text>
           <Text color="fg.neutralSubtle">
-            관리비 {maintenanceFee}만 · {pyeong}평 · {floor}층
+            관리비 {maintenanceFee === null ? '문의' : `${maintenanceFee}만`} · {pyeong}평 · {floor}층
           </Text>
         </VStack>
       }

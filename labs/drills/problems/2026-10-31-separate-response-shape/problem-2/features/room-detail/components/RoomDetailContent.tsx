@@ -70,10 +70,17 @@ export function RoomDetailContent({
               <List>
                 <ListItem title="보증금" suffix={<Text>{formatManwon(deposit)}</Text>} />
                 <ListItem title="월세" suffix={<Text>{formatManwon(monthlyRent)}</Text>} />
-                <ListItem title="관리비" suffix={<Text>{formatManwon(maintenanceFee)}</Text>} />
+                <ListItem
+                  title="관리비"
+                  suffix={<Text>{maintenanceFee === null ? '집주인에게 문의' : formatManwon(maintenanceFee)}</Text>}
+                />
                 <ListItem
                   title={<Text textStyle="t5Bold">매달 드는 돈</Text>}
-                  suffix={<Text textStyle="t5Bold">{formatManwon(monthlyCost)}</Text>}
+                  suffix={
+                    <Text textStyle="t5Bold">
+                      {monthlyCost === null ? `${formatManwon(monthlyRent)} + 관리비` : formatManwon(monthlyCost)}
+                    </Text>
+                  }
                 />
               </List>
             </VStack>
