@@ -1,7 +1,7 @@
 # 동네 모임 알림함
 
 - 역할: 적용 · 30분
-- 유형: 직접 구현. 요구사항, API, 빈 화면 틀만 있습니다. 행동 테스트는 `it.skip`으로 들어 있습니다.
+- 유형: 직접 구현. 요구사항, API, 다 그려 둔 화면이 있고 동작은 없습니다. 행동 테스트는 `it.skip`으로 들어 있습니다.
 - 도메인: 커뮤니티 (동네 모임 앱의 알림)
 - SEED: `Avatar` · `AvatarStack`(`seed-design/ui/avatar`), `ImageFrame`, `ActionButton`, `Skeleton`, `Callout`, `VisuallyHidden`
 
@@ -101,11 +101,17 @@ POST /api/drills/2026-11-01/notifications/3/answer
 
 | 파일               | 내용                                    |
 | ------------------ | --------------------------------------- |
-| `Problem.tsx`      | Stack과 앱 바만 있는 빈 화면            |
+| `Problem.tsx`      | 다 그려 둔 정적 화면. 동작은 없음       |
 | `api.ts`           | 응답 타입, `fetchInbox`, `answerInvite` |
 | `time.ts`          | `formatTimeAgo`                         |
 | `handlers.ts`      | 모의 서버                               |
 | `Problem.spec.tsx` | 행동 테스트. 모두 `it.skip`             |
+
+`Problem.tsx`에 그려 둔 것
+
+- 알림 다섯 개를 응답 순서대로 `ul`/`li`에 그대로 적어 두었습니다. 값은 `handlers.ts`의 응답과 같습니다. `map`으로 바꾸는 것, 컴포넌트와 파일을 나누는 것은 풀이입니다.
+- 처음에는 안 보이는 모양은 주석으로 넣고, 바로 위에 언제 보여 줄지 적었습니다: 불러오는 중(`Skeleton`), 불러오기 실패(`Callout`과 `다시 불러오기`), 빈 상태, 초대에 답하는 중(두 버튼 잠금과 `loading`), 답하지 못함, 거절한 뒤. 참여한 뒤의 모양은 맨 아래 초대 알림에 있습니다.
+- 사람 사진은 비워 두어 이름 첫 글자가 보입니다. 응답의 `profileImageUrl`을 넣으면 사진이 나옵니다.
 
 SEED 쓰는 법 메모
 
@@ -115,6 +121,6 @@ SEED 쓰는 법 메모
 
 ## 할 일
 
-1. `Problem.spec.tsx`의 `it.skip`을 하나씩 `it`으로 바꾸며 화면을 만듭니다. 파일을 나눌지, 컴포넌트를 몇 개로 할지는 직접 정합니다.
+1. `Problem.spec.tsx`의 `it.skip`을 하나씩 `it`으로 바꾸며 그려 둔 화면에 동작을 붙입니다. 파일을 나눌지, 컴포넌트를 몇 개로 할지는 직접 정합니다.
 2. `pnpm dev`로 띄워 375px 너비에서 초대에 답해 봅니다.
 3. `note.md`의 질문에 답합니다.
