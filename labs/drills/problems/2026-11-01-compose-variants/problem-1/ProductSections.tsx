@@ -1,4 +1,5 @@
 import { type Product, ProductCard } from './ProductCard'
+import { ProductThumbnail } from './ProductThumbnail'
 
 type SectionProps = {
   products: Product[]
@@ -12,8 +13,17 @@ type SectionWithCartProps = SectionProps & {
 export function BestSellers({ products }: SectionProps) {
   return (
     <section aria-label="많이 산 상품">
-      {products.map((product, index) => (
-        <ProductCard key={product.id} product={product} showRank rank={index + 1} showDiscount showSoldOut />
+      {products.map((product, rank) => (
+        <ProductCard
+          key={product.id}
+          product={product}
+          thumbnail={
+            <ProductThumbnail imageUrl={product.imageUrl} name={product.name}>
+              {<span>{rank + 1}위</span>}
+              {product.stock === 0 && <span>품절</span>}
+            </ProductThumbnail>
+          }
+        />
       ))}
     </section>
   )
@@ -24,7 +34,19 @@ export function SearchResults({ products, onAddToCart }: SectionWithCartProps) {
   return (
     <section aria-label="검색 결과">
       {products.map((product) => (
-        <ProductCard key={product.id} product={product} showDiscount showSoldOut showCartButton onAddToCart={onAddToCart} />
+        <ProductCard
+          key={product.id}
+          product={product}
+          thumbnail={
+            <ProductThumbnail imageUrl={product.imageUrl} name={product.name}>
+              {product.stock === 0 && <span>품절</span>}
+            </ProductThumbnail>
+          }
+          action={{
+            label: '장바구니 담기',
+            onClick: onAddToCart,
+          }}
+        />
       ))}
     </section>
   )
@@ -35,7 +57,7 @@ export function CartRecommendations({ products, onAddToCart }: SectionWithCartPr
   return (
     <section aria-label="함께 사면 좋은 상품">
       {products.map((product) => (
-        <ProductCard key={product.id} product={product} compact showDiscount showCartButton onAddToCart={onAddToCart} />
+        <ProductCard key={product.id} product={product} action={{ label: '담기', onClick: onAddToCart }} />
       ))}
     </section>
   )

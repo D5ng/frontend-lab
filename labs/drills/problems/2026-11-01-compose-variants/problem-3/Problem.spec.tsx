@@ -24,7 +24,10 @@ beforeEach(() => {
   vi.resetModules()
 })
 
-async function renderProblem(notifications: unknown[] = [...inbox.notifications, scheduleChanged]) {
+// problem-2/handlers.ts 끝에 일정 변경 알림을 넣어 두어도 두 번 그려지지 않게, 같은 id는 빼고 붙인다.
+const withScheduleChanged = [...inbox.notifications.filter((notification) => notification.id !== scheduleChanged.id), scheduleChanged]
+
+async function renderProblem(notifications: unknown[] = withScheduleChanged) {
   server.use(http.get(`${BASE}/notifications`, () => HttpResponse.json({ now: inbox.now, notifications })))
   const { Problem } = await import('../problem-2/Problem')
   render(<Problem />)
@@ -44,7 +47,7 @@ async function findNotification(text: string) {
 
 // 요청을 구현한 뒤 it.skip을 it으로 바꿔 통과시킨다. 문제 2의 테스트도 계속 통과해야 한다.
 describe('모임 일정이 바뀌었다는 알림', () => {
-  it.skip('바뀌기 전과 바뀐 뒤의 일정을 함께 보여 주고, 버튼은 없다', async () => {
+  it('바뀌기 전과 바뀐 뒤의 일정을 함께 보여 주고, 버튼은 없다', async () => {
     await renderProblem()
 
     const notice = await findNotification('망원 책 읽는 밤 모임 일정이 바뀌었어요')
@@ -56,7 +59,7 @@ describe('모임 일정이 바뀌었다는 알림', () => {
 })
 
 describe('댓글 알림에서 좋아요 누르기', () => {
-  it.skip('좋아요를 누르면 그 댓글에 좋아요를 보내고 눌린 채로 보여 준다', async () => {
+  it('좋아요를 누르면 그 댓글에 좋아요를 보내고 눌린 채로 보여 준다', async () => {
     const likedCommentIds: string[] = []
     server.use(
       http.post(`${BASE}/comments/:commentId/likes`, ({ params }) => {
@@ -76,7 +79,7 @@ describe('댓글 알림에서 좋아요 누르기', () => {
     expect(likedCommentIds).toEqual(['501'])
   })
 
-  it.skip('이미 좋아요한 댓글은 눌린 채로 보여 준다', async () => {
+  it('이미 좋아요한 댓글은 눌린 채로 보여 준다', async () => {
     const [first, ...rest] = inbox.notifications
     await renderProblem([{ ...first, comment: { ...first!.comment, likedByMe: true } }, ...rest])
 
@@ -84,7 +87,7 @@ describe('댓글 알림에서 좋아요 누르기', () => {
     expect(within(comment).getByRole('button', { name: '좋아요' })).toHaveAttribute('aria-pressed', 'true')
   })
 
-  it.skip('좋아요 알림과 초대 알림에는 좋아요 버튼이 없다', async () => {
+  it('좋아요 알림과 초대 알림에는 좋아요 버튼이 없다', async () => {
     await renderProblem()
 
     expect(within(await findNotification('김민지님 외 3명이 내 글을 좋아해요')).queryByRole('button')).not.toBeInTheDocument()

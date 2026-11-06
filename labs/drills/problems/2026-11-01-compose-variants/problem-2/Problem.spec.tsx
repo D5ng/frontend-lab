@@ -38,7 +38,7 @@ async function findInvite() {
 
 // 알림함을 처음부터 만든 뒤 it.skip을 it으로 바꿔 통과시킨다.
 describe('알림 목록', () => {
-  it.skip('받은 순서대로 보여 주고, 언제 받았는지 알려 준다', async () => {
+  it('받은 순서대로 보여 주고, 언제 받았는지 알려 준다', async () => {
     await renderProblem()
     await findInvite()
 
@@ -53,7 +53,7 @@ describe('알림 목록', () => {
     expect(items[4]).toHaveTextContent('3일 전')
   })
 
-  it.skip('댓글 알림은 댓글 내용을, 좋아요 알림은 글 제목을 함께 보여 준다', async () => {
+  it('댓글 알림은 댓글 내용을, 좋아요 알림은 글 제목을 함께 보여 준다', async () => {
     await renderProblem()
 
     const comment = await findNotification('김민지님이 내 글에 댓글을 남겼어요')
@@ -62,20 +62,20 @@ describe('알림 목록', () => {
     expect(like).toHaveTextContent('토요일 아침 한강 러닝 후기')
   })
 
-  it.skip('좋아요를 한 명만 눌렀으면 그 사람 이름만 보여 준다', async () => {
+  it('좋아요를 한 명만 눌렀으면 그 사람 이름만 보여 준다', async () => {
     await renderProblem()
 
     const like = await findNotification('이서연님이 내 글을 좋아해요')
     expect(like).toHaveTextContent('망원동 저녁 산책 같이 해요')
   })
 
-  it.skip('초대 알림은 모임 멤버 수를 함께 보여 준다', async () => {
+  it('초대 알림은 모임 멤버 수를 함께 보여 준다', async () => {
     await renderProblem()
 
     expect(await findInvite()).toHaveTextContent('멤버 24명')
   })
 
-  it.skip('읽지 않은 알림은 읽지 않았다고 알려 준다', async () => {
+  it('읽지 않은 알림은 읽지 않았다고 알려 준다', async () => {
     await renderProblem()
     await findInvite()
 
@@ -85,7 +85,7 @@ describe('알림 목록', () => {
     expect(screen.getAllByText('읽지 않음')).toHaveLength(2)
   })
 
-  it.skip('알림을 불러오지 못하면 다시 불러올 수 있다', async () => {
+  it('알림을 불러오지 못하면 다시 불러올 수 있다', async () => {
     server.use(http.get(`${BASE}/notifications`, () => HttpResponse.json({}, { status: 500 }), { once: true }))
     const user = userEvent.setup()
     await renderProblem()
@@ -95,7 +95,7 @@ describe('알림 목록', () => {
     expect(await findInvite()).toBeInTheDocument()
   })
 
-  it.skip('받은 알림이 없으면 없다고 알려 준다', async () => {
+  it('받은 알림이 없으면 없다고 알려 준다', async () => {
     server.use(http.get(`${BASE}/notifications`, () => HttpResponse.json({ now: '2026-11-01T09:00:00+09:00', notifications: [] })))
     await renderProblem()
 
@@ -104,7 +104,7 @@ describe('알림 목록', () => {
 })
 
 describe('모임 초대에 답하기', () => {
-  it.skip('참여하기를 누르면 버튼 자리에 참여했다고 알려 준다', async () => {
+  it('참여하기를 누르면 버튼 자리에 참여했다고 알려 준다', async () => {
     const user = userEvent.setup()
     await renderProblem()
     const invite = await findInvite()
@@ -115,7 +115,7 @@ describe('모임 초대에 답하기', () => {
     expect(within(invite).queryByRole('button')).not.toBeInTheDocument()
   })
 
-  it.skip('거절을 누르면 버튼 자리에 거절했다고 알려 준다', async () => {
+  it('거절을 누르면 버튼 자리에 거절했다고 알려 준다', async () => {
     const user = userEvent.setup()
     await renderProblem()
     const invite = await findInvite()
@@ -126,7 +126,7 @@ describe('모임 초대에 답하기', () => {
     expect(within(invite).queryByRole('button')).not.toBeInTheDocument()
   })
 
-  it.skip('답하는 동안에는 두 버튼 모두 누를 수 없다', async () => {
+  it('답하는 동안에는 두 버튼 모두 누를 수 없다', async () => {
     server.use(
       http.post(`${BASE}/notifications/:id/answer`, async () => {
         await delay('infinite')
@@ -145,7 +145,7 @@ describe('모임 초대에 답하기', () => {
     for (const button of buttons) expect(button).toBeDisabled()
   })
 
-  it.skip('답하지 못하면 이유를 알려 주고 다시 누를 수 있다', async () => {
+  it('답하지 못하면 이유를 알려 주고 다시 누를 수 있다', async () => {
     server.use(http.post(`${BASE}/notifications/:id/answer`, () => HttpResponse.json({}, { status: 500 }), { once: true }))
     const user = userEvent.setup()
     await renderProblem()
@@ -158,7 +158,7 @@ describe('모임 초대에 답하기', () => {
     expect(await within(invite).findByText('모임에 참여했어요')).toBeInTheDocument()
   })
 
-  it.skip('이미 답한 초대는 버튼 없이 결과만 보여 준다', async () => {
+  it('이미 답한 초대는 버튼 없이 결과만 보여 준다', async () => {
     await renderProblem()
 
     const answered = await findNotification('정하린님이 망원 책 읽는 밤에 초대했어요')

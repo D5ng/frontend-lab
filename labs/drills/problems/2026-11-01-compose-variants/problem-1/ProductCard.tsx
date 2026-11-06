@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react'
+
 export type Product = {
   id: number
   name: string
@@ -9,39 +11,22 @@ export type Product = {
 
 type ProductCardProps = {
   product: Product
-  showRank?: boolean
-  rank?: number
-  showDiscount?: boolean
-  showSoldOut?: boolean
-  showCartButton?: boolean
-  onAddToCart?: (product: Product) => void
-  compact?: boolean
+  thumbnail?: ReactNode
+  action?: {
+    label: string
+    onClick: (product: Product) => void
+  }
 }
 
-export function ProductCard({
-  product,
-  showRank = false,
-  rank,
-  showDiscount = false,
-  showSoldOut = false,
-  showCartButton = false,
-  onAddToCart,
-  compact = false,
-}: ProductCardProps) {
+export function ProductCard({ product, thumbnail, action }: ProductCardProps) {
   const soldOut = product.stock === 0
-  const salePrice = Math.floor((product.price * (100 - product.discountRate)) / 1000) * 10
+  const salePrice = calculateSalePrice(product.price, product.discountRate)
 
   return (
     <article aria-label={product.name}>
-      {!compact && (
-        <div>
-          <img src={product.imageUrl} alt={product.name} />
-          {showRank && rank !== undefined && <span>{rank}위</span>}
-          {showSoldOut && soldOut && <span>품절</span>}
-        </div>
-      )}
+      {thumbnail}
       <h3>{product.name}</h3>
-      {showDiscount && product.discountRate > 0 ? (
+      {product.discountRate > 0 ? (
         <p>
           <span>{product.discountRate}%</span> <strong>{formatWon(salePrice)}</strong> <del>{formatWon(product.price)}</del>
         </p>
@@ -50,13 +35,20 @@ export function ProductCard({
           <strong>{formatWon(product.price)}</strong>
         </p>
       )}
-      {showCartButton && (
-        <button type="button" disabled={soldOut} onClick={() => onAddToCart?.(product)}>
-          {compact ? '담기' : '장바구니 담기'}
+      {action && (
+        <button type="button" disabled={soldOut} onClick={() => action.onClick(product)}>
+          {action.label}
         </button>
       )}
     </article>
   )
+}
+
+const PRICE_ROUNDING_UNIT = 10
+
+function calculateSalePrice(price: number, discountRate: number) {
+  const discounted = (price * (100 - discountRate)) / 100
+  return Math.floor(discounted / PRICE_ROUNDING_UNIT) * PRICE_ROUNDING_UNIT
 }
 
 function formatWon(amount: number) {
