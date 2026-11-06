@@ -4,10 +4,7 @@ import type { ReactNode } from 'react'
 interface Props {
   avatar: ReactNode
   message: ReactNode
-  description: {
-    text: string
-    maxLines?: number
-  }
+  description: ReactNode
   timeAgo: string
   read: boolean
   action?: ReactNode
@@ -20,9 +17,7 @@ export function NotificationCard({ message, description, timeAgo, read, avatar, 
         {avatar}
         <VStack gap="x1" flexGrow={1}>
           {message}
-          <Text textStyle="t4Regular" color="fg.neutralMuted" maxLines={description.maxLines}>
-            {description.text}
-          </Text>
+          {description}
           <Text textStyle="t3Regular" color="fg.neutralSubtle">
             {timeAgo}
           </Text>

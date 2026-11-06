@@ -65,6 +65,15 @@ export const inbox = {
       group: { name: '망원 책 읽는 밤', imageUrl: photo('#577590'), memberCount: 12 },
       status: 'accepted',
     },
+    {
+      id: 6,
+      type: 'scheduleChanged',
+      createdAt: '2026-10-27T21:00:00+09:00',
+      read: true,
+      group: { name: '망원 책 읽는 밤' },
+      before: '2026-11-06T19:30:00+09:00',
+      after: '2026-11-07T19:30:00+09:00',
+    },
   ],
 }
 

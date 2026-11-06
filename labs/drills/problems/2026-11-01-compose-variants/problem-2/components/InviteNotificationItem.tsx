@@ -32,9 +32,11 @@ export function InviteNotificationItem({ notification, now }: Props) {
           에 초대했어요
         </Text>
       }
-      description={{
-        text: `멤버 ${notification.group.memberCount}명`,
-      }}
+      description={
+        <Text textStyle="t4Regular" color="fg.neutralMuted">
+          멤버 {notification.group.memberCount}명
+        </Text>
+      }
       timeAgo={formatTimeAgo(notification.createdAt, now)}
       read={notification.read}
       action={

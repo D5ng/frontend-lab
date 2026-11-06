@@ -31,9 +31,11 @@ export function LikeNotificationItem({ notification, now }: Props) {
           {otherActorCount === 0 ? `님이 내 글을 좋아해요` : `님 외 ${otherActorCount}명이 내 글을 좋아해요`}
         </Text>
       }
-      description={{
-        text: notification.postTitle,
-      }}
+      description={
+        <Text textStyle="t4Regular" color="fg.neutralMuted">
+          {notification.postTitle}
+        </Text>
+      }
       timeAgo={formatTimeAgo(notification.createdAt, now)}
       read={notification.read}
     />

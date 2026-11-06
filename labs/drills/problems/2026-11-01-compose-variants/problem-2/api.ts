@@ -30,8 +30,15 @@ export type InviteNotification = NotificationBase & {
   status: InviteStatus
 }
 
+export type ScheduleChangedNotification = NotificationBase & {
+  type: 'scheduleChanged'
+  group: { name: string }
+  before: string
+  after: string
+}
+
 // DOM에 이미 Notification이 있어서 이름을 다르게 둔다.
-export type InboxNotification = CommentNotification | LikeNotification | InviteNotification
+export type InboxNotification = CommentNotification | LikeNotification | InviteNotification | ScheduleChangedNotification
 
 export type InboxResponse = {
   now: string
@@ -54,4 +61,11 @@ export async function answerInvite(notificationId: number, accept: boolean): Pro
   })
   if (!response.ok) throw new Error('초대에 답하지 못했어요.')
   return (await response.json()) as { status: InviteStatus }
+}
+
+export async function updateCommentLike(commentId: number, liked: boolean): Promise<void> {
+  const response = await fetch(new URL(`${BASE}/comments/${commentId}/likes`, window.location.origin), {
+    method: liked ? 'POST' : 'DELETE',
+  })
+  if (!response.ok) throw new Error('좋아요를 반영하지 못했어요.')
 }
